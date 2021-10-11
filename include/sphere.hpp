@@ -2,31 +2,24 @@
 #define SPHERE_H
 
 #include "object3d.hpp"
-#include <vecmath.h>
 #include <cmath>
-
-// TODO: Implement functions and add more fields as necessary
+#include <vecmath.h>
 
 class Sphere : public Object3D {
 public:
-    Sphere() {
-        // unit ball at the center
-    }
-
-    Sphere(const Vector3f &center, float radius, Material *material) : Object3D(material) {
-        // 
-    }
+    Sphere(const Vector3f &center, float radius, Material *material)
+        : Object3D(material), center(center), radius(radius) {}
 
     ~Sphere() override = default;
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        //
+        // TODO: sphere intersection algorithm
         return false;
     }
 
 protected:
-
+    const Vector3f center;
+    const float radius;
 };
-
 
 #endif

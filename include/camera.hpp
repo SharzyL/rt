@@ -2,10 +2,9 @@
 #define CAMERA_H
 
 #include "ray.hpp"
-#include <vecmath.h>
 #include <cfloat>
 #include <cmath>
-
+#include <vecmath.h>
 
 class Camera {
 public:
@@ -36,19 +35,18 @@ protected:
     int height;
 };
 
-// TODO: Implement Perspective camera
-// You can add new functions or variables whenever needed.
 class PerspectiveCamera : public Camera {
 
 public:
-    PerspectiveCamera(const Vector3f &center, const Vector3f &direction,
-            const Vector3f &up, int imgW, int imgH, float angle) : Camera(center, direction, up, imgW, imgH) {
+    PerspectiveCamera(const Vector3f &center, const Vector3f &direction, const Vector3f &up, int imgW, int imgH,
+                      float angle)
+        : Camera(center, direction, up, imgW, imgH) {
         // angle is in radian.
     }
 
     Ray generateRay(const Vector2f &point) override {
-        // TODO
+        // TODO: generate ray
     }
 };
 
-#endif //CAMERA_H
+#endif // CAMERA_H

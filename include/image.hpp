@@ -8,24 +8,17 @@
 class Image {
 
 public:
-
     Image(int w, int h) {
         width = w;
         height = h;
         data = new Vector3f[width * height];
     }
 
-    ~Image() {
-        delete[] data;
-    }
+    ~Image() { delete[] data; }
 
-    int Width() const {
-        return width;
-    }
+    int Width() const { return width; }
 
-    int Height() const {
-        return height;
-    }
+    int Height() const { return height; }
 
     const Vector3f &GetPixel(int x, int y) const {
         assert(x >= 0 && x < width);
@@ -58,11 +51,9 @@ public:
     void SaveImage(const char *filename);
 
 private:
-
     int width;
     int height;
     Vector3f *data;
-
 };
 
 #endif // IMAGE_H
