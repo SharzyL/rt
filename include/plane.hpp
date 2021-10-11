@@ -2,34 +2,22 @@
 #define PLANE_H
 
 #include "object3d.hpp"
-#include <vecmath.h>
 #include <cmath>
+#include <vecmath.h>
 
-// TODO: Implement Plane representing an infinite plane
 // function: ax+by+cz=d
 // choose your representation , add more fields and fill in the functions
-
 class Plane : public Object3D {
 public:
-    Plane() {
-
-    }
-
     Plane(const Vector3f &normal, float d, Material *m) : Object3D(m) {
-
+        // TODO: sphere intersection algorithm
     }
 
     ~Plane() override = default;
 
-    bool intersect(const Ray &r, Hit &h, float tmin) override {
-        return false;
-    }
+    bool intersect(const Ray &r, Hit &h, float tmin) override { return false; }
 
 protected:
-
-
 };
 
-#endif //PLANE_H
-		
-
+#endif // PLANE_H

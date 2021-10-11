@@ -1,8 +1,8 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include <Vector3f.h>
 #include "object3d.hpp"
+#include <Vector3f.h>
 
 class Light {
 public:
@@ -12,7 +12,6 @@ public:
 
     virtual void getIllumination(const Vector3f &p, Vector3f &dir, Vector3f &col) const = 0;
 };
-
 
 class DirectionalLight : public Light {
 public:
@@ -35,10 +34,8 @@ public:
     }
 
 private:
-
     Vector3f direction;
     Vector3f color;
-
 };
 
 class PointLight : public Light {
@@ -61,10 +58,8 @@ public:
     }
 
 private:
-
     Vector3f position;
     Vector3f color;
-
 };
 
 #endif // LIGHT_H

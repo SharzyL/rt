@@ -19,44 +19,32 @@ class Mesh;
 
 class SceneParser {
 public:
-
     SceneParser() = delete;
     SceneParser(const char *filename);
 
     ~SceneParser();
 
-    Camera *getCamera() const {
-        return camera;
-    }
+    Camera *getCamera() const { return camera; }
 
-    Vector3f getBackgroundColor() const {
-        return background_color;
-    }
+    Vector3f getBackgroundColor() const { return background_color; }
 
-    int getNumLights() const {
-        return num_lights;
-    }
+    int getNumLights() const { return num_lights; }
 
     Light *getLight(int i) const {
         assert(i >= 0 && i < num_lights);
         return lights[i];
     }
 
-    int getNumMaterials() const {
-        return num_materials;
-    }
+    int getNumMaterials() const { return num_materials; }
 
     Material *getMaterial(int i) const {
         assert(i >= 0 && i < num_materials);
         return materials[i];
     }
 
-    Group *getGroup() const {
-        return group;
-    }
+    Group *getGroup() const { return group; }
 
 private:
-
     void parseFile();
     void parsePerspectiveCamera();
     void parseBackground();

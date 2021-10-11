@@ -1,15 +1,15 @@
 #include <cassert>
+#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
-#include <cmath>
 #include <iostream>
 
-#include "scene_parser.hpp"
-#include "image.hpp"
 #include "camera.hpp"
 #include "group.hpp"
+#include "image.hpp"
 #include "light.hpp"
+#include "scene_parser.hpp"
 
 #include <string>
 
@@ -25,7 +25,7 @@ int main(int argc, char *argv[]) {
         return 1;
     }
     string inputFile = argv[1];
-    string outputFile = argv[2];  // only bmp is allowed.
+    string outputFile = argv[2]; // only bmp is allowed.
 
     // TODO: Main RayCasting Logic
     // First, parse the scene using SceneParser.
@@ -36,4 +36,3 @@ int main(int argc, char *argv[]) {
     cout << "Hello! Computer Graphics!" << endl;
     return 0;
 }
-
