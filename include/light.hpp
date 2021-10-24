@@ -52,8 +52,8 @@ public:
     void getIllumination(const Vector3f &p, Vector3f &dir, Vector3f &col) const override {
         // the direction to the light is the opposite of the
         // direction of the directional light source
-        dir = (position - p);
-        dir = dir / dir.length();
+        LOG(INFO) << fmt::format("light {} from {}", p, position);
+        dir = (position - p).normalized();
         col = color;
     }
 

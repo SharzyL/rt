@@ -7,7 +7,6 @@
 #include <iostream>
 #include <vector>
 
-// TODO: Implement Group - add data structure to store a list of Object*
 class Group : public Object3D {
 
 public:
@@ -16,8 +15,19 @@ public:
     explicit Group(int num_objects) { objects.reserve(num_objects); }
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        // TODO: group intersection algorithm
-        return false;
+        float t = std::numeric_limits<float>::max();
+        Hit h_tmp;
+        bool is_intersect = false;
+        for (const auto obj : objects) {
+            if (obj->intersect(r, h_tmp, tmin)) {
+                if (h_tmp.getT() <= t) {
+                    is_intersect = true;
+                    t = h_tmp.getT();
+                    h.set(t, h_tmp.getMaterial(), h_tmp.getNormal());
+                }
+            }
+        }
+        return is_intersect;
     }
 
     void addObject(int index, Object3D *obj) { objects.push_back(obj); }

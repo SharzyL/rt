@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+bin="cmake-build-debug/PA1"
 # If project not ready, generate cmake file.
 if [[ ! -d build ]]; then
     echo "good"
