@@ -42,16 +42,17 @@ public:
                       float angle)
         : Camera(center, direction, up, imgW, imgH) {
         // angle is in radian.
-        auto w = (float) imgW, h = (float) imgH;
-        right = Vector3f::cross(direction, up);
+        auto w = (float) imgW;
+        auto dir = direction.normalized();
+        right = Vector3f::cross(dir, up);
         float distToCanvas = w / 2 / std::tan(angle / 2);
-        Vector3f canvasCenter = center + direction * distToCanvas;
+        Vector3f canvasCenter = center + dir * distToCanvas;
         canvasOrigin = canvasCenter - right * (w / 2) - up * (w / 2);
     }
 
     Ray generateRay(const Vector2f &point) override {
         Vector3f pointOnCanvas = canvasOrigin + right * point.x() + up * point.y();
-        return {center, (pointOnCanvas - center).normalized()};
+        return {center, pointOnCanvas - center};
     }
 
 protected:
