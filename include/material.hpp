@@ -8,6 +8,10 @@
 #include "ray.hpp"
 #include <iostream>
 
+static float clamp(float x) {
+    return x >= 0 ? x : 0;
+}
+
 class Material {
 public:
     explicit Material(const Vector3f &d_color, const Vector3f &s_color = Vector3f::ZERO, float s = 0)
@@ -19,8 +23,14 @@ public:
 
     Vector3f Shade(const Ray &ray, const Hit &hit, const Vector3f &dirToLight, const Vector3f &lightColor) {
         Vector3f shaded = Vector3f::ZERO;
-        // TODO: Phong model
-        return shaded;
+        const Vector3f &normal = hit.getNormal();
+        const Vector3f &toRay = -ray.getDirection();
+        Vector3f reflection = 2 * Vector3f::dot(normal, dirToLight) * normal - dirToLight;
+        Vector3f diffuse = diffuseColor * clamp(Vector3f::dot(dirToLight, normal));
+        Vector3f specular = shaded += specularColor * std::pow(clamp(Vector3f::dot(toRay, reflection)), shininess);
+//        LOG(INFO) << fmt::format("diffuse {}, specular {}", diffuse, specular);
+        LOG(INFO) << fmt::format("li {}, normal {}, toRay {}, reflection {}", dirToLight, normal, toRay, reflection);
+        return (diffuse + specular) * lightColor;
     }
 
 protected:

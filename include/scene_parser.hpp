@@ -20,7 +20,7 @@ class Mesh;
 class SceneParser {
 public:
     SceneParser() = delete;
-    SceneParser(const char *filename);
+    explicit SceneParser(const char *filename);
 
     ~SceneParser();
 
