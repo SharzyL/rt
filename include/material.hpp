@@ -24,7 +24,7 @@ public:
     Vector3f Shade(const Ray &ray, const Hit &hit, const Vector3f &dirToLight, const Vector3f &lightColor) {
         Vector3f shaded = Vector3f::ZERO;
         const Vector3f &normal = hit.getNormal();
-        const Vector3f &toRay = -ray.getDirection();
+        const Vector3f &toRay = -ray.getDirection().normalized();
         Vector3f reflection = 2 * Vector3f::dot(normal, dirToLight) * normal - dirToLight;
         Vector3f diffuse = diffuseColor * clamp(Vector3f::dot(dirToLight, normal));
         Vector3f specular = shaded += specularColor * std::pow(clamp(Vector3f::dot(toRay, reflection)), shininess);
