@@ -1,10 +1,11 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include "ray.hpp"
-#include "vecmath.h"
 #include <cfloat>
 #include <cmath>
+
+#include "ray.hpp"
+#include "vecmath.h"
 
 class Camera {
 public:
@@ -13,8 +14,6 @@ public:
         this->direction = direction.normalized();
         this->horizontal = Vector3f::cross(this->direction, up).normalized();
         this->up = Vector3f::cross(this->horizontal, this->direction);
-        LOG(ERROR) << fmt::format("direction {}, up {}, horizontal {}", this->direction.length(), this->up.length(),
-                                  this->horizontal.length());
         this->width = imgW;
         this->height = imgH;
     }

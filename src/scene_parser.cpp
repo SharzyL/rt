@@ -4,13 +4,14 @@
 #include <cstring>
 
 #include "camera.hpp"
-#include "group.hpp"
 #include "light.hpp"
 #include "material.hpp"
+#include "scene_parser.hpp"
+
+#include "objects/group.hpp"
 #include "objects/mesh.hpp"
 #include "objects/object3d.hpp"
 #include "objects/plane.hpp"
-#include "scene_parser.hpp"
 #include "objects/sphere.hpp"
 #include "objects/transform.hpp"
 #include "objects/triangle.hpp"

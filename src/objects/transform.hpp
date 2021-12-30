@@ -1,8 +1,9 @@
 #ifndef TRANSFORM_H
 #define TRANSFORM_H
 
-#include "object3d.hpp"
 #include "vecmath.h"
+
+#include "objects/object3d.hpp"
 
 // transforms a 3D point using a matrix, returning a 3D point
 static Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) { return (mat * Vector4f(point, 1)).xyz(); }
