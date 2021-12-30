@@ -67,10 +67,7 @@ float& Vector2f::y()
     return m_elements[1];
 }
 
-float Vector2f::x() const
-{
-    return m_elements[0];
-}	
+float Vector2f::x() const { return m_elements[0]; }
 
 float Vector2f::y() const
 {

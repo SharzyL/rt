@@ -253,22 +253,22 @@ Vector3f Vector3f::lerp( const Vector3f& v0, const Vector3f& v1, float alpha )
 // static
 Vector3f Vector3f::cubicInterpolate( const Vector3f& p0, const Vector3f& p1, const Vector3f& p2, const Vector3f& p3, float t )
 {
-	// geometric construction:
-	//            t
-	//   (t+1)/2     t/2
-	// t+1        t	        t-1
+    // geometric construction:
+    //            indices
+    //   (indices+1)/2     indices/2
+    // indices+1        indices	        indices-1
 
-	// bottom level
-	Vector3f p0p1 = Vector3f::lerp( p0, p1, t + 1 );
-	Vector3f p1p2 = Vector3f::lerp( p1, p2, t );
-	Vector3f p2p3 = Vector3f::lerp( p2, p3, t - 1 );
+    // bottom level
+    Vector3f p0p1 = Vector3f::lerp(p0, p1, t + 1);
+    Vector3f p1p2 = Vector3f::lerp(p1, p2, t);
+    Vector3f p2p3 = Vector3f::lerp(p2, p3, t - 1);
 
-	// middle level
-	Vector3f p0p1_p1p2 = Vector3f::lerp( p0p1, p1p2, 0.5f * ( t + 1 ) );
-	Vector3f p1p2_p2p3 = Vector3f::lerp( p1p2, p2p3, 0.5f * t );
+    // middle level
+    Vector3f p0p1_p1p2 = Vector3f::lerp(p0p1, p1p2, 0.5f * (t + 1));
+    Vector3f p1p2_p2p3 = Vector3f::lerp(p1p2, p2p3, 0.5f * t);
 
-	// top level
-	return Vector3f::lerp( p0p1_p1p2, p1p2_p2p3, t );
+    // top level
+    return Vector3f::lerp(p0p1_p1p2, p1p2_p2p3, t);
 }
 
 Vector3f operator + ( const Vector3f& v0, const Vector3f& v1 )

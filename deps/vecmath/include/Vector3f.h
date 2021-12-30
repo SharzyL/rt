@@ -71,7 +71,7 @@ public:
     static Vector3f lerp(const Vector3f &v0, const Vector3f &v1, float alpha);
 
     // computes the cubic catmull-rom interpolation between p0, p1, p2, p3
-    // by t \in [0,1].  Guarantees that at t = 0, the result is p0 and
+    // by indices \in [0,1].  Guarantees that at indices = 0, the result is p0 and
     // at p1, the result is p2.
     static Vector3f cubicInterpolate(const Vector3f &p0, const Vector3f &p1, const Vector3f &p2, const Vector3f &p3,
                                      float t);

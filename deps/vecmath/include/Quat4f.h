@@ -70,7 +70,7 @@ public:
     // spherical linear interpolation
     static Quat4f slerp(const Quat4f &a, const Quat4f &b, float t, bool allowFlip = true);
 
-    // spherical quadratic interoplation between a and b at point t
+    // spherical quadratic interoplation between a and b at point indices
     // given quaternion tangents tanA and tanB (can be computed using squadTangent)
     static Quat4f squad(const Quat4f &a, const Quat4f &tanA, const Quat4f &tanB, const Quat4f &b, float t);
 

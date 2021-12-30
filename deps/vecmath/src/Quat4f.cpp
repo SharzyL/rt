@@ -119,10 +119,7 @@ Vector4f Quat4f::wxyz() const
 	);
 }
 
-float Quat4f::abs() const
-{
-	return sqrt( absSquared() );	
-}
+float Quat4f::abs() const { return sqrt(absSquared()); }
 
 float Quat4f::absSquared() const
 {
@@ -224,8 +221,8 @@ Quat4f Quat4f::exp() const
 	else
 	{
 		float coeff = sin( theta ) / theta;
-		return Quat4f( cos( theta ), m_elements[ 1 ] * coeff, m_elements[ 2 ] * coeff, m_elements[ 3 ] * coeff );		
-	}
+                return Quat4f(cos(theta), m_elements[1] * coeff, m_elements[2] * coeff, m_elements[3] * coeff);
+        }
 }
 
 Vector3f Quat4f::getAxisAngle( float* radiansOut )
@@ -323,22 +320,22 @@ Quat4f Quat4f::squad( const Quat4f& a, const Quat4f& tanA, const Quat4f& tanB, c
 // static
 Quat4f Quat4f::cubicInterpolate( const Quat4f& q0, const Quat4f& q1, const Quat4f& q2, const Quat4f& q3, float t )
 {
-	// geometric construction:
-	//            t
-	//   (t+1)/2     t/2
-	// t+1        t	        t-1
+    // geometric construction:
+    //            indices
+    //   (indices+1)/2     indices/2
+    // indices+1        indices	        indices-1
 
-	// bottom level
-	Quat4f q0q1 = Quat4f::slerp( q0, q1, t + 1 );
-	Quat4f q1q2 = Quat4f::slerp( q1, q2, t );
-	Quat4f q2q3 = Quat4f::slerp( q2, q3, t - 1 );
+    // bottom level
+    Quat4f q0q1 = Quat4f::slerp(q0, q1, t + 1);
+    Quat4f q1q2 = Quat4f::slerp(q1, q2, t);
+    Quat4f q2q3 = Quat4f::slerp(q2, q3, t - 1);
 
-	// middle level
-	Quat4f q0q1_q1q2 = Quat4f::slerp( q0q1, q1q2, 0.5f * ( t + 1 ) );
-	Quat4f q1q2_q2q3 = Quat4f::slerp( q1q2, q2q3, 0.5f * t );
+    // middle level
+    Quat4f q0q1_q1q2 = Quat4f::slerp(q0q1, q1q2, 0.5f * (t + 1));
+    Quat4f q1q2_q2q3 = Quat4f::slerp(q1q2, q2q3, 0.5f * t);
 
-	// top level
-	return Quat4f::slerp( q0q1_q1q2, q1q2_q2q3, t );
+    // top level
+    return Quat4f::slerp(q0q1_q1q2, q1q2_q2q3, t);
 }
 
 // static
@@ -354,15 +351,14 @@ Quat4f Quat4f::squadTangent( const Quat4f& before, const Quat4f& center, const Q
 {
 	Quat4f l1 = Quat4f::logDifference( center, before );
 	Quat4f l2 = Quat4f::logDifference( center, after );
-	
-	Quat4f e;
-	for( int i = 0; i < 4; ++i )
-	{
-		e[ i ] = -0.25f * ( l1[ i ] + l2[ i ] );
-	}
-	e = center * ( e.exp() );
 
-	return e;
+        Quat4f e;
+        for (int i = 0; i < 4; ++i) {
+            e[i] = -0.25f * (l1[i] + l2[i]);
+        }
+        e = center * (e.exp());
+
+        return e;
 }
 
 // static

@@ -3,8 +3,6 @@
 
 #include "Vector3f.h"
 
-#include "objects/object3d.h"
-
 class Light {
 public:
     Light() = default;
