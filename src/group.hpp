@@ -2,7 +2,7 @@
 #define GROUP_H
 
 #include "hit.hpp"
-#include "object3d.hpp"
+#include "objects/object3d.hpp"
 #include "ray.hpp"
 #include <iostream>
 #include <vector>

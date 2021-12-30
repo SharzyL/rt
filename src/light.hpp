@@ -1,8 +1,8 @@
 #ifndef LIGHT_H
 #define LIGHT_H
 
-#include "object3d.hpp"
-#include <Vector3f.h>
+#include "Vector3f.h"
+#include "objects/object3d.hpp"
 
 class Light {
 public:

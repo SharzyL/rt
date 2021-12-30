@@ -2,9 +2,9 @@
 #define TRIANGLE_H
 
 #include "object3d.hpp"
+#include "vecmath.h"
 #include <cmath>
 #include <iostream>
-#include <vecmath.h>
 using namespace std;
 
 class Triangle : public Object3D {
@@ -16,11 +16,11 @@ public:
     }
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        const Vector3f& rd = r.getDirection();
+        const Vector3f &rd = r.getDirection();
         const Vector3f e1 = a - b, e2 = a - c, s = a - r.getOrigin();
         float det_rd_e1_e2 = Matrix3f(rd, e1, e2).determinant();
-        float t     = Matrix3f(s, e1, e2).determinant() / det_rd_e1_e2;
-        float beta  = Matrix3f(rd, s, e2).determinant() / det_rd_e1_e2;
+        float t = Matrix3f(s, e1, e2).determinant() / det_rd_e1_e2;
+        float beta = Matrix3f(rd, s, e2).determinant() / det_rd_e1_e2;
         float gamma = Matrix3f(rd, e1, s).determinant() / det_rd_e1_e2;
         if (t < h.getT() && t >= tmin && 0 <= beta && beta <= 1 && 0 <= gamma && gamma <= 1 && beta + gamma <= 1) {
             h.set(t, material, normal);

@@ -2,9 +2,9 @@
 #define CAMERA_H
 
 #include "ray.hpp"
+#include "vecmath.h"
 #include <cfloat>
 #include <cmath>
-#include <vecmath.h>
 
 class Camera {
 public:
@@ -13,7 +13,8 @@ public:
         this->direction = direction.normalized();
         this->horizontal = Vector3f::cross(this->direction, up).normalized();
         this->up = Vector3f::cross(this->horizontal, this->direction);
-        LOG(ERROR) << fmt::format("direction {}, up {}, horizontal {}", this->direction.length(), this->up.length(), this->horizontal.length());
+        LOG(ERROR) << fmt::format("direction {}, up {}, horizontal {}", this->direction.length(), this->up.length(),
+                                  this->horizontal.length());
         this->width = imgW;
         this->height = imgH;
     }
@@ -22,8 +23,8 @@ public:
     virtual Ray generateRay(const Vector2f &point) = 0;
     virtual ~Camera() = default;
 
-    int getWidth() const { return width; }
-    int getHeight() const { return height; }
+    [[nodiscard]] int getWidth() const { return width; }
+    [[nodiscard]] int getHeight() const { return height; }
 
 protected:
     // Extrinsic parameters
@@ -43,7 +44,7 @@ public:
                       float angle)
         : Camera(center, _direction, _up, imgW, imgH) {
         // angle is in radian.
-        auto w = (float) imgW, h = (float) imgH;
+        auto w = (float)imgW, h = (float)imgH;
         float distToCanvas = h / 2 / std::tan(angle / 2);
         Vector3f canvasCenter = center + direction * distToCanvas;
         canvasOrigin = canvasCenter - horizontal * (w / 2) - up * (w / 2);

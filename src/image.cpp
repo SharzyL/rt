@@ -36,7 +36,7 @@ unsigned char ClampColorComponent(float c) {
 // (uncompressed, unmapped RGB images)
 
 void Image::SaveTGA(const char *filename) const {
-    assert(filename != NULL);
+    assert(filename != nullptr);
     // must end in .tga
     const char *ext = &filename[strlen(filename) - 4];
     assert(!strcmp(ext, ".tga"));
@@ -75,7 +75,7 @@ void Image::SaveTGA(const char *filename) const {
 }
 
 Image *Image::LoadTGA(const char *filename) {
-    assert(filename != NULL);
+    assert(filename != nullptr);
     // must end in .tga
     const char *ext = &filename[strlen(filename) - 4];
     assert(!strcmp(ext, ".tga"));
@@ -104,7 +104,7 @@ Image *Image::LoadTGA(const char *filename) {
             assert(tmp == 0);
     }
     // the data
-    Image *answer = new Image(width, height);
+    auto *answer = new Image(width, height);
     // flip y so that (0,0) is bottom left corner
     for (int y = height - 1; y >= 0; y--) {
         for (int x = 0; x < width; x++) {
@@ -125,13 +125,13 @@ Image *Image::LoadTGA(const char *filename) {
 // and having one comment line
 
 void Image::SavePPM(const char *filename) const {
-    assert(filename != NULL);
+    assert(filename != nullptr);
     // must end in .ppm
     const char *ext = &filename[strlen(filename) - 4];
     assert(!strcmp(ext, ".ppm"));
     FILE *file = fopen(filename, "w");
     // misc header information
-    assert(file != NULL);
+    assert(file != nullptr);
     fprintf(file, "P6\n");
     fprintf(file, "# Creator: Image::SavePPM()\n");
     fprintf(file, "%d %d\n", width, height);
@@ -150,7 +150,7 @@ void Image::SavePPM(const char *filename) const {
 }
 
 Image *Image::LoadPPM(const char *filename) {
-    assert(filename != NULL);
+    assert(filename != nullptr);
     // must end in .ppm
     const char *ext = &filename[strlen(filename) - 4];
     assert(!strcmp(ext, ".ppm"));
@@ -168,7 +168,7 @@ Image *Image::LoadPPM(const char *filename) {
     fgets(tmp, 100, file);
     assert(strstr(tmp, "255"));
     // the data
-    Image *answer = new Image(width, height);
+    auto *answer = new Image(width, height);
     // flip y so that (0,0) is bottom left corner
     for (int y = height - 1; y >= 0; y--) {
         for (int x = 0; x < width; x++) {
@@ -228,7 +228,7 @@ int Image::SaveBMP(const char *filename) {
     unsigned char *line;
     Vector3f *rgb = data;
     FILE *file;
-    struct BMPHeader bmph;
+    struct BMPHeader bmph{};
 
     /* The length of each line must be a multiple of 4 bytes */
 

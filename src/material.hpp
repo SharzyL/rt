@@ -1,16 +1,14 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
+#include "vecmath.h"
 #include <cassert>
-#include <vecmath.h>
 
 #include "hit.hpp"
 #include "ray.hpp"
 #include <iostream>
 
-static float clamp(float x) {
-    return x >= 0 ? x : 0;
-}
+static float clamp(float x) { return x >= 0 ? x : 0; }
 
 class Material {
 public:
@@ -28,7 +26,7 @@ public:
         Vector3f reflection = 2 * Vector3f::dot(normal, dirToLight) * normal - dirToLight;
         Vector3f diffuse = diffuseColor * clamp(Vector3f::dot(dirToLight, normal));
         Vector3f specular = shaded += specularColor * std::pow(clamp(Vector3f::dot(toRay, reflection)), shininess);
-//        LOG(INFO) << fmt::format("diffuse {}, specular {}", diffuse, specular);
+        //        LOG(INFO) << fmt::format("diffuse {}, specular {}", diffuse, specular);
         LOG(INFO) << fmt::format("li {}, normal {}, toRay {}, reflection {}", dirToLight, normal, toRay, reflection);
         return (diffuse + specular) * lightColor;
     }
