@@ -3,18 +3,18 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "camera.hpp"
-#include "light.hpp"
-#include "material.hpp"
-#include "scene_parser.hpp"
+#include "camera.h"
+#include "light.h"
+#include "material.h"
+#include "scene_parser.h"
 
-#include "objects/group.hpp"
-#include "objects/mesh.hpp"
-#include "objects/object3d.hpp"
-#include "objects/plane.hpp"
-#include "objects/sphere.hpp"
-#include "objects/transform.hpp"
-#include "objects/triangle.hpp"
+#include "objects/group.h"
+#include "objects/mesh.h"
+#include "objects/object3d.h"
+#include "objects/plane.h"
+#include "objects/sphere.h"
+#include "objects/transform.h"
+#include "objects/triangle.h"
 
 #define DegreesToRadians(x) ((M_PI * x) / 180.0f)
 

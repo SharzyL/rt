@@ -2,8 +2,8 @@
 // Created by sharzy on 12/30/21.
 //
 
-#ifndef RT_DEBUG_HPP
-#define RT_DEBUG_HPP
+#ifndef RT_DEBUG_H
+#define RT_DEBUG_H
 
 #include "Vector3f.h"
 
@@ -18,4 +18,4 @@ template <> struct fmt::formatter<Vector3f> {
     }
 };
 
-#endif //RT_DEBUG_HPP
+#endif // RT_DEBUG_H

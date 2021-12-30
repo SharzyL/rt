@@ -1,9 +1,9 @@
 #include <fstream>
 #include <iostream>
 
-#include "ray.hpp"
-#include "mesh.hpp"
-#include "hit.hpp"
+#include "hit.h"
+#include "mesh.h"
+#include "ray.h"
 
 bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
 

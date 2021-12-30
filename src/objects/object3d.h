@@ -1,9 +1,9 @@
 #ifndef OBJECT3D_H
 #define OBJECT3D_H
 
-#include "hit.hpp"
-#include "material.hpp"
-#include "ray.hpp"
+#include "hit.h"
+#include "material.h"
+#include "ray.h"
 
 // Base class for all 3d entities.
 class Object3D {
