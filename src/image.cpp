@@ -272,7 +272,7 @@ int Image::SaveBMP(const char *filename) {
 
     line = (unsigned char *)malloc(bytesPerLine);
     if (line == NULL) {
-        fprintf(stderr, "Can't allocate memory for BMP file.\n");
+        fprintf(stderr, "Can'indices allocate memory for BMP file.\n");
         return (0);
     }
 

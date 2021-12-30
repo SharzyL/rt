@@ -95,12 +95,7 @@ Vector3f Matrix3f::getCol( int j ) const
 {
 	int colStart = 3 * j;
 
-	return Vector3f
-	(
-		m_elements[ colStart ],
-		m_elements[ colStart + 1 ],
-		m_elements[ colStart + 2 ]			
-	);
+        return Vector3f(m_elements[colStart], m_elements[colStart + 1], m_elements[colStart + 2]);
 }
 
 void Matrix3f::setCol( int j, const Vector3f& v )
@@ -175,32 +170,26 @@ Matrix3f Matrix3f::inverse( bool* pbIsSingular, float epsilon ) const
 	float cofactor22 =  Matrix2f::determinant2x2( m00, m01, m10, m11 );
 
 	float determinant = m00 * cofactor00 + m01 * cofactor01 + m02 * cofactor02;
-	
-	bool isSingular = ( fabs( determinant ) < epsilon );
-	if( isSingular )
-	{
-		if( pbIsSingular != NULL )
-		{
-			*pbIsSingular = true;
-		}
-		return Matrix3f();
-	}
-	else
-	{
-		if( pbIsSingular != NULL )
-		{
-			*pbIsSingular = false;
-		}
 
-		float reciprocalDeterminant = 1.0f / determinant;
+        bool isSingular = (fabs(determinant) < epsilon);
+        if (isSingular) {
+            if (pbIsSingular != NULL) {
+                *pbIsSingular = true;
+            }
+            return Matrix3f();
+        } else {
+            if (pbIsSingular != NULL) {
+                *pbIsSingular = false;
+            }
 
-		return Matrix3f
-		(
-			cofactor00 * reciprocalDeterminant, cofactor10 * reciprocalDeterminant, cofactor20 * reciprocalDeterminant,
-			cofactor01 * reciprocalDeterminant, cofactor11 * reciprocalDeterminant, cofactor21 * reciprocalDeterminant,
-			cofactor02 * reciprocalDeterminant, cofactor12 * reciprocalDeterminant, cofactor22 * reciprocalDeterminant
-		);
-	}
+            float reciprocalDeterminant = 1.0f / determinant;
+
+            return Matrix3f(cofactor00 * reciprocalDeterminant, cofactor10 * reciprocalDeterminant,
+                            cofactor20 * reciprocalDeterminant, cofactor01 * reciprocalDeterminant,
+                            cofactor11 * reciprocalDeterminant, cofactor21 * reciprocalDeterminant,
+                            cofactor02 * reciprocalDeterminant, cofactor12 * reciprocalDeterminant,
+                            cofactor22 * reciprocalDeterminant);
+        }
 }
 
 void Matrix3f::transpose()
@@ -351,15 +340,15 @@ Matrix3f Matrix3f::uniformScaling( float s )
 Matrix3f Matrix3f::rotation( const Vector3f& rDirection, float radians )
 {
 	Vector3f normalizedDirection = rDirection.normalized();
-	
-	float cosTheta = cos( radians );
-	float sinTheta = sin( radians );
 
-	float x = normalizedDirection.x();
-	float y = normalizedDirection.y();
-	float z = normalizedDirection.z();
+        float cosTheta = cos(radians);
+        float sinTheta = sin(radians);
 
-	return Matrix3f
+        float x = normalizedDirection.x();
+        float y = normalizedDirection.y();
+        float z = normalizedDirection.z();
+
+        return Matrix3f
 		(
 			x * x * ( 1.0f - cosTheta ) + cosTheta,			y * x * ( 1.0f - cosTheta ) - z * sinTheta,		z * x * ( 1.0f - cosTheta ) + y * sinTheta,
 			x * y * ( 1.0f - cosTheta ) + z * sinTheta,		y * y * ( 1.0f - cosTheta ) + cosTheta,			z * y * ( 1.0f - cosTheta ) - x * sinTheta,
