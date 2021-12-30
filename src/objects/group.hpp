@@ -1,11 +1,13 @@
 #ifndef GROUP_H
 #define GROUP_H
 
-#include "hit.hpp"
-#include "objects/object3d.hpp"
-#include "ray.hpp"
 #include <iostream>
 #include <vector>
+
+#include "hit.hpp"
+#include "ray.hpp"
+
+#include "objects/object3d.hpp"
 
 class Group : public Object3D {
 
@@ -26,7 +28,7 @@ public:
 
     void addObject(int index, Object3D *obj) { objects.push_back(obj); }
 
-    size_t getGroupSize() const { return objects.size(); }
+    [[nodiscard]] size_t getGroupSize() const { return objects.size(); }
 
     std::vector<Object3D *> objects;
 

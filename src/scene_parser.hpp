@@ -1,8 +1,9 @@
 #ifndef SCENE_PARSER_H
 #define SCENE_PARSER_H
 
-#include "vecmath.h"
 #include <cassert>
+
+#include "vecmath.h"
 
 class Camera;
 class Light;

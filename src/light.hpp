@@ -2,6 +2,7 @@
 #define LIGHT_H
 
 #include "Vector3f.h"
+
 #include "objects/object3d.hpp"
 
 class Light {
@@ -52,7 +53,6 @@ public:
     void getIllumination(const Vector3f &p, Vector3f &dir, Vector3f &col) const override {
         // the direction to the light is the opposite of the
         // direction of the directional light source
-        LOG(INFO) << fmt::format("light {} from {}", p, position);
         dir = (position - p).normalized();
         col = color;
     }

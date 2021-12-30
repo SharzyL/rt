@@ -1,12 +1,14 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include "vecmath.h"
 #include <cassert>
+#include <iostream>
+
+#include "vecmath.h"
 
 #include "hit.hpp"
 #include "ray.hpp"
-#include <iostream>
+#include "debug.hpp"
 
 static float clamp(float x) { return x >= 0 ? x : 0; }
 
@@ -17,7 +19,7 @@ public:
 
     virtual ~Material() = default;
 
-    virtual Vector3f getDiffuseColor() const { return diffuseColor; }
+    [[nodiscard]] virtual Vector3f getDiffuseColor() const { return diffuseColor; }
 
     Vector3f Shade(const Ray &ray, const Hit &hit, const Vector3f &dirToLight, const Vector3f &lightColor) {
         Vector3f shaded = Vector3f::ZERO;

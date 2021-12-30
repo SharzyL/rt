@@ -1,9 +1,11 @@
 #ifndef PLANE_H
 #define PLANE_H
 
-#include "object3d.hpp"
-#include "vecmath.h"
 #include <cmath>
+
+#include "vecmath.h"
+
+#include "objects/object3d.hpp"
 
 // function: ax+by+cz=d
 // choose your representation , add more fields and fill in the functions

@@ -1,9 +1,11 @@
 #ifndef SPHERE_H
 #define SPHERE_H
 
-#include "object3d.hpp"
-#include "vecmath.h"
 #include <cmath>
+
+#include "vecmath.h"
+
+#include "objects/object3d.hpp"
 
 class Sphere : public Object3D {
 public:

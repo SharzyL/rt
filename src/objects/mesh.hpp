@@ -1,11 +1,13 @@
 #ifndef MESH_H
 #define MESH_H
 
+#include <vector>
+
 #include "Vector2f.h"
 #include "Vector3f.h"
-#include "object3d.hpp"
-#include "triangle.hpp"
-#include <vector>
+
+#include "objects/object3d.hpp"
+#include "objects/triangle.hpp"
 
 class Mesh : public Object3D {
 
