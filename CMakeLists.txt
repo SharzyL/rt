@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-PROJECT(PA1 CXX)
+PROJECT(RT CXX)
 
 IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE Release)
@@ -7,13 +7,13 @@ ENDIF()
 
 ADD_SUBDIRECTORY(deps/vecmath)
 
-SET(PA1_SOURCES
+SET(SOURCES
         src/image.cpp
         src/main.cpp
         src/mesh.cpp
         src/scene_parser.cpp)
 
-SET(PA1_INCLUDES
+SET(INCLUDES
         include/camera.hpp
         include/group.hpp
         include/hit.hpp
@@ -33,9 +33,9 @@ SET(PA1_INCLUDES
 find_package(fmt REQUIRED)
 find_package(glog REQUIRED)
 
-SET(CMAKE_CXX_STANDARD 14)
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
+SET(CMAKE_CXX_STANDARD 20)
 
-ADD_EXECUTABLE(${PROJECT_NAME} ${PA1_SOURCES} ${PA1_INCLUDES})
+ADD_EXECUTABLE(${PROJECT_NAME} ${SOURCES} ${INCLUDES})
 TARGET_LINK_LIBRARIES(${PROJECT_NAME} vecmath glog::glog fmt)
 TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME} PRIVATE include)
+
