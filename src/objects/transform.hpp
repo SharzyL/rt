@@ -7,14 +7,14 @@
 // transforms a 3D point using a matrix, returning a 3D point
 static Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) { return (mat * Vector4f(point, 1)).xyz(); }
 
-// transform a 3D directino using a matrix, returning a direction
+// transform a 3D direction using a matrix, returning a direction
 static Vector3f transformDirection(const Matrix4f &mat, const Vector3f &dir) { return (mat * Vector4f(dir, 0)).xyz(); }
 
 class Transform : public Object3D {
 public:
     Transform(const Matrix4f &m, Object3D *obj) : o(obj) { transform = m.inverse(); }
 
-    virtual bool intersect(const Ray &r, Hit &h, float tmin) {
+    bool intersect(const Ray &r, Hit &h, float tmin) override {
         Vector3f trSource = transformPoint(transform, r.getOrigin());
         Vector3f trDirection = transformDirection(transform, r.getDirection());
         Ray tr(trSource, trDirection);
