@@ -2,8 +2,8 @@
 #define SPHERE_H
 
 #include "object3d.hpp"
+#include "vecmath.h"
 #include <cmath>
-#include <vecmath.h>
 
 class Sphere : public Object3D {
 public:
@@ -13,7 +13,7 @@ public:
     ~Sphere() override = default;
 
     bool intersect(const Ray &r, Hit &h, float tmin) override {
-        const Vector3f& rd = r.getDirection();
+        const Vector3f &rd = r.getDirection();
         auto origin_to_center = center - r.getOrigin();
         float tp = Vector3f::dot(origin_to_center, rd);
         float dist_to_center = origin_to_center.length();

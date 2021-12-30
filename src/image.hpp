@@ -1,8 +1,8 @@
 #ifndef IMAGE_H
 #define IMAGE_H
 
+#include "vecmath.h"
 #include <cassert>
-#include <vecmath.h>
 
 // Simple image class
 class Image {
@@ -16,11 +16,11 @@ public:
 
     ~Image() { delete[] data; }
 
-    int Width() const { return width; }
+    [[nodiscard]] int Width() const { return width; }
 
-    int Height() const { return height; }
+    [[nodiscard]] int Height() const { return height; }
 
-    const Vector3f &GetPixel(int x, int y) const {
+    [[nodiscard]] const Vector3f &GetPixel(int x, int y) const {
         assert(x >= 0 && x < width);
         assert(y >= 0 && y < height);
         return data[y * width + x];

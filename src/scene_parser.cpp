@@ -7,13 +7,13 @@
 #include "group.hpp"
 #include "light.hpp"
 #include "material.hpp"
-#include "mesh.hpp"
-#include "object3d.hpp"
-#include "plane.hpp"
+#include "objects/mesh.hpp"
+#include "objects/object3d.hpp"
+#include "objects/plane.hpp"
 #include "scene_parser.hpp"
-#include "sphere.hpp"
-#include "transform.hpp"
-#include "triangle.hpp"
+#include "objects/sphere.hpp"
+#include "objects/transform.hpp"
+#include "objects/triangle.hpp"
 
 #define DegreesToRadians(x) ((M_PI * x) / 180.0f)
 

@@ -1,7 +1,7 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include <Vector3f.h>
+#include "Vector3f.h"
 #include <cassert>
 #include <iostream>
 
@@ -11,8 +11,7 @@
 
 template <> struct fmt::formatter<Vector3f> {
     constexpr auto parse(format_parse_context &ctx) { return ctx.begin(); }
-    template <typename FormatContext>
-    auto format(const Vector3f &p, FormatContext &ctx) {
+    template <typename FormatContext> auto format(const Vector3f &p, FormatContext &ctx) {
         return format_to(ctx.out(), "({:.3f}, {:.3f}, {:.3f})", p.x(), p.y(), p.z());
     }
 };

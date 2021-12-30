@@ -1,10 +1,6 @@
 #include "mesh.hpp"
-#include <algorithm>
-#include <cstdlib>
 #include <fstream>
 #include <iostream>
-#include <sstream>
-#include <utility>
 
 bool Mesh::intersect(const Ray &r, Hit &h, float tmin) {
 
