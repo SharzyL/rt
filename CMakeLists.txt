@@ -8,9 +8,19 @@ ENDIF()
 ADD_SUBDIRECTORY(deps/vecmath)
 
 SET(SOURCES
+        src/objects/group.cpp
+        src/objects/plane.cpp
+        src/objects/sphere.cpp
+        src/objects/transform.cpp
+        src/objects/triangle.cpp
+        src/objects/mesh.cpp
+        src/hit.cpp
+        src/light.cpp
+        src/material.cpp
+        src/ray.cpp
+        src/camera.cpp
         src/image.cpp
         src/main.cpp
-        src/objects/mesh.cpp
         src/scene_parser.cpp)
 
 find_package(fmt REQUIRED)

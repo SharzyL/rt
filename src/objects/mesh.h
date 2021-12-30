@@ -6,8 +6,8 @@
 #include "Vector2f.h"
 #include "Vector3f.h"
 
-#include "objects/object3d.hpp"
-#include "objects/triangle.hpp"
+#include "objects/object3d.h"
+#include "objects/triangle.h"
 
 class Mesh : public Object3D {
 

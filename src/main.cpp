@@ -1,12 +1,12 @@
 #include <iostream>
 
-#include "camera.hpp"
-#include "image.hpp"
-#include "light.hpp"
-#include "scene_parser.hpp"
-#include "debug.hpp"
+#include "camera.h"
+#include "debug.h"
+#include "image.h"
+#include "light.h"
+#include "scene_parser.h"
 
-#include "objects/group.hpp"
+#include "objects/group.h"
 
 using namespace std;
 

@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <cstring>
 
-#include "image.hpp"
+#include "image.h"
 
 // some helper functions for save & load
 
