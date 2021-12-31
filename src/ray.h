@@ -20,6 +20,8 @@ public:
 
     [[nodiscard]] Vector3f pointAtParameter(float t) const;
 
+    void set(const Vector3f &orig, const Vector3f &dir);
+
 private:
     Vector3f origin;
     Vector3f direction;

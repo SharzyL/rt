@@ -16,6 +16,11 @@ Ray::Ray(const Ray &r) {
 
 [[nodiscard]] Vector3f Ray::pointAtParameter(float t) const { return origin + direction * t; }
 
+void Ray::set(const Vector3f &orig, const Vector3f &dir) {
+    this->origin = orig;
+    this->direction = dir;
+}
+
 inline std::ostream &operator<<(std::ostream &os, const Ray &r) {
     os << "Ray <" << r.getOrigin() << ", " << r.getDirection() << ">";
     return os;

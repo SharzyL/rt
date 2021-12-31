@@ -8,10 +8,17 @@ ENDIF()
 include(FetchContent)
 FetchContent_Declare(tinyobjloader GIT_REPOSITORY https://github.com/tinyobjloader/tinyobjloader GIT_TAG v2.0.0rc9)
 FetchContent_MakeAvailable(tinyobjloader)
+#add_definitions(-DTINYOBJLOADER_IMPLEMENTATION)
 
-ADD_SUBDIRECTORY(deps/vecmath)
+add_subdirectory(deps/vecmath)
 
-SET(SOURCES
+set(SOURCES
+        src/objects/group.cpp
+        src/objects/plane.cpp
+        src/objects/sphere.cpp
+        src/objects/transform.cpp
+        src/objects/triangle.cpp
+        src/objects/mesh.cpp
         src/hit.cpp
         src/light.cpp
         src/material.cpp
@@ -24,8 +31,8 @@ SET(SOURCES
 find_package(fmt REQUIRED)
 find_package(glog REQUIRED)
 
-SET(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 20)
 
-ADD_EXECUTABLE(${PROJECT_NAME} ${SOURCES})
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} vecmath glog::glog fmt tinyobjloader)
-TARGET_INCLUDE_DIRECTORIES(${PROJECT_NAME} PRIVATE src)
+add_executable(${PROJECT_NAME} ${SOURCES})
+target_link_libraries(${PROJECT_NAME} vecmath glog::glog fmt tinyobjloader)
+target_include_directories(${PROJECT_NAME} PRIVATE src)

@@ -19,11 +19,11 @@ Hit::Hit(const Hit &h) {
 
 [[nodiscard]] float Hit::getT() const { return t; }
 
-[[nodiscard]] Material *Hit::getMaterial() const { return material; }
+[[nodiscard]] const Material *Hit::getMaterial() const { return material; }
 
 [[nodiscard]] const Vector3f &Hit::getNormal() const { return normal; }
 
-void Hit::set(float _t, Material *m, const Vector3f &n) {
+void Hit::set(float _t, const Material *m, const Vector3f &n) {
     t = _t;
     material = m;
     normal = n;

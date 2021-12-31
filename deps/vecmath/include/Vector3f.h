@@ -21,6 +21,7 @@ public:
 
     // assignment operators
     Vector3f &operator=(const Vector3f &rv);
+    Vector3f &operator=(const float rv[3]);
 
     // no destructor necessary
 
