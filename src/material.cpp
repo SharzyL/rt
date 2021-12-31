@@ -1,18 +1,43 @@
 #include "./material.h"
+#include "util.h"
 
-Material::Material(const Vector3f &d_color, const Vector3f &s_color, float s)
-    : diffuseColor(d_color), specularColor(s_color), shininess(s) {}
+Material::Material(const tinyobj::material_t &mat) {
+    illumination_model = static_cast<IlluminationModel>(mat.illum);
 
-Vector3f Material::getDiffuseColor() const { return diffuseColor; }
+    ambientColor = mat.ambient;
+    diffuseColor = mat.diffuse;
+    specularColor = mat.specular;
+    emissionColor = mat.emission;
 
-Vector3f Material::Shade(const Ray &ray, const Hit &hit, const Vector3f &dirToLight, const Vector3f &lightColor) {
-    Vector3f shaded = Vector3f::ZERO;
-    const Vector3f &normal = hit.getNormal();
-    const Vector3f &toRay = -ray.getDirection().normalized();
-    Vector3f reflection = 2 * Vector3f::dot(normal, dirToLight) * normal - dirToLight;
-    Vector3f diffuse = diffuseColor * clamp(Vector3f::dot(dirToLight, normal));
-    Vector3f specular = shaded += specularColor * std::pow(clamp(Vector3f::dot(toRay, reflection)), shininess);
-    //        LOG(INFO) << fmt::format("diffuse {}, specular {}", diffuse, specular);
-    LOG(INFO) << fmt::format("li {}, normal {}, toRay {}, reflection {}", dirToLight, normal, toRay, reflection);
-    return (diffuse + specular) * lightColor;
+    shininess = mat.shininess;
+    refraction = mat.ior;
+}
+
+Vector3f Material::Ambient() const {
+    return ambientColor;
+}
+
+Vector3f Material::BDRF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const {
+    assert(illumination_model == IlluminationModel::blinn);
+
+    const Vector3f &norm = hit.getNormal();
+    const Vector3f &ray_out_dir = -ray_out.getDirection().normalized();
+    const Vector3f &ray_in_dir = ray_in.getDirection().normalized();
+    Vector3f reflection = 2 * Vector3f::dot(norm, ray_in_dir) * norm - ray_in_dir;
+    Vector3f diffuse = diffuseColor * clamp(Vector3f::dot(ray_in_dir, norm));
+    Vector3f specular = specularColor * std::pow(clamp(Vector3f::dot(ray_out_dir, reflection)), shininess);
+    return diffuse + specular;
+}
+
+Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
+    const Vector3f &norm = hit.getNormal();
+    const Vector3f &dir = ray_in.getDirection();
+    const Vector3f front = (dir - norm * Vector3f::dot(norm, dir)).normalized();
+    const Vector3f side = Vector3f::cross(norm, front);
+    float theta = rand_float() * 2 * (float) M_PI;  // random angle
+    float norm_part = rand_float();          // random projection on norm
+    Vector3f reflection_dir = (front * std::cos(theta) + side * std::sin(theta)) * std::sqrt(1 - norm_part);
+    reflection_dir += norm * std::sqrt(norm_part);
+    reflection_dir.normalize();
+    return reflection_dir;
 }

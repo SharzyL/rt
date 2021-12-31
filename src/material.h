@@ -4,28 +4,49 @@
 #include <cassert>
 #include <iostream>
 
+#include <tiny_obj_loader.h>
+
 #include "vecmath.h"
 
 #include "debug.h"
 #include "hit.h"
 #include "ray.h"
 
-static float clamp(float x) { return x >= 0 ? x : 0; }
-
 class Material {
 public:
-    explicit Material(const Vector3f &d_color, const Vector3f &s_color = Vector3f::ZERO, float s = 0);
+    enum class IlluminationModel {
+        constant = 0, // Kd color
+        diffuse,      // Lambertian shading
+        blinn,        // actually Blinn-Phong diffuse and specular combined
+        reflective,   // Blinn-Phong plus reflection
+        transparent,  // Blinn-Phong plus transparency
+        fresnelReflection, // Blinn-Phong plus Fresnel reflection
+        transparentNoReflection,
+        transparentReflection,
+        reflectionNoRayTrace,
+        transparentNoRayTrace,
+        castShadows
+    };
+
+    explicit Material(const tinyobj::material_t &mat);
 
     virtual ~Material() = default;
 
-    [[nodiscard]] virtual Vector3f getDiffuseColor() const;
+    Vector3f Sample(const Ray &ray_in, const Hit &hit) const;
 
-    Vector3f Shade(const Ray &ray, const Hit &hit, const Vector3f &dirToLight, const Vector3f &lightColor);
+    Vector3f BDRF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
+
+    Vector3f Ambient() const;
 
 protected:
-    Vector3f diffuseColor;
-    Vector3f specularColor;
-    float shininess;
+    IlluminationModel illumination_model;
+
+    Vector3f ambientColor;  // Ka
+    Vector3f diffuseColor;  // Kd
+    Vector3f specularColor; // Ks
+    Vector3f emissionColor; // Ke
+    float shininess;        // Ns
+    float refraction;       // Ni
 };
 
 #endif // MATERIAL_H

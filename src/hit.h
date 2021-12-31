@@ -23,15 +23,15 @@ public:
 
     [[nodiscard]] float getT() const;
 
-    [[nodiscard]] Material *getMaterial() const;
+    [[nodiscard]] const Material *getMaterial() const;
 
     [[nodiscard]] const Vector3f &getNormal() const;
 
-    void set(float _t, Material *m, const Vector3f &n);
+    void set(float _t, const Material *m, const Vector3f &n);
 
 private:
     float t;
-    Material *material;
+    const Material *material;
     Vector3f normal;
 };
 
