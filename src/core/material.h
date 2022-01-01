@@ -3,6 +3,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <optional>
 
 #include "tiny_obj_loader.h"
 
@@ -33,7 +34,9 @@ public:
     virtual ~Material() = default;
 
     [[nodiscard]] Vector3f Sample(const Ray &ray_in, const Hit &hit) const;
+    [[nodiscard]] std::optional<Vector3f> SampleRefraction(const Ray &ray_in, const Hit &hit) const;
 
+    [[nodiscard]] bool HasRefraction() const;
     [[nodiscard]] Vector3f BDRF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
 
     [[nodiscard]] Vector3f Ambient() const;
