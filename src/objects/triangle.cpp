@@ -1,3 +1,4 @@
+#include "util.h"
 #include "./triangle.h"
 
 Triangle::Triangle(const Vector3f &a, const Vector3f &b, const Vector3f &c, const Material *m)
@@ -8,10 +9,10 @@ Triangle::Triangle(const Vector3f &a, const Vector3f &b, const Vector3f &c, cons
 bool Triangle::intersect(const Ray &r, Hit &h, float tmin) const {
     const Vector3f &rd = r.getDirection();
     const Vector3f e1 = a - b, e2 = a - c, s = a - r.getOrigin();
-    float det_rd_e1_e2 = Matrix3f(rd, e1, e2).determinant();
-    float t = Matrix3f(s, e1, e2).determinant() / det_rd_e1_e2;
-    float beta = Matrix3f(rd, s, e2).determinant() / det_rd_e1_e2;
-    float gamma = Matrix3f(rd, e1, s).determinant() / det_rd_e1_e2;
+    float det_rd_e1_e2 = tri_det(rd, e1, e2);
+    float t = tri_det(s, e1, e2) / det_rd_e1_e2;
+    float beta = tri_det(rd, s, e2) / det_rd_e1_e2;
+    float gamma = tri_det(rd, e1, s) / det_rd_e1_e2;
     if (t < h.getT() && t >= tmin && 0 <= beta && 0 <= gamma && beta + gamma <= 1) {
         Vector3f true_normal = Vector3f::dot(normal, rd) > 0 ? -normal : normal;
         h.set(t, material, true_normal);
