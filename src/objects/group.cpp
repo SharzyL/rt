@@ -64,15 +64,17 @@ Group::Group(const std::string &obj_file_path, const std::string &material_searc
         size_t index_offset = 0;
         for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); f++) {   // iterate faces
             const tinyobj::material_t &material = materials[shape.mesh.material_ids[f]];
-            LOG(INFO) << fmt::format("|-face of {} vertices", shape.mesh.num_face_vertices[f]);
-            LOG(INFO) << fmt::format("|-material {}", material.name);
+            LOG(INFO) << fmt::format("|-face ({}) of {} vertices", material.name, shape.mesh.num_face_vertices[f]);
+            LOG(INFO) << fmt::format("|---v1: {}", vs[shape.mesh.indices[index_offset + 0].vertex_index]);
+            LOG(INFO) << fmt::format("|---v2: {}", vs[shape.mesh.indices[index_offset + 1].vertex_index]);
+            LOG(INFO) << fmt::format("|---v3: {}", vs[shape.mesh.indices[index_offset + 2].vertex_index]);
             assert(shape.mesh.num_face_vertices[f] == 3);
             mesh->t.emplace_back(
                 shape.mesh.indices[index_offset + 0].vertex_index,
                 shape.mesh.indices[index_offset + 1].vertex_index,
                 shape.mesh.indices[index_offset + 2].vertex_index
             );
-            mesh->mat_idx.emplace_back();
+            mesh->mat_idx.emplace_back(shape.mesh.material_ids[f]);
             index_offset += 3;
         }
         mesh->computeNormal();

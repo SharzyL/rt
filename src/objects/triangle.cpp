@@ -12,7 +12,7 @@ bool Triangle::intersect(const Ray &r, Hit &h, float tmin) const {
     float t = Matrix3f(s, e1, e2).determinant() / det_rd_e1_e2;
     float beta = Matrix3f(rd, s, e2).determinant() / det_rd_e1_e2;
     float gamma = Matrix3f(rd, e1, s).determinant() / det_rd_e1_e2;
-    if (t < h.getT() && t >= tmin && 0 <= beta && beta <= 1 && 0 <= gamma && gamma <= 1 && beta + gamma <= 1) {
+    if (t < h.getT() && t >= tmin && 0 <= beta && 0 <= gamma && beta + gamma <= 1) {
         h.set(t, material, normal);
         return true;
     } else {

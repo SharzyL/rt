@@ -11,6 +11,8 @@ Material::Material(const tinyobj::material_t &mat) {
 
     shininess = mat.shininess;
     refraction = mat.ior;
+
+    name = mat.name;
 }
 
 Vector3f Material::Ambient() const {
@@ -40,4 +42,8 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
     reflection_dir += norm * std::sqrt(norm_part);
     reflection_dir.normalize();
     return reflection_dir;
+}
+
+const std::string &Material::GetName() const {
+    return name;
 }
