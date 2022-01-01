@@ -3,9 +3,9 @@
 
 #include <tiny_obj_loader.h>
 
-#include "hit.h"
+#include "core/hit.h"
+#include "core/ray.h"
 #include "mesh.h"
-#include "ray.h"
 
 bool Mesh::intersect(const Ray &r, Hit &h, float tmin) const {
 
@@ -13,8 +13,9 @@ bool Mesh::intersect(const Ray &r, Hit &h, float tmin) const {
     bool result = false;
     for (int triId = 0; triId < (int)t.size(); ++triId) {
         const TriangleIndex &triIndex = t[triId];
-        Triangle triangle(vs.at(triIndex.at(0)), vs.at(triIndex.at(1)), vs.at(triIndex.at(2)), &mats.at(mat_idx[triId]));
-//        triangle.normal = n[triId];
+        Triangle triangle(vs.at(triIndex.at(0)), vs.at(triIndex.at(1)), vs.at(triIndex.at(2)),
+                          &mats.at(mat_idx[triId]));
+        //        triangle.normal = n[triId];
         result |= triangle.intersect(r, h, tmin);
     }
     return result;
@@ -30,7 +31,7 @@ void Mesh::computeNormal() {
     }
 }
 
-Mesh::Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, size_t size): vs(vs), mats(mats) {
+Mesh::Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, size_t size) : vs(vs), mats(mats) {
     t.reserve(size);
     n.reserve(size);
     mat_idx.reserve(size);

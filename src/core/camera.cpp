@@ -25,7 +25,7 @@ PerspectiveCamera::PerspectiveCamera(const Vector3f &center, const Vector3f &_di
     canvasOrigin = canvasCenter - horizontal * (w / 2) - up * (w / 2);
 }
 
-Ray PerspectiveCamera::generateRay(const Vector2f &point) {
+Ray PerspectiveCamera::generateRay(const Vector2f &point) const {
     Vector3f pointOnCanvas = canvasOrigin + horizontal * point.x() + up * point.y();
     return {center, pointOnCanvas - center};
 }

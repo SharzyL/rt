@@ -228,7 +228,7 @@ int Image::SaveBMP(const char *filename) {
     unsigned char *line;
     Vector3f *rgb = data;
     FILE *file;
-    struct BMPHeader bmph{};
+    struct BMPHeader bmph {};
 
     /* The length of each line must be a multiple of 4 bytes */
 
