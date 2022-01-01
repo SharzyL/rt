@@ -14,6 +14,10 @@ inline float rand_float() {
     return dis(gen);
 }
 
+inline float to_radian(float x) {
+    return x / 180.f * (float) M_PI;
+}
+
 inline float clamp(float x) { return x >= 0 ? x : 0; }
 
 #endif //RT_UTIL_H

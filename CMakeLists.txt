@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 3.21)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 PROJECT(RT CXX)
 
 IF(NOT CMAKE_BUILD_TYPE)
@@ -8,9 +8,14 @@ ENDIF()
 include(FetchContent)
 FetchContent_Declare(tinyobjloader GIT_REPOSITORY https://github.com/tinyobjloader/tinyobjloader GIT_TAG v2.0.0rc9)
 FetchContent_MakeAvailable(tinyobjloader)
-#add_definitions(-DTINYOBJLOADER_IMPLEMENTATION)
+FetchContent_Declare(fmt GIT_REPOSITORY https://github.com/fmtlib/fmt GIT_TAG 8.0.1)
+FetchContent_MakeAvailable(fmt)
+FetchContent_Declare(glog GIT_REPOSITORY https://github.com/google/glog GIT_TAG v0.5.0)
+FetchContent_MakeAvailable(glog)
 
 add_subdirectory(deps/vecmath)
+
+find_package(OpenMP)
 
 set(SOURCES
         src/objects/group.cpp
@@ -28,11 +33,8 @@ set(SOURCES
         src/main.cpp
         )
 
-find_package(fmt REQUIRED)
-find_package(glog REQUIRED)
-
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME} vecmath glog::glog fmt tinyobjloader)
+target_link_libraries(${PROJECT_NAME} vecmath glog::glog fmt tinyobjloader OpenMP::OpenMP_CXX)
 target_include_directories(${PROJECT_NAME} PRIVATE src)

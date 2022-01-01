@@ -38,6 +38,8 @@ public:
 
     Vector3f Ambient() const;
 
+    const std::string &GetName() const;
+
 protected:
     IlluminationModel illumination_model;
 
@@ -47,6 +49,7 @@ protected:
     Vector3f emissionColor; // Ke
     float shininess;        // Ns
     float refraction;       // Ni
+    std::string name;
 };
 
 #endif // MATERIAL_H
