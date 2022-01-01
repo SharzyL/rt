@@ -17,7 +17,7 @@ public:
     Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, size_t size);
 
     struct TriangleIndex {
-        TriangleIndex(int idx1, int idx2, int idx3): x{idx1, idx2, idx3} {}
+        TriangleIndex(int idx1, int idx2, int idx3) : x{idx1, idx2, idx3} {}
         int &operator[](int i) { return x[i]; }
         [[nodiscard]] int at(int i) const { return x[i]; }
         // By Computer Graphics convention, counterclockwise winding is front

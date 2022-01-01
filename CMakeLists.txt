@@ -24,11 +24,11 @@ set(SOURCES
         src/objects/transform.cpp
         src/objects/triangle.cpp
         src/objects/mesh.cpp
-        src/hit.cpp
-        src/light.cpp
-        src/material.cpp
-        src/ray.cpp
-        src/camera.cpp
+        src/core/hit.cpp
+        src/core/material.cpp
+        src/core/ray.cpp
+        src/core/camera.cpp
+        src/core/renderer.cpp
         src/image.cpp
         src/main.cpp
         )

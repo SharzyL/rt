@@ -4,8 +4,8 @@
 #include <iostream>
 #include <vector>
 
-#include "hit.h"
-#include "ray.h"
+#include "core/hit.h"
+#include "core/ray.h"
 
 #include "objects/object3d.h"
 

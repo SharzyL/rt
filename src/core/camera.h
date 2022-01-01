@@ -12,7 +12,7 @@ public:
     Camera(const Vector3f &center, const Vector3f &direction, const Vector3f &up, int imgW, int imgH);
 
     // Generate rays for each screen-space coordinate
-    virtual Ray generateRay(const Vector2f &point) = 0;
+    virtual Ray generateRay(const Vector2f &point) const = 0;
     virtual ~Camera();
 
     [[nodiscard]] int getWidth() const;
@@ -35,7 +35,7 @@ public:
     PerspectiveCamera(const Vector3f &center, const Vector3f &_direction, const Vector3f &_up, int imgW, int imgH,
                       float angle);
 
-    Ray generateRay(const Vector2f &point) override;
+    Ray generateRay(const Vector2f &point) const override;
 
 protected:
     Vector3f canvasOrigin;

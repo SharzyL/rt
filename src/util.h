@@ -16,20 +16,18 @@ inline float rand_float() {
     return dis(gen);
 }
 
-inline float to_radian(float x) {
-    return x / 180.f * (float) M_PI;
-}
+inline float to_radian(float x) { return x / 180.f * (float)M_PI; }
 
 inline float clamp(float x) { return x >= 0 ? x : 0; }
 
 inline float clamp1(float x) {
-    if (x > 1) return 1;
-    if (x < 0) return 0;
+    if (x > 1)
+        return 1;
+    if (x < 0)
+        return 0;
     return x;
 }
 
-inline Vector3f clamp1(Vector3f v) {
-    return {clamp1(v.x()), clamp1(v.y()), clamp1(v.z())};
-}
+inline Vector3f clamp1(Vector3f v) { return {clamp1(v.x()), clamp1(v.y()), clamp1(v.z())}; }
 
-#endif //RT_UTIL_H
+#endif // RT_UTIL_H

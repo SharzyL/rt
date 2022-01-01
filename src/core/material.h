@@ -4,7 +4,7 @@
 #include <cassert>
 #include <iostream>
 
-#include <tiny_obj_loader.h>
+#include "tiny_obj_loader.h"
 
 #include "vecmath.h"
 
@@ -15,11 +15,11 @@
 class Material {
 public:
     enum class IlluminationModel {
-        constant = 0, // Kd color
-        diffuse,      // Lambertian shading
-        blinn,        // actually Blinn-Phong diffuse and specular combined
-        reflective,   // Blinn-Phong plus reflection
-        transparent,  // Blinn-Phong plus transparency
+        constant = 0,      // Kd color
+        diffuse,           // Lambertian shading
+        blinn,             // actually Blinn-Phong diffuse and specular combined
+        reflective,        // Blinn-Phong plus reflection
+        transparent,       // Blinn-Phong plus transparency
         fresnelReflection, // Blinn-Phong plus Fresnel reflection
         transparentNoReflection,
         transparentReflection,
