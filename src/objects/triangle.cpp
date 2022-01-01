@@ -14,8 +14,7 @@ bool Triangle::intersect(const Ray &r, Hit &h, float tmin) const {
     float beta = tri_det(rd, s, e2) / det_rd_e1_e2;
     float gamma = tri_det(rd, e1, s) / det_rd_e1_e2;
     if (t < h.getT() && t >= tmin && 0 <= beta && 0 <= gamma && beta + gamma <= 1) {
-        Vector3f true_normal = Vector3f::dot(normal, rd) > 0 ? -normal : normal;
-        h.set(t, material, true_normal);
+        h.set(t, material, normal);
         return true;
     } else {
         return false;

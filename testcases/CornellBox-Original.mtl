@@ -34,9 +34,10 @@ newmtl floor
   Ka 0.725 0.73 0.68
   Kd 0.725 0.73 0.68
   Ks 0 0 0
+  Ke 0.25 0.25 0.25
 
 
-newmtl ceiling
+   newmtl ceiling
   Ns 10.0000
   Ni 1.0000
   illum 1
@@ -57,16 +58,16 @@ newmtl backWall
 newmtl shortBox
   Ns 10.0000
   Ni 1.0000
-  illum 2
-  Ka 0.725 0.61 0.68
+  illum 4
+  Ka 1 1 1
   Kd 0.725 0.61 0.68
   Ks 0 0 0
-  Ke 0.25 0.25 0.25
+#   Ke 0.25 0.25 0.25
 
  newmtl tallBox
   Ns 10.0000
   Ni 1.0000
-  illum 3
+  illum 2
   Ka 0.725 0.71 0.88
   Kd 0.725 0.71 0.88
   Ks 0 0 0

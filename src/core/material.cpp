@@ -1,3 +1,4 @@
+#include <optional>
 #include "./material.h"
 #include "util.h"
 
@@ -52,6 +53,7 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
             reflection_dir += norm * std::sqrt(norm_part);
             return reflection_dir;
         }
+        case IlluminationModel::transparent:
         case IlluminationModel::reflective: {
             return dir - 2 * norm * Vector3f::dot(norm, dir);
         }
@@ -63,3 +65,26 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
 const std::string &Material::GetName() const { return name; }
 
 Vector3f Material::Emission() const { return emissionColor; }
+
+std::optional<Vector3f> Material::SampleRefraction(const Ray &ray_in, const Hit &hit) const {
+    if (illumination_model == IlluminationModel::transparent) {
+        const Vector3f &norm = hit.getNormal();
+        const Vector3f &dir = ray_in.getDirection();
+        float norm_dot_dir = Vector3f::dot(norm, dir);
+        bool is_into = norm_dot_dir > 0;
+        Vector3f true_norm = is_into ? -norm : norm;
+        float refr_rate = is_into ? refraction : 1 / refraction;
+
+        float cos2t = 1 - fsquare(refr_rate) * (1 - fsquare(norm_dot_dir));
+        if (cos2t < 0) return std::nullopt;
+
+        Vector3f refr_dir = (refr_rate * dir + true_norm * (refr_rate * norm_dot_dir));
+        return refr_dir;
+    } else {
+        return std::nullopt;
+    }
+}
+
+bool Material::HasRefraction() const {
+    return illumination_model == IlluminationModel::transparent;
+}

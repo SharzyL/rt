@@ -13,7 +13,7 @@ bool Mesh::intersect(const Ray &r, Hit &h, float tmin) const {
         const TriangleIndex &triIndex = tri_idx_list[triId];
         Triangle triangle(group_vertices.at(triIndex.at(0)), group_vertices.at(triIndex.at(1)), group_vertices.at(triIndex.at(2)),
                           &group_materials.at(mat_idx[triId]));
-        //        triangle.normal = n[triId];
+        triangle.normal = n[triId];
         result |= triangle.intersect(r, h, tmin);
     }
     return result;

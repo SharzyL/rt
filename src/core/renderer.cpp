@@ -13,8 +13,8 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
             Vector3f color;
             for (int sx = 0; sx < sub_pixel; sx++) {
                 for (int sy = 0; sy < sub_pixel; sy++) {
-                    float sub_x = (float)x + (float)sx / (float)sub_pixel;
-                    float sub_y = (float)y + (float)sy / (float)sub_pixel;
+                    float sub_x = (float) x + (float) sx / (float) sub_pixel;
+                    float sub_y = (float) y + (float) sy / (float) sub_pixel;
                     for (int s = 0; s < sub_sample; s++) {
                         Ray r = camera.generateRay(Vector2f(sub_x, sub_y));
                         color += clamp1(trace(r, obj, 0));
@@ -23,7 +23,7 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
                     }
                 }
             }
-            color = color / (float)sub_pixel / (float)sub_pixel / (float)sub_sample;
+            color = color / (float) sub_pixel / (float) sub_pixel / (float) sub_sample;
             img.SetPixel(x, y, color);
         }
     }
@@ -33,21 +33,23 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
 
 Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
     Hit hit;
-    bool is_hit = obj.intersect(ray, hit, 0);
+    bool is_hit = obj.intersect(ray, hit, 0.00001);
     if (!is_hit) {
         return Vector3f::ZERO;
     }
 //    LOG(INFO) << fmt::format("hit ({}): {}", ray.pointAtParameter(hit.getT()), hit.getMaterial()->GetName());
     const Material *mat = hit.getMaterial();
 
-    if (depth >= 3 && rand_float() > 1 - 0.2 * depth) {
-        return mat->Ambient();
+    if (depth >= 5) {
+        return Vector3f::ZERO;
     }
 
     Vector3f hit_point = ray.pointAtParameter(hit.getT());
 
-    Vector3f refl_dir = mat->Sample(ray, hit);
-    Ray sample_ray = Ray(hit_point + 0.001 * refl_dir, refl_dir);
+    auto refraction = mat->SampleRefraction(ray, hit);
+    Ray sample_ray = refraction.has_value()
+                     ? Ray(hit_point, refraction.value())
+                     : Ray(hit_point, mat->Sample(ray, hit));
     //    Vector3f bdrf = mat->BDRF(sample_ray, ray, hit);
     Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1);
     Vector3f ambient = mat->Ambient();
