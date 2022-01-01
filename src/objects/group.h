@@ -26,8 +26,8 @@ public:
     std::vector<Object3D *> objects;
 
 private:
-    std::vector<Vector3f> vs;
-    std::vector<Material> mats;
+    std::vector<Vector3f> all_vertices;
+    std::vector<Material> all_materials;
 };
 
 #endif

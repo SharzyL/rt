@@ -9,7 +9,6 @@
 #include "Vector3f.h"
 
 #include "objects/object3d.h"
-#include "objects/triangle.h"
 
 class Mesh : public Object3D {
 
@@ -25,7 +24,7 @@ public:
         int x[3]{};
     };
 
-    std::vector<TriangleIndex> t;
+    std::vector<TriangleIndex> tri_idx_list;
     std::vector<int> mat_idx;
     std::vector<Vector3f> n;
     bool intersect(const Ray &r, Hit &h, float tmin) const override;
@@ -34,8 +33,8 @@ public:
     void computeNormal();
 
 private:
-    const std::vector<Vector3f> &vs;
-    const std::vector<Material> &mats;
+    const std::vector<Vector3f> &group_vertices;
+    const std::vector<Material> &group_materials;
 };
 
 #endif
