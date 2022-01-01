@@ -36,14 +36,17 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
     const Vector3f &dir = ray_in.getDirection();
     const Vector3f front = (dir - norm * Vector3f::dot(norm, dir)).normalized();
     const Vector3f side = Vector3f::cross(norm, front);
-    float theta = rand_float() * 2 * (float) M_PI;  // random angle
+    float theta = rand_float() * (float) M_PI_2;  // random angle
     float norm_part = rand_float();          // random projection on norm
     Vector3f reflection_dir = (front * std::cos(theta) + side * std::sin(theta)) * std::sqrt(1 - norm_part);
     reflection_dir += norm * std::sqrt(norm_part);
-    reflection_dir.normalize();
     return reflection_dir;
 }
 
 const std::string &Material::GetName() const {
     return name;
+}
+
+Vector3f Material::Emission() const {
+    return emissionColor;
 }

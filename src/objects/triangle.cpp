@@ -13,7 +13,8 @@ bool Triangle::intersect(const Ray &r, Hit &h, float tmin) const {
     float beta = Matrix3f(rd, s, e2).determinant() / det_rd_e1_e2;
     float gamma = Matrix3f(rd, e1, s).determinant() / det_rd_e1_e2;
     if (t < h.getT() && t >= tmin && 0 <= beta && 0 <= gamma && beta + gamma <= 1) {
-        h.set(t, material, normal);
+        Vector3f true_normal = Vector3f::dot(normal, rd) > 0 ? -normal : normal;
+        h.set(t, material, true_normal);
         return true;
     } else {
         return false;
