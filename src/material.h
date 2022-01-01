@@ -32,13 +32,14 @@ public:
 
     virtual ~Material() = default;
 
-    Vector3f Sample(const Ray &ray_in, const Hit &hit) const;
+    [[nodiscard]] Vector3f Sample(const Ray &ray_in, const Hit &hit) const;
 
-    Vector3f BDRF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
+    [[nodiscard]] Vector3f BDRF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
 
-    Vector3f Ambient() const;
+    [[nodiscard]] Vector3f Ambient() const;
+    [[nodiscard]] Vector3f Emission() const;
 
-    const std::string &GetName() const;
+    [[nodiscard]] const std::string &GetName() const;
 
 protected:
     IlluminationModel illumination_model;
