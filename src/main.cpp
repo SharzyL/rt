@@ -26,6 +26,7 @@ int main(int argc, char *argv[]) {
 
     args::ValueFlag<int> subp(parser, "subp", "sub pixel", {'p', "subp"}, 1);
     args::ValueFlag<int> samples(parser, "samples", "samples", {'s', "samples"}, 1);
+    args::ValueFlag<float> gamma(parser, "gamma", "gamma value", {'g', "gamma"}, 2.2f);
 
     try {
         parser.ParseCLI(argc, argv);
@@ -44,6 +45,6 @@ int main(int argc, char *argv[]) {
     );
     Group g(args::get(input), args::get(search_path));
 
-    Renderer renderer(args::get(subp), args::get(samples));
+    Renderer renderer(args::get(subp), args::get(samples), args::get(gamma));
     renderer.Render(g, camera, args::get(output));
 }

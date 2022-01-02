@@ -1,14 +1,17 @@
 #include "renderer.h"
 #include "util.h"
 
-Renderer::Renderer(int sub_pixel, int sub_sample) : sub_pixel(sub_pixel), sub_sample(sub_sample) {}
+Renderer::Renderer(int sub_pixel, int sub_sample, float gamma) : sub_pixel(sub_pixel), sub_sample(sub_sample), gamma(gamma) {}
 
 void Renderer::Render(const Object3D &obj, const Camera &camera, const std::string &output_file) {
     Image img(camera.getWidth(), camera.getHeight());
 
-#pragma omp parallel for collapse(1) schedule(dynamic, 4) shared(camera, img, obj) default(none)
+    int ok_pixels = 0;
+    int total_pixels = camera.getWidth() * camera.getHeight();
+    const int progress_per_pixel = std::max(total_pixels / 2000, 1);
+
+#pragma omp parallel for collapse(1) schedule(dynamic, 4) shared(camera, img, obj, ok_pixels, progress_per_pixel, total_pixels) default(none)
     for (int y = 0; y < camera.getHeight(); y++) {
-        LOG(ERROR) << fmt::format("start tracing y = {} / {}", y + 1, camera.getHeight());
         for (int x = 0; x < camera.getWidth(); x++) {
             Vector3f color;
             for (int sx = 0; sx < sub_pixel; sx++) {
@@ -25,8 +28,16 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
                     }
                 }
             }
-            color = color / (float) sub_pixel / (float) sub_pixel / (float) sub_sample;
+            color = gamma_correct(color / (float) sub_pixel / (float) sub_pixel / (float) sub_sample, gamma);
             img.SetPixel(x, y, color);
+
+            // report progress
+# pragma omp critical
+            ok_pixels += 1;
+            if (ok_pixels % progress_per_pixel == 0) {
+                float complete_rate = (float) ok_pixels * 100.f / (float) total_pixels;
+                LOG(ERROR) << fmt::format("complete {:.2f}% ({}/{} pixels)", complete_rate, ok_pixels, total_pixels);
+            }
         }
     }
 
@@ -48,11 +59,8 @@ Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
 
     Vector3f hit_point = ray.pointAtParameter(hit.getT());
 
-    auto refraction = mat->SampleRefraction(ray, hit);
-    Ray sample_ray = refraction.has_value()
-                     ? Ray(hit_point, refraction.value())
-                     : Ray(hit_point, mat->Sample(ray, hit));
-    //    Vector3f bdrf = mat->BDRF(sample_ray, ray, hit);
+    Ray sample_ray = Ray(hit_point, mat->Sample(ray, hit));
+    //    Vector3f bdrf = mat->BRDF(sample_ray, ray, hit);
     Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1);
     Vector3f ambient = mat->Ambient();
 

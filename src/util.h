@@ -57,6 +57,14 @@ inline float tri_det(const Vector3f &v0, const Vector3f &v1, const Vector3f &v2)
            + v0[2] * (v1[0] * v2[1] - v1[1] * v2[0]);
 }
 
+inline Vector3f gamma_correct(const Vector3f &v, float gamma) {
+    return {
+        std::pow(v.x(), 1 / gamma),
+        std::pow(v.y(), 1 / gamma),
+        std::pow(v.z(), 1 / gamma),
+    };
+}
+
 inline float fsquare(float x) { return x * x; }
 
 #endif // RT_UTIL_H

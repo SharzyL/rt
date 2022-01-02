@@ -6,6 +6,11 @@ Vector3f random_normalized_vector() {
     return Vector3f{rand_float(), rand_float(), rand_float()}.normalized();
 }
 
+float schlick(float cos, float refr_idx) {  // return rate of reflection
+    float r0 = fsquare((1.f - refr_idx) / (1.f + refr_idx));
+    return r0 + (1 - r0) * std::pow(1.f - cos, 5.f);
+}
+
 Material::Material(const tinyobj::material_t &mat) {
     illumination_model = static_cast<IlluminationModel>(mat.illum);
 
@@ -22,7 +27,7 @@ Material::Material(const tinyobj::material_t &mat) {
 
 Vector3f Material::Ambient() const { return ambientColor; }
 
-Vector3f Material::BDRF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const {
+Vector3f Material::BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const {
     assert(illumination_model == IlluminationModel::blinn);
 
     const Vector3f &norm = hit.getNormal();
@@ -40,9 +45,10 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
 
     switch (illumination_model) {
         case IlluminationModel::diffuse: {
+            const Vector3f outward_norm = Vector3f::dot(norm, dir) > 0 ? -norm : norm;
             Vector3f rand_vec = random_normalized_vector();
             if (Vector3f::dot(rand_vec, norm) < 0) rand_vec = -rand_vec;
-            return rand_vec;
+            return outward_norm + rand_vec;
         }
         case IlluminationModel::blinn: {
             const Vector3f front = (dir - norm * Vector3f::dot(norm, dir)).normalized();
@@ -53,38 +59,30 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
             reflection_dir += norm * std::sqrt(norm_part);
             return reflection_dir;
         }
-        case IlluminationModel::transparent:
         case IlluminationModel::reflective: {
             return dir - 2 * norm * Vector3f::dot(norm, dir);
         }
+        case IlluminationModel::transparent: {
+            float norm_dot_dir = Vector3f::dot(norm, dir);
+            bool is_into = norm_dot_dir > 0;
+            float norm_dot_dir_abs = std::abs(norm_dot_dir);
+            Vector3f outward_norm = is_into ? -norm : norm;
+            float refr_idx = is_into ? refraction : 1 / refraction;
+
+            float cos2t = 1 - fsquare(refr_idx) * (1 - fsquare(norm_dot_dir));
+            if (cos2t < 0 || rand_float() < schlick(norm_dot_dir_abs, refr_idx)) {
+                Vector3f refl_dir = dir - 2 * norm * Vector3f::dot(norm, dir);
+                return refl_dir;
+            } else {
+                Vector3f refr_dir = (refr_idx * dir + outward_norm * (-refr_idx * norm_dot_dir_abs + std::sqrt(cos2t)));
+                return refr_dir;
+            }
+        }
         default:
-            throw std::runtime_error("Not implement illum type");
+            throw std::runtime_error("illum type not implemented");
     }
 }
 
 const std::string &Material::GetName() const { return name; }
 
 Vector3f Material::Emission() const { return emissionColor; }
-
-std::optional<Vector3f> Material::SampleRefraction(const Ray &ray_in, const Hit &hit) const {
-    if (illumination_model == IlluminationModel::transparent) {
-        const Vector3f &norm = hit.getNormal();
-        const Vector3f &dir = ray_in.getDirection();
-        float norm_dot_dir = Vector3f::dot(norm, dir);
-        bool is_into = norm_dot_dir > 0;
-        Vector3f true_norm = is_into ? -norm : norm;
-        float refr_rate = is_into ? refraction : 1 / refraction;
-
-        float cos2t = 1 - fsquare(refr_rate) * (1 - fsquare(norm_dot_dir));
-        if (cos2t < 0) return std::nullopt;
-
-        Vector3f refr_dir = (refr_rate * dir + true_norm * (-refr_rate * std::abs(norm_dot_dir) + std::sqrt(cos2t)));
-        return refr_dir;
-    } else {
-        return std::nullopt;
-    }
-}
-
-bool Material::HasRefraction() const {
-    return illumination_model == IlluminationModel::transparent;
-}
