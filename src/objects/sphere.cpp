@@ -5,7 +5,7 @@
 namespace RT {
 
 Sphere::Sphere(const Vector3f &center, float radius, const Material *material)
-    : Object3D(material), center(center), radius(radius) {}
+    : SimpleObject3D(material), center(center), radius(radius) {}
 
 Sphere::~Sphere() = default;
 

@@ -1,5 +1,5 @@
-#ifndef GROUP_H
-#define GROUP_H
+#ifndef GROUP_OBJ_IMPORT
+#define GROUP_OBJ_IMPORT
 
 #include <vector>
 
@@ -7,22 +7,14 @@
 #include "core/ray.h"
 
 #include "objects/object3d.h"
+#include "objects/group.h"
 
 namespace RT {
 
-class ObjImport : public Object3D {
+class ObjImport : public Group {
 
 public:
-    ObjImport();
-    ~ObjImport() override;
-
-    ObjImport(const std::string &obj_file_path, const std::string &material_search_path);
-
-    explicit ObjImport(int num_objects);
-
-    bool Intersect(const Ray &r, Hit &h, float tmin) const override;
-
-    std::vector<Object3D *> objects;
+    explicit ObjImport(const std::string &obj_file_path);
 
 private:
     std::vector<Vector3f> all_vertices;

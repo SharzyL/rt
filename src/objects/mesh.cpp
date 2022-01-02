@@ -5,13 +5,13 @@
 
 #include "core/hit.h"
 #include "core/ray.h"
-#include "mesh.h"
+#include "./mesh.h"
 #include "objects/triangle.h"
 
 namespace RT {
 
 bool Mesh::Intersect(const Ray &r, Hit &h, float tmin) const {
-    if (num_faces > 2 && !bbox.MayIntersect(r)) return false;
+    if (!bbox.MayIntersect(r)) return false;
     bool result = false;
     for (int triId = 0; triId < (int) tri_idx_list.size(); ++triId) {
         const TriangleIndex &triIndex = tri_idx_list[triId];
@@ -37,7 +37,7 @@ Mesh::Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, c
         : group_vertices(vs), group_materials(mats) {
     num_faces = shape.mesh.num_face_vertices.size();
     tri_idx_list.reserve(num_faces);
-    face_normals.reserve(num_faces);
+    face_normals.reserve(num_faces);  // TODO: handle face normals
     mat_idx.reserve(num_faces);
     size_t index_offset = 0;
     for (size_t f = 0; f < num_faces; f++) { // iterate faces
@@ -63,7 +63,7 @@ BoundingBox::BoundingBox() {
     x1 = y1 = z1 = -std::numeric_limits<float>::max();
 }
 
-void BoundingBox::AddVertex(Vector3f v) {
+void BoundingBox::AddVertex(const Vector3f &v) {
     x0 = std::min(x0, v.x());
     x1 = std::max(x1, v.x());
     y0 = std::min(y0, v.y());
@@ -84,7 +84,7 @@ bool BoundingBox::MayIntersect(const Ray &ray) const {
     float intersect_z0 = (z0 - origin.z()) / dir.z();
     float intersect_z1 = (z1 - origin.z()) / dir.z();
     if (intersect_z0 > intersect_z1) std::swap(intersect_z0, intersect_z1);
-    float into = std::max(intersect_x0, std::max(intersect_y0, intersect_y1));
+    float into = std::max(intersect_x0, std::max(intersect_y0, intersect_z0));
     float out = std::min(intersect_x1, std::min(intersect_y1, intersect_z1));
     return into <= out;
 }

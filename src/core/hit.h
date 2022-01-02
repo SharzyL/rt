@@ -1,6 +1,8 @@
 #ifndef HIT_H
 #define HIT_H
 
+#include <memory>
+
 #include "vecmath.h"
 
 #include "ray.h"
@@ -14,7 +16,7 @@ public:
     // constructors
     Hit();
 
-    Hit(float _t, Material *m, const Vector3f &n);
+    Hit(float _t, const Material *m, const Vector3f &n);
 
     Hit(const Hit &h);
 

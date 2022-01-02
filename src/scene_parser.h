@@ -5,6 +5,8 @@
 #include <memory>
 #include <map>
 
+#include <yaml-cpp/yaml.h>
+
 #include "objects/object3d.h"
 #include "core/camera.h"
 
@@ -18,9 +20,9 @@ public:
 
     std::unique_ptr<Camera> camera;
     std::unique_ptr<Object3D> scene;
-
 private:
-    std::map<std::string, Material> materials;
+    std::unique_ptr<Object3D> parse_obj(const YAML::Node &node);
+    std::vector<std::unique_ptr<const Material>> all_materials;
 };
 
 } // namespace RT

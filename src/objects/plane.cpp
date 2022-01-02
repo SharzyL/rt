@@ -1,8 +1,10 @@
+#include <utility>
+
 #include "./plane.h"
 
 namespace RT {
 
-Plane::Plane(const Vector3f &normal, float d, const Material *m) : normal(normal), d(d), Object3D(m) {}
+Plane::Plane(const Vector3f &normal, float d, const Material *m) : normal(normal), d(d), SimpleObject3D(m) {}
 
 Plane::~Plane() = default;
 

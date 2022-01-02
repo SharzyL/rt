@@ -10,19 +10,22 @@ namespace RT {
 // Base class for all 3d entities.
 class Object3D {
 public:
-    Object3D() : material(nullptr) {}
+    Object3D() = default;
 
     virtual ~Object3D() = default;
-
-    explicit Object3D(const Material *material) : material(material) {}
 
     // MayIntersect Ray with this object. If hit, store information in hit
     // structure.
     virtual bool Intersect(const Ray &r, Hit &h, float tmin) const = 0;
+};
 
+class SimpleObject3D: public Object3D {
+public:
+    explicit SimpleObject3D(const Material *material) : material(material) {};
 protected:
     const Material *material;
 };
 
 } // namespace RT
+
 #endif

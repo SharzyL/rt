@@ -14,7 +14,7 @@ namespace RT {
 class BoundingBox {
 public:
     BoundingBox();
-    void AddVertex(Vector3f v);
+    void AddVertex(const Vector3f &v);
     [[nodiscard]] bool MayIntersect(const Ray &ray) const;
 private:
     float x0, x1, y0, y1, z0, z1;
