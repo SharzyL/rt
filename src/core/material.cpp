@@ -78,7 +78,7 @@ std::optional<Vector3f> Material::SampleRefraction(const Ray &ray_in, const Hit 
         float cos2t = 1 - fsquare(refr_rate) * (1 - fsquare(norm_dot_dir));
         if (cos2t < 0) return std::nullopt;
 
-        Vector3f refr_dir = (refr_rate * dir + true_norm * (refr_rate * norm_dot_dir));
+        Vector3f refr_dir = (refr_rate * dir + true_norm * (-refr_rate * std::abs(norm_dot_dir) + std::sqrt(cos2t)));
         return refr_dir;
     } else {
         return std::nullopt;
