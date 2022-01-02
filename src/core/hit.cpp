@@ -1,3 +1,5 @@
+#include <limits>
+
 #include "./hit.h"
 
 Hit::Hit() {

@@ -1,7 +1,6 @@
 #ifndef GROUP_H
 #define GROUP_H
 
-#include <iostream>
 #include <vector>
 
 #include "core/hit.h"

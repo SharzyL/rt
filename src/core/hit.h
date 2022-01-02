@@ -1,8 +1,6 @@
 #ifndef HIT_H
 #define HIT_H
 
-#include <limits>
-
 #include "vecmath.h"
 
 #include "ray.h"

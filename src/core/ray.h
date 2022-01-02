@@ -1,7 +1,6 @@
 #ifndef RAY_H
 #define RAY_H
 
-#include <cassert>
 #include <iostream>
 
 #include "Vector3f.h"

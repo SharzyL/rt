@@ -1,4 +1,5 @@
-#include <optional>
+#include <cassert>
+
 #include "./material.h"
 #include "util.h"
 

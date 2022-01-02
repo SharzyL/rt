@@ -1,4 +1,5 @@
 #include "renderer.h"
+#include "image.h"
 #include "util.h"
 
 Renderer::Renderer(int sub_pixel, int sub_sample, float gamma) : sub_pixel(sub_pixel), sub_sample(sub_sample), gamma(gamma) {}
