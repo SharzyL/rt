@@ -11,10 +11,10 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
     int total_pixels = camera.getWidth() * camera.getHeight();
     const int progress_per_pixel = std::max(total_pixels / 2000, 1);
 
-#pragma omp parallel for collapse(1) schedule(dynamic, 4) shared(camera, img, obj, ok_pixels, progress_per_pixel, total_pixels) default(none)
+#pragma omp parallel for collapse(2) schedule(dynamic, 4) shared(camera, img, obj, ok_pixels, progress_per_pixel, total_pixels) default(none)
     for (int y = 0; y < camera.getHeight(); y++) {
         for (int x = 0; x < camera.getWidth(); x++) {
-            Vector3f color;
+            Vector3f pixel_color;
             for (int sx = 0; sx < sub_pixel; sx++) {
                 for (int sy = 0; sy < sub_pixel; sy++) {
                     float sub_x = (float) x + (float) sx / (float) sub_pixel;
@@ -23,14 +23,15 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
                         float disturb_x = (1 + rand_float_tent()) / (float) sub_pixel / 2;
                         float disturb_y = (1 + rand_float_tent()) / (float) sub_pixel / 2;
                         Ray r = camera.generateRay(Vector2f(sub_x + disturb_x, sub_y + disturb_y));
-                        color += clamp1(trace(r, obj, 0));
-//                        LOG(INFO) << fmt::format("cast ray ({}, {}) ({} -> {}) = {}", x, y, r.getOrigin(),
-//                                                 r.getDirection(), color);
+                        Vector3f sample_color = trace(r, obj, 0);
+                        pixel_color += clamp1(sample_color);
+//                        LOG(ERROR) << fmt::format("cast ray ({}, {}) ({} -> {}) = {}", x, y, r.getOrigin(),
+//                                                 r.getDirection(), sample_color);
                     }
                 }
             }
-            color = gamma_correct(color / (float) sub_pixel / (float) sub_pixel / (float) sub_sample, gamma);
-            img.SetPixel(x, y, color);
+            pixel_color = gamma_correct(pixel_color / (float) sub_pixel / (float) sub_pixel / (float) sub_sample, gamma);
+            img.SetPixel(x, y, pixel_color);
 
             // report progress
 # pragma omp critical

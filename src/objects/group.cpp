@@ -52,26 +52,14 @@ Group::Group(const std::string &obj_file_path, const std::string &material_searc
 
     // prepare materials
     size_t mat_num = materials.size();
+    assert(mat_num > 0);
     all_materials.reserve(mat_num);
     for (const auto &mat : materials) {
         all_materials.emplace_back(mat);
     }
 
     for (const auto &shape : shapes) { // iterate shapes
-        LOG(INFO) << fmt::format("shape '{}': {} faces", shape.name, shape.mesh.num_face_vertices.size());
-        Mesh *mesh = new Mesh(all_vertices, all_materials, shape.mesh.num_face_vertices.size());
-        size_t index_offset = 0;
-        for (size_t f = 0; f < shape.mesh.num_face_vertices.size(); f++) { // iterate faces
-            const tinyobj::material_t &material = materials[shape.mesh.material_ids[f]];
-            assert(shape.mesh.num_face_vertices[f] == 3);
-            mesh->tri_idx_list.emplace_back(shape.mesh.indices[index_offset + 0].vertex_index,
-                                            shape.mesh.indices[index_offset + 1].vertex_index,
-                                            shape.mesh.indices[index_offset + 2].vertex_index);
-            mesh->mat_idx.emplace_back(shape.mesh.material_ids[f]);
-            index_offset += 3;
-        }
-        mesh->computeNormal();
-        objects.emplace_back(mesh);
+        objects.emplace_back(new Mesh(all_vertices, all_materials, shape));
     }
 }
 
