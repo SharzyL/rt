@@ -5,7 +5,8 @@ namespace RT {
 Camera::Camera(const Vector3f &center, const Vector3f &direction, const Vector3f &up, int imgW, int imgH) {
     this->center = center;
     this->direction = direction.normalized();
-    this->horizontal = Vector3f::cross(this->direction, up).normalized();
+    this->up = (up - this->direction* Vector3f::dot(up, this->direction)).normalized();
+    this->horizontal = Vector3f::cross(this->direction, this->up);
     this->up = Vector3f::cross(this->horizontal, this->direction);
     this->width = imgW;
     this->height = imgH;

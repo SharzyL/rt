@@ -28,6 +28,6 @@ private:
     std::vector<Material> mats;
 };
 
-#endif
-
 } // namespace RT
+
+#endif

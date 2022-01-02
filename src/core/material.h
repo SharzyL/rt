@@ -26,6 +26,8 @@ public:
         castShadows
     };
 
+    explicit Material(IlluminationModel model): illumination_model(model) {};
+
     explicit Material(const tinyobj::material_t &mat);
 
     virtual ~Material() = default;
@@ -39,7 +41,6 @@ public:
 
     [[nodiscard]] const std::string &GetName() const;
 
-protected:
     IlluminationModel illumination_model;
 
     Vector3f ambientColor;  // Ka
@@ -47,7 +48,7 @@ protected:
     Vector3f specularColor; // Ks
     Vector3f emissionColor; // Ke
     float shininess;        // Ns
-    float refraction;       // Ni
+    float refraction = 1;       // Ni
     std::string name;
 };
 

@@ -10,7 +10,7 @@
 
 namespace RT {
 
-class Triangle : public Object3D {
+class Triangle : public SimpleObject3D {
 
 public:
     // a b c are three get_v positions of the triangle
@@ -20,8 +20,6 @@ public:
 
     Vector3f normal;
     Vector3f a, b, c;
-
-protected:
 };
 
 } // namespace RT

@@ -4,7 +4,7 @@
 namespace RT {
 
 Triangle::Triangle(const Vector3f &a, const Vector3f &b, const Vector3f &c, const Material *m)
-    : Object3D(m), a(a), b(b), c(c) {
+    : SimpleObject3D(m), a(a), b(b), c(c) {
     normal = Vector3f::cross(b - a, c - a).normalized();
 }
 

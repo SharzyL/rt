@@ -7,7 +7,7 @@
 
 namespace RT {
 
-class Sphere : public Object3D {
+class Sphere : public SimpleObject3D {
 public:
     Sphere(const Vector3f &center, float radius, const Material *material);
 
@@ -15,7 +15,6 @@ public:
 
     bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
-protected:
     const Vector3f center;
     const float radius;
 };

@@ -5,11 +5,11 @@
 namespace RT {
 
 Hit::Hit() {
-    material = nullptr;
     t = std::numeric_limits<decltype(t)>::max();
+    material = nullptr;
 }
 
-Hit::Hit(float _t, Material *m, const Vector3f &n) {
+Hit::Hit(float _t, const Material *m, const Vector3f &n) {
     t = _t;
     material = m;
     normal = n;

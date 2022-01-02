@@ -2,6 +2,7 @@
 #define PLANE_H
 
 #include <cmath>
+#include <memory>
 
 #include "vecmath.h"
 
@@ -9,7 +10,7 @@
 
 namespace RT {
 
-class Plane : public Object3D {
+class Plane : public SimpleObject3D {
 public:
     Plane(const Vector3f &normal, float d, const Material *m);
 
