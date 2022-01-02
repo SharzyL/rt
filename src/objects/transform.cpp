@@ -1,5 +1,7 @@
 #include "./transform.h"
 
+namespace RT {
+
 static Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point) { return (mat * Vector4f(point, 1)).xyz(); }
 
 // transform a 3D direction using a matrix, returning a direction
@@ -17,3 +19,5 @@ bool Transform::Intersect(const Ray &r, Hit &h, float tmin) const {
     }
     return inter;
 }
+
+} // namespace RT

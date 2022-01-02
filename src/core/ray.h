@@ -5,6 +5,8 @@
 
 #include "Vector3f.h"
 
+namespace RT {
+
 // Ray class mostly copied from Peter Shirley and Keith Morley
 class Ray {
 public:
@@ -27,5 +29,7 @@ private:
 };
 
 inline std::ostream &operator<<(std::ostream &os, const Ray &r);
+
+} // namespace RT
 
 #endif // RAY_H

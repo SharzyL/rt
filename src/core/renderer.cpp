@@ -2,6 +2,8 @@
 #include "image.h"
 #include "util.h"
 
+namespace RT {
+
 Renderer::Renderer(int sub_pixel, int sub_sample, float gamma) : sub_pixel(sub_pixel), sub_sample(sub_sample), gamma(gamma) {}
 
 void Renderer::Render(const Object3D &obj, const Camera &camera, const std::string &output_file) {
@@ -68,3 +70,5 @@ Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
 
     return mat->Emission() + mat->Ambient() * sample_ray_color;
 }
+
+} // namespace RT

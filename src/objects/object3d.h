@@ -5,6 +5,8 @@
 #include "core/material.h"
 #include "core/ray.h"
 
+namespace RT {
+
 // Base class for all 3d entities.
 class Object3D {
 public:
@@ -22,4 +24,5 @@ protected:
     const Material *material;
 };
 
+} // namespace RT
 #endif

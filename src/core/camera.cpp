@@ -1,5 +1,7 @@
 #include "./camera.h"
 
+namespace RT {
+
 Camera::Camera(const Vector3f &center, const Vector3f &direction, const Vector3f &up, int imgW, int imgH) {
     this->center = center;
     this->direction = direction.normalized();
@@ -29,3 +31,5 @@ Ray PerspectiveCamera::generateRay(const Vector2f &point) const {
     Vector3f pointOnCanvas = canvasOrigin + horizontal * point.x() + up * point.y();
     return {center, pointOnCanvas - center};
 }
+
+} // namespace RT

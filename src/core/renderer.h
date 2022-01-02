@@ -4,6 +4,8 @@
 #include "core/camera.h"
 #include "objects/object3d.h"
 
+namespace RT {
+
 class Renderer {
 public:
     Renderer(int sub_pixel, int sub_sample, float gamma);
@@ -15,5 +17,7 @@ private:
     int sub_pixel, sub_sample;
     float gamma;
 };
+
+} // namespace RT
 
 #endif // RT_RENDERER_H

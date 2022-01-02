@@ -5,6 +5,8 @@
 
 #include "vecmath.h"
 
+namespace RT {
+
 // Simple image class
 class Image {
 
@@ -56,5 +58,7 @@ private:
     int height;
     Vector3f *data;
 };
+
+} // namespace RT
 
 #endif // IMAGE_H

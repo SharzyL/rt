@@ -6,6 +6,8 @@
 #include "ray.h"
 #include "vecmath.h"
 
+namespace RT {
+
 class Camera {
 public:
     Camera(const Vector3f &center, const Vector3f &direction, const Vector3f &up, int imgW, int imgH);
@@ -39,5 +41,7 @@ public:
 protected:
     Vector3f canvasOrigin;
 };
+
+} // namespace RT
 
 #endif // CAMERA_H
