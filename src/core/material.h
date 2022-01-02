@@ -16,12 +16,11 @@
 class Material {
 public:
     enum class IlluminationModel {
-        constant = 0,      // Kd color
-        diffuse,           // Lambertian shading
-        blinn,             // actually Blinn-Phong diffuse and specular combined
-        reflective,        // Blinn-Phong plus reflection
-        transparent,       // Blinn-Phong plus transparency
-        fresnelReflection, // Blinn-Phong plus Fresnel reflection
+        diffuse = 1,           // random reflection
+        blinn = 2,             // random reflection (to be improved)
+        reflective = 3,        // total reflective
+        transparent = 4,       // refractive
+        fresnelReflection,
         transparentNoReflection,
         transparentReflection,
         reflectionNoRayTrace,
@@ -34,10 +33,9 @@ public:
     virtual ~Material() = default;
 
     [[nodiscard]] Vector3f Sample(const Ray &ray_in, const Hit &hit) const;
-    [[nodiscard]] std::optional<Vector3f> SampleRefraction(const Ray &ray_in, const Hit &hit) const;
 
     [[nodiscard]] bool HasRefraction() const;
-    [[nodiscard]] Vector3f BDRF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
+    [[nodiscard]] Vector3f BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
 
     [[nodiscard]] Vector3f Ambient() const;
     [[nodiscard]] Vector3f Emission() const;

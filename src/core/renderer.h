@@ -7,13 +7,14 @@
 
 class Renderer {
 public:
-    Renderer(int sub_pixel, int sub_sample);
+    Renderer(int sub_pixel, int sub_sample, float gamma);
 
     void Render(const Object3D &obj, const Camera &camera, const std::string &output_file);
 
 private:
     Vector3f trace(const Ray &ray, const Object3D &obj, int depth);
     int sub_pixel, sub_sample;
+    float gamma;
 };
 
 #endif // RT_RENDERER_H
