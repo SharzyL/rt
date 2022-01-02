@@ -7,7 +7,7 @@
 #include "mesh.h"
 #include "objects/triangle.h"
 
-bool Mesh::intersect(const Ray &r, Hit &h, float tmin) const {
+bool Mesh::Intersect(const Ray &r, Hit &h, float tmin) const {
     if (num_faces > 2 && !bbox.MayIntersect(r)) return false;
     bool result = false;
     for (int triId = 0; triId < (int) tri_idx_list.size(); ++triId) {
@@ -15,7 +15,7 @@ bool Mesh::intersect(const Ray &r, Hit &h, float tmin) const {
         Triangle triangle(group_vertices[triIndex[0]], group_vertices[triIndex[1]], group_vertices[triIndex[2]],
                           &group_materials[mat_idx[triId]]);
         triangle.normal = face_normals[triId];
-        result |= triangle.intersect(r, h, tmin);
+        result |= triangle.Intersect(r, h, tmin);
     }
     return result;
 }
@@ -70,34 +70,34 @@ void BoundingBox::AddVertex(Vector3f v) {
 }
 
 bool BoundingBox::MayIntersect(const Ray &ray) const {
-    const Vector3f &dir = ray.getDirection();
-    const Vector3f &origin = ray.getOrigin();
-    Vector3f intersect_x0 = ray.pointAtParameter((x0 - origin.x()) / dir.x());
+    const Vector3f &dir = ray.GetDirection();
+    const Vector3f &origin = ray.GetOrigin();
+    Vector3f intersect_x0 = ray.PointAtParameter((x0 - origin.x()) / dir.x());
     if (y0 <= intersect_x0.y() && intersect_x0.y() <= y1 && z0 <= intersect_x0.z() && intersect_x0.z() <= z1) {
         return true;
     }
 
-    Vector3f intersect_x1 = ray.pointAtParameter((x1 - origin.x()) / dir.x());
+    Vector3f intersect_x1 = ray.PointAtParameter((x1 - origin.x()) / dir.x());
     if (y0 <= intersect_x1.y() && intersect_x1.y() <= y1 && z0 <= intersect_x1.z() && intersect_x1.z() <= z1) {
         return true;
     }
 
-    Vector3f intersect_y0 = ray.pointAtParameter((y0 - origin.y()) / dir.y());
+    Vector3f intersect_y0 = ray.PointAtParameter((y0 - origin.y()) / dir.y());
     if (x0 <= intersect_y0.x() && intersect_y0.x() <= x1 && z0 <= intersect_y0.z() && intersect_y0.z() <= z1) {
         return true;
     }
 
-    Vector3f intersect_y1 = ray.pointAtParameter((y1 - origin.y()) / dir.y());
+    Vector3f intersect_y1 = ray.PointAtParameter((y1 - origin.y()) / dir.y());
     if (x0 <= intersect_y1.x() && intersect_y1.x() <= x1 && z0 <= intersect_y1.z() && intersect_y1.z() <= z1) {
         return true;
     }
 
-    Vector3f intersect_z0 = ray.pointAtParameter((z0 - origin.z()) / dir.z());
+    Vector3f intersect_z0 = ray.PointAtParameter((z0 - origin.z()) / dir.z());
     if (y0 <= intersect_z0.y() && intersect_z0.y() <= y1 && x0 <= intersect_z0.x() && intersect_z0.x() <= x1) {
         return true;
     }
 
-    Vector3f intersect_z1 = ray.pointAtParameter((z1 - origin.z()) / dir.z());
+    Vector3f intersect_z1 = ray.PointAtParameter((z1 - origin.z()) / dir.z());
     if (y0 <= intersect_z1.y() && intersect_z1.y() <= y1 && x0 <= intersect_z1.x() && intersect_z1.x() <= x1) {
         return true;
     }

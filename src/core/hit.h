@@ -19,11 +19,11 @@ public:
     // destructor
     ~Hit() = default;
 
-    [[nodiscard]] float getT() const;
+    [[nodiscard]] float GetT() const;
 
-    [[nodiscard]] const Material *getMaterial() const;
+    [[nodiscard]] const Material *GetMaterial() const;
 
-    [[nodiscard]] const Vector3f &getNormal() const;
+    [[nodiscard]] const Vector3f &GetNormal() const;
 
     void set(float _t, const Material *m, const Vector3f &n);
 

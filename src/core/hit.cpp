@@ -19,11 +19,11 @@ Hit::Hit(const Hit &h) {
     normal = h.normal;
 }
 
-[[nodiscard]] float Hit::getT() const { return t; }
+[[nodiscard]] float Hit::GetT() const { return t; }
 
-[[nodiscard]] const Material *Hit::getMaterial() const { return material; }
+[[nodiscard]] const Material *Hit::GetMaterial() const { return material; }
 
-[[nodiscard]] const Vector3f &Hit::getNormal() const { return normal; }
+[[nodiscard]] const Vector3f &Hit::GetNormal() const { return normal; }
 
 void Hit::set(float _t, const Material *m, const Vector3f &n) {
     t = _t;
@@ -32,6 +32,6 @@ void Hit::set(float _t, const Material *m, const Vector3f &n) {
 }
 
 inline std::ostream &operator<<(std::ostream &os, const Hit &h) {
-    os << "Hit <" << h.getT() << ", " << h.getNormal() << ">";
+    os << "Hit <" << h.GetT() << ", " << h.GetNormal() << ">";
     return os;
 }

@@ -14,7 +14,7 @@ public:
     // a b c are three get_v positions of the triangle
     Triangle(const Vector3f &a, const Vector3f &b, const Vector3f &c, const Material *m);
 
-    bool intersect(const Ray &r, Hit &h, float tmin) const override;
+    bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
     Vector3f normal;
     Vector3f a, b, c;

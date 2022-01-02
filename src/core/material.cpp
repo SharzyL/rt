@@ -31,9 +31,9 @@ Vector3f Material::Ambient() const { return ambientColor; }
 Vector3f Material::BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const {
     assert(illumination_model == IlluminationModel::blinn);
 
-    const Vector3f &norm = hit.getNormal();
-    const Vector3f &ray_out_dir = -ray_out.getDirection().normalized();
-    const Vector3f &ray_in_dir = ray_in.getDirection().normalized();
+    const Vector3f &norm = hit.GetNormal();
+    const Vector3f &ray_out_dir = -ray_out.GetDirection().normalized();
+    const Vector3f &ray_in_dir = ray_in.GetDirection().normalized();
     Vector3f reflection = 2 * Vector3f::dot(norm, ray_in_dir) * norm - ray_in_dir;
     Vector3f diffuse = diffuseColor * clamp(Vector3f::dot(ray_in_dir, norm));
     Vector3f specular = specularColor * std::pow(clamp(Vector3f::dot(ray_out_dir, reflection)), shininess);
@@ -41,8 +41,8 @@ Vector3f Material::BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) c
 }
 
 Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
-    const Vector3f &norm = hit.getNormal();
-    const Vector3f &dir = ray_in.getDirection();
+    const Vector3f &norm = hit.GetNormal();
+    const Vector3f &dir = ray_in.GetDirection();
 
     switch (illumination_model) {
         case IlluminationModel::diffuse: {
