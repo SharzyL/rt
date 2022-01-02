@@ -25,8 +25,8 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
                         Ray r = camera.generateRay(Vector2f(sub_x + disturb_x, sub_y + disturb_y));
                         Vector3f sample_color = trace(r, obj, 0);
                         pixel_color += clamp1(sample_color);
-//                        LOG(ERROR) << fmt::format("cast ray ({}, {}) ({} -> {}) = {}", x, y, r.getOrigin(),
-//                                                 r.getDirection(), sample_color);
+//                        LOG(ERROR) << fmt::format("cast ray ({}, {}) ({} -> {}) = {}", x, y, r.GetOrigin(),
+//                                                 r.GetDirection(), sample_color);
                     }
                 }
             }
@@ -48,18 +48,18 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
 
 Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
     Hit hit;
-    bool is_hit = obj.intersect(ray, hit, 0.00001);
+    bool is_hit = obj.Intersect(ray, hit, 0.00001);
     if (!is_hit) {
         return Vector3f::ZERO;
     }
-//    LOG(INFO) << fmt::format("hit ({}): {}", ray.pointAtParameter(hit.getT()), hit.getMaterial()->GetName());
-    const Material *mat = hit.getMaterial();
+//    LOG(INFO) << fmt::format("hit ({}): {}", ray.PointAtParameter(hit.GetT()), hit.GetMaterial()->GetName());
+    const Material *mat = hit.GetMaterial();
 
     if (depth >= 5) {
         return mat->Ambient();
     }
 
-    Vector3f hit_point = ray.pointAtParameter(hit.getT());
+    Vector3f hit_point = ray.PointAtParameter(hit.GetT());
 
     Ray sample_ray = Ray(hit_point, mat->Sample(ray, hit));
     //    Vector3f bdrf = mat->BRDF(sample_ray, ray, hit);

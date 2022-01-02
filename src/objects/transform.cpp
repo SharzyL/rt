@@ -7,13 +7,13 @@ static Vector3f transformDirection(const Matrix4f &mat, const Vector3f &dir) { r
 
 Transform::Transform(const Matrix4f &m, Object3D *obj) : o(obj) { transform = m.inverse(); }
 
-bool Transform::intersect(const Ray &r, Hit &h, float tmin) const {
-    Vector3f trSource = transformPoint(transform, r.getOrigin());
-    Vector3f trDirection = transformDirection(transform, r.getDirection());
+bool Transform::Intersect(const Ray &r, Hit &h, float tmin) const {
+    Vector3f trSource = transformPoint(transform, r.GetOrigin());
+    Vector3f trDirection = transformDirection(transform, r.GetDirection());
     Ray tr(trSource, trDirection);
-    bool inter = o->intersect(tr, h, tmin);
+    bool inter = o->Intersect(tr, h, tmin);
     if (inter) {
-        h.set(h.getT(), h.getMaterial(), transformDirection(transform.transposed(), h.getNormal()).normalized());
+        h.set(h.GetT(), h.GetMaterial(), transformDirection(transform.transposed(), h.GetNormal()).normalized());
     }
     return inter;
 }

@@ -13,11 +13,11 @@ public:
 
     Ray(const Ray &r);
 
-    [[nodiscard]] const Vector3f &getOrigin() const;
+    [[nodiscard]] const Vector3f &GetOrigin() const;
 
-    [[nodiscard]] const Vector3f &getDirection() const;
+    [[nodiscard]] const Vector3f &GetDirection() const;
 
-    [[nodiscard]] Vector3f pointAtParameter(float t) const;
+    [[nodiscard]] Vector3f PointAtParameter(float t) const;
 
     void set(const Vector3f &orig, const Vector3f &dir);
 

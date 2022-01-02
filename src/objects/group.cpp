@@ -12,17 +12,15 @@ Group::Group() = default;
 
 Group::Group(int num_objects) { objects.reserve(num_objects); }
 
-bool Group::intersect(const Ray &r, Hit &h, float tmin) const {
+bool Group::Intersect(const Ray &r, Hit &h, float tmin) const {
     bool is_intersect = false;
     for (const auto obj : objects) {
-        if (obj->intersect(r, h, tmin)) {
+        if (obj->Intersect(r, h, tmin)) {
             is_intersect = true;
         }
     }
     return is_intersect;
 }
-
-size_t Group::getGroupSize() const { return objects.size(); }
 
 Group::Group(const std::string &obj_file_path, const std::string &material_search_path) {
 

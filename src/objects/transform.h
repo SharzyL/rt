@@ -15,7 +15,7 @@ class Transform : public Object3D {
 public:
     Transform(const Matrix4f &m, Object3D *obj);
 
-    bool intersect(const Ray &r, Hit &h, float tmin) const override;
+    bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
 protected:
     Object3D *o; // un-transformed object

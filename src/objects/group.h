@@ -18,9 +18,7 @@ public:
 
     explicit Group(int num_objects);
 
-    bool intersect(const Ray &r, Hit &h, float tmin) const override;
-
-    [[nodiscard]] size_t getGroupSize() const;
+    bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
     std::vector<Object3D *> objects;
 

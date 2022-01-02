@@ -35,7 +35,7 @@ public:
     std::vector<TriangleIndex> tri_idx_list;
     std::vector<int> mat_idx;
     std::vector<Vector3f> face_normals;
-    bool intersect(const Ray &r, Hit &h, float tmin) const override;
+    bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
     // Normal can be used for light estimation
     void ComputeNormal();
