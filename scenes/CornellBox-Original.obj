@@ -1,14 +1,3 @@
-# The original Cornell Box in OBJ format.
-# Note that the real box is not a perfect cube, so
-# the faces are imperfect in this data set.
-#
-# Created by Guedis Cardenas and Morgan McGuire at Williams College, 2011
-# Released into the Public Domain.
-#
-# http://graphics.cs.williams.edu/data
-# http://www.graphics.cornell.edu/online/box/data.html
-#
-
 mtllib CornellBox-Original.mtl
 
 ## Object floor
@@ -61,59 +50,11 @@ g leftWall
 usemtl leftWall
 f -4 -3 -2 -1
 
-## Object tallBox
-usemtl tallBox
-
-# Top Face
-v	-0.53  1.20   0.09
-v	 0.00  1.20  -0.09
-v	-0.14  1.20  -0.67
-v	-0.71  1.20  -0.49
-f -4 -3 -2 -1
-
-# Left Face
-v	-0.53  0.00   0.09
-v	-0.53  1.20   0.09
-v	-0.71  1.20  -0.49
-v	-0.71  0.00  -0.49
-f -4 -3 -2 -1
-
-# Back Face
-v	-0.71  0.00  -0.49
-v	-0.71  1.20  -0.49
-v	-0.14  1.20  -0.67
-v	-0.14  0.00  -0.67
-f -4 -3 -2 -1
-
-# Right Face
-v	-0.14  0.00  -0.67
-v	-0.14  1.20  -0.67
-v	 0.00  1.20  -0.09
-v	 0.00  0.00  -0.09
-f -4 -3 -2 -1
-
-# Front Face
-v	 0.00  0.00  -0.09
-v	 0.00  1.20  -0.09
-v	-0.53  1.20   0.09
-v	-0.53  0.00   0.09
-f -4 -3 -2 -1
-
-# Bottom Face
-v	-0.53  0.00   0.09
-v	 0.00  0.00  -0.09
-v	-0.14  0.00  -0.67
-v	-0.71  0.00  -0.49
-f -8 -7 -6 -5
-
-g tallBox
-usemtl tallBox
-
 ## Object light
-v	-0.24  1.999   0.16
-v	-0.24  1.999  -0.22
-v	 0.23  1.999  -0.22
-v	 0.23  1.999   0.16
+v	-0.25  1.999   0.25
+v	-0.25  1.999  -0.25
+v	 0.25  1.999  -0.25
+v	 0.25  1.999   0.25
 
 g light
 usemtl light

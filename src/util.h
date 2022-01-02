@@ -8,21 +8,20 @@
 
 namespace RT {
 
-inline float rand_float() {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
-    static std::uniform_real_distribution<float> dis(0, 1);
-    return dis(gen);
-}
+class RNG {
+public:
+    RNG() noexcept;
+    float RandUniformFloat();
+    float RandNormalFloat();
+    float RandTentFloat();
+private:
+    std::random_device rd;
+    std::mt19937 gen;
+    std::uniform_real_distribution<float> uniform_dist{0, 1};
+    std::normal_distribution<float> normal_dist{0, 1};
+};
 
-inline float rand_float_tent() {
-    float rd = 2 * rand_float();
-    if (rd > 1.f) {
-        return 1.f - std::sqrt(2.f - rd);
-    } else {
-        return std::sqrt(rd) - 1;
-    }
-}
+extern RNG rng;
 
 inline float to_radian(float x) { return x / 180.f * (float)M_PI; }
 

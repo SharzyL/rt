@@ -6,7 +6,7 @@
 namespace RT {
 
 Vector3f random_normalized_vector() {
-    return Vector3f{rand_float(), rand_float(), rand_float()}.normalized();
+    return Vector3f{rng.RandNormalFloat(), rng.RandNormalFloat(), rng.RandNormalFloat()}.normalized();
 }
 
 float schlick(float cos, float refr_idx) {  // return rate of reflection
@@ -45,39 +45,38 @@ Vector3f Material::BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) c
 Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
     const Vector3f &norm = hit.GetNormal();
     const Vector3f &dir = ray_in.GetDirection();
+    float cos_ray_in = Vector3f::dot(norm, dir);
+    bool norm_in_diff_side = cos_ray_in > 0;
+    Vector3f ray_side_norm = norm_in_diff_side ? -norm : norm;
 
     switch (illumination_model) {
-        case IlluminationModel::diffuse: {
-            const Vector3f outward_norm = Vector3f::dot(norm, dir) > 0 ? -norm : norm;
+        case IlluminationModel::diffuse: {  // 1
             Vector3f rand_vec = random_normalized_vector();
-            if (Vector3f::dot(rand_vec, norm) < 0) rand_vec = -rand_vec;
-            return outward_norm + rand_vec;
+            if (Vector3f::dot(rand_vec, ray_side_norm) < 0) rand_vec = -rand_vec;
+            return rand_vec;
         }
-        case IlluminationModel::blinn: {
+        case IlluminationModel::blinn: {  // 2
             const Vector3f front = (dir - norm * Vector3f::dot(norm, dir)).normalized();
             const Vector3f side = Vector3f::cross(norm, front);
-            float theta = rand_float() * (float)M_PI * 2; // random angle
-            float norm_part = rand_float();             // random projection on norm
+            float theta = rng.RandUniformFloat() * (float)M_PI * 2; // random angle
+            float norm_part = rng.RandUniformFloat();             // random projection on norm
             Vector3f reflection_dir = (front * std::cos(theta) + side * std::sin(theta)) * std::sqrt(1 - norm_part);
             reflection_dir += norm * std::sqrt(norm_part);
             return reflection_dir;
         }
-        case IlluminationModel::reflective: {
+        case IlluminationModel::reflective: {  // 3
             return dir - 2 * norm * Vector3f::dot(norm, dir);
         }
-        case IlluminationModel::transparent: {
-            float norm_dot_dir = Vector3f::dot(norm, dir);
-            bool is_into = norm_dot_dir > 0;
-            float norm_dot_dir_abs = std::abs(norm_dot_dir);
-            Vector3f outward_norm = is_into ? -norm : norm;
-            float refr_idx = is_into ? refraction : 1 / refraction;
+        case IlluminationModel::transparent: {  // 4
+            float cos_ray_in_abs = std::abs(cos_ray_in);
+            float refr_idx = norm_in_diff_side ? refraction : 1.f / refraction;
 
-            float cos2t = 1 - fsquare(refr_idx) * (1 - fsquare(norm_dot_dir));
-            if (cos2t < 0 || rand_float() < schlick(norm_dot_dir_abs, refr_idx)) {
+            float cos2t = 1.f - fsquare(refr_idx) * (1.f - fsquare(cos_ray_in));
+            if (cos2t < 0 || rng.RandUniformFloat() < schlick(cos_ray_in_abs, refr_idx)) {
                 Vector3f refl_dir = dir - 2 * norm * Vector3f::dot(norm, dir);
                 return refl_dir;
             } else {
-                Vector3f refr_dir = (refr_idx * dir + outward_norm * (-refr_idx * norm_dot_dir_abs + std::sqrt(cos2t)));
+                Vector3f refr_dir = refr_idx * dir - ray_side_norm * (-refr_idx * cos_ray_in_abs + std::sqrt(cos2t));
                 return refr_dir;
             }
         }

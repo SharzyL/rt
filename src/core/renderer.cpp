@@ -13,7 +13,7 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
     int total_pixels = camera.getWidth() * camera.getHeight();
     const int progress_per_pixel = std::max(total_pixels / 2000, 1);
 
-#pragma omp parallel for collapse(2) schedule(dynamic, 4) shared(camera, img, obj, ok_pixels, progress_per_pixel, total_pixels) default(none)
+#pragma omp parallel for collapse(2) schedule(dynamic, 4) shared(camera, img, obj, ok_pixels, progress_per_pixel, total_pixels, rng) default(none)
     for (int y = 0; y < camera.getHeight(); y++) {
         for (int x = 0; x < camera.getWidth(); x++) {
             Vector3f pixel_color;
@@ -22,11 +22,11 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
                     float sub_x = (float) x + (float) sx / (float) sub_pixel;
                     float sub_y = (float) y + (float) sy / (float) sub_pixel;
                     for (int s = 0; s < sub_sample; s++) {
-                        float disturb_x = (1 + rand_float_tent()) / (float) sub_pixel / 2;
-                        float disturb_y = (1 + rand_float_tent()) / (float) sub_pixel / 2;
+                        float disturb_x = (1 + rng.RandTentFloat()) / (float) sub_pixel / 2;
+                        float disturb_y = (1 + rng.RandTentFloat()) / (float) sub_pixel / 2;
                         Ray r = camera.generateRay(Vector2f(sub_x + disturb_x, sub_y + disturb_y));
                         Vector3f sample_color = trace(r, obj, 0);
-                        pixel_color += clamp1(sample_color);
+                        pixel_color += sample_color;
 //                        LOG(ERROR) << fmt::format("cast ray ({}, {}) ({} -> {}) = {}", x, y, r.GetOrigin(),
 //                                                 r.GetDirection(), sample_color);
                     }
@@ -50,25 +50,30 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
 
 Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
     Hit hit;
-    bool is_hit = obj.Intersect(ray, hit, 0.00001);
+    bool is_hit = obj.Intersect(ray, hit, 0);
     if (!is_hit) {
         return Vector3f::ZERO;
     }
-//    LOG(INFO) << fmt::format("hit ({}): {}", ray.PointAtParameter(hit.GetT()), hit.GetMaterial()->GetName());
     const Material *mat = hit.GetMaterial();
 
+    Vector3f mat_color = mat->Ambient();
+
+    float cmax = mat_color.max_component();
     if (depth >= 5) {
-        return mat->Ambient();
+        if (rng.RandUniformFloat() < cmax * 0.8 && depth <= 8) {
+            mat_color = mat_color / cmax;
+        } else {
+            return mat->Emission();
+        }
     }
 
     Vector3f hit_point = ray.PointAtParameter(hit.GetT());
 
-    Ray sample_ray = Ray(hit_point, mat->Sample(ray, hit));
-    //    Vector3f bdrf = mat->BRDF(sample_ray, ray, hit);
+    Vector3f sample_dir = mat->Sample(ray, hit);
+    Ray sample_ray = Ray(hit_point + 0.0001 * sample_dir, sample_dir);
     Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1);
-    Vector3f ambient = mat->Ambient();
 
-    return mat->Emission() + mat->Ambient() * sample_ray_color;
+    return mat->Emission() + mat_color * sample_ray_color;
 }
 
 } // namespace RT
