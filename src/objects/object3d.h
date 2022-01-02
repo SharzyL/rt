@@ -14,7 +14,7 @@ public:
 
     explicit Object3D(const Material *material) : material(material) {}
 
-    // Intersect Ray with this object. If hit, store information in hit
+    // MayIntersect Ray with this object. If hit, store information in hit
     // structure.
     virtual bool intersect(const Ray &r, Hit &h, float tmin) const = 0;
 
