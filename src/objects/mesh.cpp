@@ -1,6 +1,7 @@
 #include <tiny_obj_loader.h>
 #include <limits>
 #include <cassert>
+#include <algorithm>
 
 #include "core/hit.h"
 #include "core/ray.h"
@@ -72,35 +73,16 @@ void BoundingBox::AddVertex(Vector3f v) {
 bool BoundingBox::MayIntersect(const Ray &ray) const {
     const Vector3f &dir = ray.GetDirection();
     const Vector3f &origin = ray.GetOrigin();
-    Vector3f intersect_x0 = ray.PointAtParameter((x0 - origin.x()) / dir.x());
-    if (y0 <= intersect_x0.y() && intersect_x0.y() <= y1 && z0 <= intersect_x0.z() && intersect_x0.z() <= z1) {
-        return true;
-    }
-
-    Vector3f intersect_x1 = ray.PointAtParameter((x1 - origin.x()) / dir.x());
-    if (y0 <= intersect_x1.y() && intersect_x1.y() <= y1 && z0 <= intersect_x1.z() && intersect_x1.z() <= z1) {
-        return true;
-    }
-
-    Vector3f intersect_y0 = ray.PointAtParameter((y0 - origin.y()) / dir.y());
-    if (x0 <= intersect_y0.x() && intersect_y0.x() <= x1 && z0 <= intersect_y0.z() && intersect_y0.z() <= z1) {
-        return true;
-    }
-
-    Vector3f intersect_y1 = ray.PointAtParameter((y1 - origin.y()) / dir.y());
-    if (x0 <= intersect_y1.x() && intersect_y1.x() <= x1 && z0 <= intersect_y1.z() && intersect_y1.z() <= z1) {
-        return true;
-    }
-
-    Vector3f intersect_z0 = ray.PointAtParameter((z0 - origin.z()) / dir.z());
-    if (y0 <= intersect_z0.y() && intersect_z0.y() <= y1 && x0 <= intersect_z0.x() && intersect_z0.x() <= x1) {
-        return true;
-    }
-
-    Vector3f intersect_z1 = ray.PointAtParameter((z1 - origin.z()) / dir.z());
-    if (y0 <= intersect_z1.y() && intersect_z1.y() <= y1 && x0 <= intersect_z1.x() && intersect_z1.x() <= x1) {
-        return true;
-    }
-
-    return false;
+    float intersect_x0 = (x0 - origin.x()) / dir.x();
+    float intersect_x1 = (x1 - origin.x()) / dir.x();
+    if (intersect_x0 > intersect_x1) std::swap(intersect_x0, intersect_x1);
+    float intersect_y0 = (y0 - origin.y()) / dir.y();
+    float intersect_y1 = (y1 - origin.y()) / dir.y();
+    if (intersect_y0 > intersect_y1) std::swap(intersect_y0, intersect_y1);
+    float intersect_z0 = (z0 - origin.z()) / dir.z();
+    float intersect_z1 = (z1 - origin.z()) / dir.z();
+    if (intersect_z0 > intersect_z1) std::swap(intersect_z0, intersect_z1);
+    float into = std::max(intersect_x0, std::max(intersect_y0, intersect_y1));
+    float out = std::min(intersect_x1, std::min(intersect_y1, intersect_z1));
+    return into <= out;
 }
