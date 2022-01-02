@@ -1,0 +1,22 @@
+camera:
+  pos: 0, 1, 3
+  dir: 0, 0, -1
+  up: 0, 1, 0
+  width: 640
+  height: 640
+  angle: 50
+
+world:
+  - type: load_obj
+    obj: scenes/CornellBox-Original.obj
+
+  - type: sphere
+    center: 0.4, 0.4, 0
+    r: 0.4
+    mat:
+      Ns: 10.0000
+      Ni: 1.0000
+      illum: 1
+      Ka: 0.725 0.71 0.68
+      Kd: 0.725 0.71 0.68
+      Ks: 0 0 0
