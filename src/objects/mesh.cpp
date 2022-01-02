@@ -8,6 +8,8 @@
 #include "mesh.h"
 #include "objects/triangle.h"
 
+namespace RT {
+
 bool Mesh::Intersect(const Ray &r, Hit &h, float tmin) const {
     if (num_faces > 2 && !bbox.MayIntersect(r)) return false;
     bool result = false;
@@ -86,3 +88,5 @@ bool BoundingBox::MayIntersect(const Ray &ray) const {
     float out = std::min(intersect_x1, std::min(intersect_y1, intersect_z1));
     return into <= out;
 }
+
+} // namespace RT

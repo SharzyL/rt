@@ -5,6 +5,8 @@
 
 #include "objects/object3d.h"
 
+namespace RT {
+
 // transforms a 3D point using a matrix, returning a 3D point
 static Vector3f transformPoint(const Matrix4f &mat, const Vector3f &point);
 
@@ -21,5 +23,7 @@ protected:
     Object3D *o; // un-transformed object
     Matrix4f transform;
 };
+
+} // namespace RT
 
 #endif // TRANSFORM_H

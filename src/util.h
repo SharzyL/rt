@@ -6,6 +6,8 @@
 
 #include <Vector3f.h>
 
+namespace RT {
+
 inline float rand_float() {
     static std::random_device rd;
     static std::mt19937 gen(rd());
@@ -62,5 +64,7 @@ inline Vector3f gamma_correct(const Vector3f &v, float gamma) {
 }
 
 inline float fsquare(float x) { return x * x; }
+
+} // namespace RT
 
 #endif // RT_UTIL_H

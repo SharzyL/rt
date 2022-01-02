@@ -1,5 +1,7 @@
 #include "ray.h"
 
+namespace RT {
+
 Ray::Ray(const Vector3f &orig, const Vector3f &dir) {
     origin = orig;
     direction = dir.normalized();
@@ -25,3 +27,5 @@ inline std::ostream &operator<<(std::ostream &os, const Ray &r) {
     os << "Ray <" << r.GetOrigin() << ", " << r.GetDirection() << ">";
     return os;
 }
+
+} // namespace RT

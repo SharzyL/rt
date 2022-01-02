@@ -10,6 +10,7 @@
 
 #include "objects/object3d.h"
 
+namespace RT {
 class BoundingBox {
 public:
     BoundingBox();
@@ -46,5 +47,7 @@ private:
     const std::vector<Vector3f> &group_vertices;
     const std::vector<Material> &group_materials;
 };
+
+} // namespace RT
 
 #endif

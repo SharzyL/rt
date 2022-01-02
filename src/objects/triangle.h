@@ -8,6 +8,8 @@
 
 #include "objects/object3d.h"
 
+namespace RT {
+
 class Triangle : public Object3D {
 
 public:
@@ -21,5 +23,7 @@ public:
 
 protected:
 };
+
+} // namespace RT
 
 #endif // TRIANGLE_H

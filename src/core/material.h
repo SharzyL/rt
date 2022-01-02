@@ -9,6 +9,8 @@
 #include "hit.h"
 #include "ray.h"
 
+namespace RT {
+
 class Material {
 public:
     enum class IlluminationModel {
@@ -49,4 +51,5 @@ protected:
     std::string name;
 };
 
+} // namespace RT
 #endif // MATERIAL_H

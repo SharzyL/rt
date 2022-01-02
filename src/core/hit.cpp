@@ -2,6 +2,8 @@
 
 #include "./hit.h"
 
+namespace RT {
+
 Hit::Hit() {
     material = nullptr;
     t = std::numeric_limits<decltype(t)>::max();
@@ -35,3 +37,5 @@ inline std::ostream &operator<<(std::ostream &os, const Hit &h) {
     os << "Hit <" << h.GetT() << ", " << h.GetNormal() << ">";
     return os;
 }
+
+} // namespace RT

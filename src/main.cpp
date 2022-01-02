@@ -5,7 +5,7 @@
 #include "debug.h"
 #include "util.h"
 
-#include "objects/group.h"
+#include "objects/obj_import.h"
 
 int main(int argc, char *argv[]) {
     google::InitGoogleLogging(argv[0]);
@@ -35,16 +35,16 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
-    PerspectiveCamera camera = PerspectiveCamera(
-            parse_vector(args::get(cam_pos)),
-            parse_vector(args::get(cam_dir)),
-            parse_vector(args::get(cam_up)),
+    RT::PerspectiveCamera camera = RT::PerspectiveCamera(
+            RT::parse_vector(args::get(cam_pos)),
+            RT::parse_vector(args::get(cam_dir)),
+            RT::parse_vector(args::get(cam_up)),
             args::get(width),
             args::get(height),
-            to_radian(args::get(angle))
+            RT::to_radian(args::get(angle))
     );
-    Group g(args::get(input), args::get(search_path));
+    RT::ObjImport g(args::get(input), args::get(search_path));
 
-    Renderer renderer(args::get(subp), args::get(samples), args::get(gamma));
+    RT::Renderer renderer(args::get(subp), args::get(samples), args::get(gamma));
     renderer.Render(g, camera, args::get(output));
 }

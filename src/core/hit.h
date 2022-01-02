@@ -5,6 +5,8 @@
 
 #include "ray.h"
 
+namespace RT {
+
 class Material;
 
 class Hit {
@@ -32,5 +34,7 @@ private:
     const Material *material;
     Vector3f normal;
 };
+
+} // namespace RT
 
 #endif // HIT_H

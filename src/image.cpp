@@ -4,7 +4,7 @@
 
 #include "image.h"
 
-// some helper functions for save & load
+namespace RT {
 
 unsigned char ReadByte(FILE *file) {
     unsigned char b;
@@ -300,3 +300,5 @@ void Image::SaveImage(const char *filename) {
         SaveTGA(filename);
     }
 }
+
+} // namespace RT

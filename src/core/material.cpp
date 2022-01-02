@@ -3,6 +3,8 @@
 #include "./material.h"
 #include "util.h"
 
+namespace RT {
+
 Vector3f random_normalized_vector() {
     return Vector3f{rand_float(), rand_float(), rand_float()}.normalized();
 }
@@ -87,3 +89,5 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
 const std::string &Material::GetName() const { return name; }
 
 Vector3f Material::Emission() const { return emissionColor; }
+
+} // namespace RT
