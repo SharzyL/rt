@@ -11,12 +11,17 @@ world:
     obj: scenes/CornellBox-Original.obj
 
   - type: sphere
-    center: 0.4, 0.4, 0
+    center: 0.5, 0.3, 0
+    r: 0.3
+    mat:
+      Ni: 1.5
+      illum: 4
+      Ka: 1 1 1
+
+  - type: sphere
+    center: -0.4, 0.4, 0
     r: 0.4
     mat:
-      Ns: 10.0000
-      Ni: 1.0000
-      illum: 1
-      Ka: 0.725 0.71 0.68
-      Kd: 0.725 0.71 0.68
-      Ks: 0 0 0
+      Ni: 1.0
+      illum: 3
+      Ka: 1 1 1

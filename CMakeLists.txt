@@ -32,6 +32,7 @@ set(SOURCES
         src/core/renderer.cpp
         src/image.cpp
         src/main.cpp
+        src/util.cpp
         src/scene_parser.cpp
         )
 

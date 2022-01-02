@@ -46,6 +46,7 @@ public:
     Vector3f zxy() const;
 
     float length() const;
+    float max_component() const;
     float squaredLength() const;
 
     void normalize();

@@ -8,6 +8,8 @@
 #include "./mesh.h"
 #include "objects/triangle.h"
 
+#include "debug.h"
+
 namespace RT {
 
 bool Mesh::Intersect(const Ray &r, Hit &h, float tmin) const {
