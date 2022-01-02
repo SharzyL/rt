@@ -2,7 +2,6 @@
 #define RT_RENDERER_H
 
 #include "core/camera.h"
-#include "image.h"
 #include "objects/object3d.h"
 
 class Renderer {

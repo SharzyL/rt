@@ -1,7 +1,3 @@
-//
-// Created by sharzy on 12/31/21.
-//
-
 #ifndef RT_UTIL_H
 #define RT_UTIL_H
 

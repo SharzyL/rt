@@ -1,11 +1,7 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include <cassert>
-#include <iostream>
-#include <optional>
-
-#include "tiny_obj_loader.h"
+#include <tiny_obj_loader.h>
 
 #include "vecmath.h"
 
@@ -34,7 +30,6 @@ public:
 
     [[nodiscard]] Vector3f Sample(const Ray &ray_in, const Hit &hit) const;
 
-    [[nodiscard]] bool HasRefraction() const;
     [[nodiscard]] Vector3f BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
 
     [[nodiscard]] Vector3f Ambient() const;
