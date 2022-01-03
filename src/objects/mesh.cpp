@@ -6,7 +6,6 @@
 #include "core/hit.h"
 #include "core/ray.h"
 #include "./mesh.h"
-#include "objects/triangle.h"
 
 #include "debug.h"
 

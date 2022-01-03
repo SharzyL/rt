@@ -31,11 +31,9 @@ public:
     [[nodiscard]] const Material *GetMaterial() const;
 
     [[nodiscard]] const Vector3f &GetNormal() const;
-    [[nodiscard]] const Vector3f &GetAmbient() const;
+    [[nodiscard]] Vector3f GetAmbient(const Ray &ray) const;
 
-    void Set(float _t, const Material *m, const Vector3f &n);
-    void SetTextureCalculator(const SimpleObject3D *object);
-    void SetTextureColor(const Vector3f &color);
+    void Set(float _t, const Material *m, const Vector3f &n, const SimpleObject3D *object);
 
 private:
     float t;
@@ -43,7 +41,6 @@ private:
     const SimpleObject3D *texture_calculator;
 
     Vector3f normal;
-    std::optional<Vector3f> ambient;
 };
 
 } // namespace RT

@@ -61,7 +61,7 @@ Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
         return mat->emissionColor;
     }
 
-    const Vector3f &hit_ambient = hit.GetAmbient();
+    const Vector3f &hit_ambient = hit.GetAmbient(ray);
 
     Vector3f hit_point = ray.PointAtParameter(hit.GetT());
 
