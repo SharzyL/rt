@@ -1,6 +1,4 @@
-#include <cassert>
 #include <stdexcept>
-#include <cmath>
 
 #include <lodepng.h>
 
@@ -13,7 +11,7 @@ inline float int_color_to_color(uint8_t x) {
     return (float) x / 256.f;
 }
 
-Texture::Texture(const std::string &filename) {
+MappedTexture::MappedTexture(const std::string &filename) {
     std::vector<uint8_t> int_texture_data;
     auto err_code = lodepng::decode(int_texture_data, width, height, filename);
 
@@ -33,7 +31,7 @@ Texture::Texture(const std::string &filename) {
     }
 }
 
-Vector3f Texture::At(float u, float v) const {
+Vector3f MappedTexture::At(float u, float v) const {
     int x = (int) ((u - 0.0000001) * width_f);
     int y = (int) ((v - 0.0000001) * height_f);
     return texture_data[y * width + x];

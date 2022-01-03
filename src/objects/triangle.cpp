@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "util.h"
 #include "./triangle.h"
 
@@ -24,8 +26,12 @@ bool Triangle::Intersect(const Ray &r, Hit &h, float tmin) const {
 }
 
 Vector3f Triangle::AmbientColorAtHit(const Ray &r, const Hit &hit) const {
-    // TODO: implement texture for triangle
-    return material->ambientColor;
+    if (texture != nullptr) {
+        // TODO: implement texture for triangle
+        throw std::runtime_error("Texture mapping for triangle not implemented");
+    } else {
+        return material->ambientColor;
+    }
 }
 
 } // namespace RT
