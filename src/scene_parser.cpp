@@ -42,7 +42,7 @@ Material *SceneParser::parse_material(const YAML::Node &node) {
 
 Texture *SceneParser::parse_texture(const YAML::Node &node) {
     if (node) {
-        return all_textures.emplace_back(std::make_unique<MappedTexture>(node["file"].as<std::string>())).get();
+        return all_textures.emplace_back(std::make_unique<MappedTexture>(node["file"].as<std::string>(), gamma)).get();
     } else {
         return nullptr;
     }
@@ -94,6 +94,9 @@ void SceneParser::parse(const std::string &scene_file) {
 
     YAML::Node camera_node = root_node["camera"];
     camera = parse_camera(camera_node);
+
+    YAML::Node gamma_node = root_node["gamma"];
+    if (gamma_node) gamma = gamma_node.as<float>();
 
     YAML::Node world_node = root_node["world"];
     auto world_group = new Group;

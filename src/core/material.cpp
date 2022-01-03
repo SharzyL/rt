@@ -28,16 +28,21 @@ Material::Material(const tinyobj::material_t &mat) {
     name = mat.name;
 }
 
-Vector3f Material::BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const {
-    assert(illumination_model == IlluminationModel::blinn);
-
-    const Vector3f &norm = hit.GetNormal();
-    const Vector3f &ray_out_dir = -ray_out.GetDirection().normalized();
-    const Vector3f &ray_in_dir = ray_in.GetDirection().normalized();
-    Vector3f reflection = 2 * Vector3f::dot(norm, ray_in_dir) * norm - ray_in_dir;
-    Vector3f diffuse = diffuseColor * clamp(Vector3f::dot(ray_in_dir, norm));
-    Vector3f specular = specularColor * std::pow(clamp(Vector3f::dot(ray_out_dir, reflection)), shininess);
-    return diffuse + specular;
+float Material::BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const {
+    switch (illumination_model) {
+        case IlluminationModel::blinn: {
+            const Vector3f &norm = hit.GetNormal();
+            const Vector3f &ray_out_dir = -ray_out.GetDirection().normalized();
+            const Vector3f &ray_in_dir = ray_in.GetDirection().normalized();
+            Vector3f reflection = 2 * Vector3f::dot(norm, ray_in_dir) * norm - ray_in_dir;
+//            float diffuse = clamp(Vector3f::dot(ray_in_dir, norm));
+            float specular = std::pow(clamp(Vector3f::dot(ray_out_dir, reflection)), shininess);
+            return specular;
+        }
+        default: {
+            return 1 / M_PI;
+        }
+    }
 }
 
 Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
@@ -48,11 +53,7 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
     Vector3f ray_side_norm = norm_in_diff_side ? -norm : norm;
 
     switch (illumination_model) {
-        case IlluminationModel::diffuse: {  // 1
-            Vector3f rand_vec = random_normalized_vector();
-            if (Vector3f::dot(rand_vec, ray_side_norm) < 0) rand_vec = -rand_vec;
-            return rand_vec;
-        }
+        case IlluminationModel::diffuse:  // 1
         case IlluminationModel::blinn: {  // 2
             const Vector3f front = (dir - norm * Vector3f::dot(norm, dir)).normalized();
             const Vector3f side = Vector3f::cross(norm, front);

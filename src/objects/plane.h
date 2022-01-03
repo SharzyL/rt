@@ -15,8 +15,6 @@ public:
     // plane: n * v  = d
     Plane(const Vector3f &normal, float d, const Material *m, const Texture *texture = nullptr);
 
-    ~Plane() override;
-
     bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
     [[nodiscard]] Vector3f AmbientColorAtHit(const Ray &r, const Hit &hit) const override;
