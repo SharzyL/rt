@@ -27,7 +27,6 @@ find_package(OpenMP)
 set(SOURCES
         src/objects/obj_import.cpp
         src/objects/group.cpp
-        src/objects/transform.cpp
         src/objects/triangle.cpp
         src/objects/mesh.cpp
         src/objects/plane.cpp

@@ -30,26 +30,15 @@ Hit::Hit(const Hit &h) {
 
 [[nodiscard]] const Vector3f &Hit::GetNormal() const { return normal; }
 
-void Hit::Set(float _t, const Material *m, const Vector3f &n) {
+void Hit::Set(float _t, const Material *m, const Vector3f &n, const SimpleObject3D *object) {
     t = _t;
     material = m;
     normal = n;
-}
-
-const Vector3f &Hit::GetAmbient() const {
-    if (ambient.has_value()) {
-        return ambient.value();
-    } else {
-        return material->ambientColor;
-    }
-}
-
-void Hit::SetTextureColor(const Vector3f &color) {
-    ambient = color;
-}
-
-void Hit::SetTextureCalculator(const SimpleObject3D *object) {
     texture_calculator = object;
+}
+
+Vector3f Hit::GetAmbient(const Ray &ray) const {
+    return texture_calculator->AmbientColorAtHit(ray, *this);
 }
 
 inline std::ostream &operator<<(std::ostream &os, const Hit &h) {

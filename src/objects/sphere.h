@@ -16,6 +16,7 @@ public:
 
     bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
+    [[nodiscard]] Vector3f AmbientColorAtHit(const Ray &r, const Hit &hit) const override;
     const Vector3f center;
     const float radius;
 };
