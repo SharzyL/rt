@@ -5,11 +5,13 @@
 
 #include "vecmath.h"
 
-#include "debug.h"
+#include "core/texture.h"
 #include "hit.h"
 #include "ray.h"
 
 namespace RT {
+
+class Hit;
 
 class Material {
 public:
@@ -36,11 +38,6 @@ public:
 
     [[nodiscard]] Vector3f BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
 
-    [[nodiscard]] Vector3f Ambient() const;
-    [[nodiscard]] Vector3f Emission() const;
-
-    [[nodiscard]] const std::string &GetName() const;
-
     IlluminationModel illumination_model;
 
     Vector3f ambientColor;  // Ka
@@ -48,7 +45,7 @@ public:
     Vector3f specularColor; // Ks
     Vector3f emissionColor; // Ke
     float shininess;        // Ns
-    float refraction = 1;       // Ni
+    float refraction = 1;   // Ni
     std::string name;
 };
 

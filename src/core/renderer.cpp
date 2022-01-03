@@ -1,6 +1,7 @@
 #include "renderer.h"
 #include "image.h"
 #include "util.h"
+#include "debug.h"
 
 namespace RT {
 
@@ -56,16 +57,11 @@ Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
     }
     const Material *mat = hit.GetMaterial();
 
-    Vector3f mat_color = mat->Ambient();
-
-    float cmax = mat_color.max_component();
     if (depth >= 5) {
-        if (rng.RandUniformFloat() < cmax * 0.8 && depth <= 8) {
-            mat_color = mat_color / cmax;
-        } else {
-            return mat->Emission();
-        }
+        return mat->emissionColor;
     }
+
+    const Vector3f &hit_ambient = hit.GetAmbient();
 
     Vector3f hit_point = ray.PointAtParameter(hit.GetT());
 
@@ -73,7 +69,7 @@ Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
     Ray sample_ray = Ray(hit_point + 0.0001 * sample_dir, sample_dir);
     Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1);
 
-    return mat->Emission() + mat_color * sample_ray_color;
+    return mat->emissionColor + hit_ambient * sample_ray_color;
 }
 
 } // namespace RT

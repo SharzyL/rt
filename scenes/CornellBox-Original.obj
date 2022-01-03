@@ -20,16 +20,6 @@ g ceiling
 usemtl ceiling
 f -4 -3 -2 -1
 
-## Object backwall
-v  -1.00  0.00  -1.00
-v   1.00  0.00  -1.00
-v   1.00  2.00  -1.00
-v  -1.00  2.00  -1.00
-
-g backWall
-usemtl backWall
-f -4 -3 -2 -1
-
 ## Object rightwall
 v	1.00  0.00  -1.00
 v	1.00  0.00   1.00

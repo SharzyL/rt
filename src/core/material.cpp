@@ -28,8 +28,6 @@ Material::Material(const tinyobj::material_t &mat) {
     name = mat.name;
 }
 
-Vector3f Material::Ambient() const { return ambientColor; }
-
 Vector3f Material::BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const {
     assert(illumination_model == IlluminationModel::blinn);
 
@@ -84,9 +82,5 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
             throw std::runtime_error("illum type not implemented");
     }
 }
-
-const std::string &Material::GetName() const { return name; }
-
-Vector3f Material::Emission() const { return emissionColor; }
 
 } // namespace RT

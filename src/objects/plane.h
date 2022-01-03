@@ -12,7 +12,8 @@ namespace RT {
 
 class Plane : public SimpleObject3D {
 public:
-    Plane(const Vector3f &normal, float d, const Material *m);
+    // plane: n * v  = d
+    Plane(const Vector3f &normal, float d, const Material *m, const Texture *texture = nullptr);
 
     ~Plane() override;
 
