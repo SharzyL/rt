@@ -18,10 +18,20 @@ world:
       illum: 4
       Ka: 1 1 1
 
+  - type: plane
+    normal: 0 0 1
+    d: -1
+    mat:
+      Ni: 1.5
+      illum: 1
+    texture:
+      file: scenes/textures/grid.png
+
   - type: sphere
     center: -0.4, 0.4, 0
     r: 0.4
     mat:
       Ni: 1.0
-      illum: 3
-      Ka: 1 1 1
+      illum: 2
+    texture:
+      file: scenes/textures/grid.png

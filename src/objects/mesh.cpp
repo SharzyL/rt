@@ -15,49 +15,31 @@ namespace RT {
 bool Mesh::Intersect(const Ray &r, Hit &h, float tmin) const {
     if (!bbox.MayIntersect(r)) return false;
     bool result = false;
-    for (int triId = 0; triId < (int) tri_idx_list.size(); ++triId) {
-        const TriangleIndex &triIndex = tri_idx_list[triId];
-        Triangle triangle(group_vertices[triIndex[0]], group_vertices[triIndex[1]], group_vertices[triIndex[2]],
-                          &group_materials[mat_idx[triId]]);
-        triangle.normal = face_normals[triId];
+    for (const auto &triangle: triangles) {
         result |= triangle.Intersect(r, h, tmin);
     }
     return result;
 }
 
-void Mesh::ComputeNormal() {
-    for (int triId = 0; triId < (int) tri_idx_list.size(); ++triId) {
-        TriangleIndex &triIndex = tri_idx_list[triId];
-        Vector3f a = group_vertices[triIndex[1]] - group_vertices[triIndex[0]];
-        Vector3f b = group_vertices[triIndex[2]] - group_vertices[triIndex[0]];
-        b = Vector3f::cross(a, b);
-        face_normals[triId] = b / b.length();
-    }
-}
-
-Mesh::Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, const tinyobj::shape_t &shape)
-        : group_vertices(vs), group_materials(mats) {
+Mesh::Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, const tinyobj::shape_t &shape) {
     num_faces = shape.mesh.num_face_vertices.size();
-    tri_idx_list.reserve(num_faces);
-    face_normals.reserve(num_faces);  // TODO: handle face normals
-    mat_idx.reserve(num_faces);
     size_t index_offset = 0;
     for (size_t f = 0; f < num_faces; f++) { // iterate faces
-        assert(shape.mesh.num_face_vertices[f] == 3);
-        int v1_idx = shape.mesh.indices[index_offset + 0].vertex_index;
-        int v2_idx = shape.mesh.indices[index_offset + 1].vertex_index;
-        int v3_idx = shape.mesh.indices[index_offset + 2].vertex_index;
-        tri_idx_list.emplace_back(v1_idx, v2_idx, v3_idx);
-        bbox.AddVertex(group_vertices[v1_idx]);
-        bbox.AddVertex(group_vertices[v2_idx]);
-        bbox.AddVertex(group_vertices[v3_idx]);
-
         int this_mat_idx = shape.mesh.material_ids[f];
-        if (this_mat_idx < 0) this_mat_idx = 0;
-        mat_idx.emplace_back(this_mat_idx);
+        if (this_mat_idx < 0) this_mat_idx = 0;  // use default material if no material is given
+
+        assert(shape.mesh.num_face_vertices[f] == 3);
+        const Vector3f &v1 = vs[shape.mesh.indices[index_offset + 0].vertex_index];
+        const Vector3f &v2 = vs[shape.mesh.indices[index_offset + 1].vertex_index];
+        const Vector3f &v3 = vs[shape.mesh.indices[index_offset + 2].vertex_index];
+        triangles.emplace_back(v1, v2, v3, &mats[this_mat_idx]);
+
+        bbox.AddVertex(v1);
+        bbox.AddVertex(v2);
+        bbox.AddVertex(v3);
+
         index_offset += 3;
     }
-    ComputeNormal();
 }
 
 BoundingBox::BoundingBox() {

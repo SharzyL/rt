@@ -10,7 +10,7 @@ public:
     static const Vector3f RIGHT;
     static const Vector3f FORWARD;
 
-    Vector3f(float f = 0.f);
+    explicit Vector3f(float f = 0.f);
     Vector3f(float x, float y, float z);
 
     Vector3f(const Vector2f &xy, float z);
@@ -33,26 +33,26 @@ public:
     float &y();
     float &z();
 
-    float x() const;
-    float y() const;
-    float z() const;
+    [[nodiscard]] float x() const;
+    [[nodiscard]] float y() const;
+    [[nodiscard]] float z() const;
 
-    Vector2f xy() const;
-    Vector2f xz() const;
-    Vector2f yz() const;
+    [[nodiscard]] Vector2f xy() const;
+    [[nodiscard]] Vector2f xz() const;
+    [[nodiscard]] Vector2f yz() const;
 
-    Vector3f xyz() const;
-    Vector3f yzx() const;
-    Vector3f zxy() const;
+    [[nodiscard]] Vector3f xyz() const;
+    [[nodiscard]] Vector3f yzx() const;
+    [[nodiscard]] Vector3f zxy() const;
 
-    float length() const;
-    float max_component() const;
-    float squaredLength() const;
+    [[nodiscard]] float length() const;
+    [[nodiscard]] float max_component() const;
+    [[nodiscard]] float squaredLength() const;
 
     void normalize();
-    Vector3f normalized() const;
+    [[nodiscard]] Vector3f normalized() const;
 
-    Vector2f homogenized() const;
+    [[nodiscard]] Vector2f homogenized() const;
 
     void negate();
 

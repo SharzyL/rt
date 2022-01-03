@@ -4,8 +4,8 @@
 
 namespace RT {
 
-Sphere::Sphere(const Vector3f &center, float radius, const Material *material)
-    : SimpleObject3D(material), center(center), radius(radius) {}
+Sphere::Sphere(const Vector3f &center, float radius, const Material *material, const Texture *texture)
+    : SimpleObject3D(material, texture), center(center), radius(radius) {}
 
 Sphere::~Sphere() = default;
 
@@ -24,7 +24,13 @@ bool Sphere::Intersect(const Ray &r, Hit &h, float tmin) const {
         if (t >= tmin && t < h.GetT()) {
             Vector3f intersection = r.PointAtParameter(t);
             Vector3f normal_at_intersection = (intersection - center).normalized();
-            h.set(t, material, normal_at_intersection);
+            h.Set(t, material, normal_at_intersection);
+            if (texture != nullptr) {
+                Vector3f center_to_intersection = (intersection - center).normalized();
+                float u = std::atan2(center_to_intersection.y(), center_to_intersection.x()) / (float) M_PI / 2.f + 0.5f;
+                float v = std::asin(center_to_intersection.z()) / (float) M_PI + 0.5f;
+                h.SetTextureColor(texture->At(u, v));
+            }
             return true;
         } else {
             return false;

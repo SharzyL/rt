@@ -15,7 +15,7 @@ bool Transform::Intersect(const Ray &r, Hit &h, float tmin) const {
     Ray tr(trSource, trDirection);
     bool inter = o->Intersect(tr, h, tmin);
     if (inter) {
-        h.set(h.GetT(), h.GetMaterial(), transformDirection(transform.transposed(), h.GetNormal()).normalized());
+        h.Set(h.GetT(), h.GetMaterial(), transformDirection(transform.transposed(), h.GetNormal()).normalized());
     }
     return inter;
 }
