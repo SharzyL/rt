@@ -42,7 +42,7 @@ Material *SceneParser::parse_material(const YAML::Node &node) {
 
 Texture *SceneParser::parse_texture(const YAML::Node &node) {
     if (node) {
-        return all_textures.emplace_back(std::make_unique<Texture>(node["file"].as<std::string>())).get();
+        return all_textures.emplace_back(std::make_unique<MappedTexture>(node["file"].as<std::string>())).get();
     } else {
         return nullptr;
     }

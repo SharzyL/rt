@@ -36,8 +36,8 @@ Vector3f Sphere::AmbientColorAtHit(const Ray &r, const Hit &hit) const {
     if (texture != nullptr) {
         auto hit_point = r.PointAtParameter(hit.GetT());
         Vector3f center_to_intersection = (hit_point - center).normalized();
-        float u = std::atan2(center_to_intersection.y(), center_to_intersection.x()) / (float) M_PI / 2.f + 0.5f;
-        float v = std::asin(center_to_intersection.z()) / (float) M_PI + 0.5f;
+        float u = std::atan2(center_to_intersection.z(), center_to_intersection.x()) / (float) M_PI / 2.f + 0.5f;
+        float v = std::asin(center_to_intersection.y()) / (float) M_PI + 0.5f;
         return texture->At(u, v);
     } else {
         return material->ambientColor;
