@@ -67,9 +67,14 @@ Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
 
     Vector3f sample_dir = mat->Sample(ray, hit);
     Ray sample_ray = Ray(hit_point + 0.0001 * sample_dir, sample_dir);
+    float brdf = mat->BRDF(ray, sample_ray, hit);
+
+    float cos_theta = std::abs(Vector3f::dot(sample_dir, hit.GetNormal()));
+    float p = 1 / (2 * M_PI);
+
     Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1);
 
-    return mat->emissionColor + hit_ambient * sample_ray_color;
+    return mat->emissionColor + hit_ambient * sample_ray_color * cos_theta * brdf / p;
 }
 
 } // namespace RT

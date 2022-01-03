@@ -36,7 +36,7 @@ public:
 
     [[nodiscard]] Vector3f Sample(const Ray &ray_in, const Hit &hit) const;
 
-    [[nodiscard]] Vector3f BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
+    [[nodiscard]] float BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
 
     IlluminationModel illumination_model;
 
@@ -44,7 +44,7 @@ public:
     Vector3f diffuseColor;  // Kd
     Vector3f specularColor; // Ks
     Vector3f emissionColor; // Ke
-    float shininess;        // Ns
+    float shininess = 1;    // Ns
     float refraction = 1;   // Ni
     std::string name;
 };

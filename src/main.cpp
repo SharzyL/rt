@@ -16,7 +16,6 @@ int main(int argc, char *argv[]) {
 
     args::ValueFlag<int> subp(parser, "subp", "sub pixel", {'p', "subp"}, 1);
     args::ValueFlag<int> samples(parser, "samples", "samples", {'s', "samples"}, 1);
-    args::ValueFlag<float> gamma(parser, "gamma", "gamma value", {'g', "gamma"}, 2.2f);
 
     try {
         parser.ParseCLI(argc, argv);
@@ -28,6 +27,6 @@ int main(int argc, char *argv[]) {
     RT::SceneParser scene_parser;
     scene_parser.parse(args::get(input));
 
-    RT::Renderer renderer(args::get(subp), args::get(samples), args::get(gamma));
+    RT::Renderer renderer(args::get(subp), args::get(samples), scene_parser.gamma);
     renderer.Render(*scene_parser.scene, *scene_parser.camera, args::get(output));
 }

@@ -7,11 +7,11 @@
 
 namespace RT {
 
-inline float int_color_to_color(uint8_t x) {
-    return (float) x / 256.f;
+inline float int_color_to_color(uint8_t x, float gamma) {
+    return std::pow((float) x / 256.f, gamma);
 }
 
-MappedTexture::MappedTexture(const std::string &filename) {
+MappedTexture::MappedTexture(const std::string &filename, float gamma) {
     std::vector<uint8_t> int_texture_data;
     auto err_code = lodepng::decode(int_texture_data, width, height, filename);
 
@@ -24,9 +24,9 @@ MappedTexture::MappedTexture(const std::string &filename) {
     texture_data.reserve(width * height);
     for (uint32_t i = 0; i < width * height; i++) {
         texture_data[i] = Vector3f(
-                int_color_to_color(int_texture_data[4 * i]),
-                int_color_to_color(int_texture_data[4 * i + 1]),
-                int_color_to_color(int_texture_data[4 * i + 2])
+                int_color_to_color(int_texture_data[4 * i], gamma),
+                int_color_to_color(int_texture_data[4 * i + 1], gamma),
+                int_color_to_color(int_texture_data[4 * i + 2], gamma)
         );
     }
 }

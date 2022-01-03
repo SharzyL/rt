@@ -19,6 +19,7 @@ public:
 
     void parse(const std::string &scene_file);
 
+    float gamma = 2.2;
     std::unique_ptr<Camera> camera;  // use pointer because it is an abstract class
     std::unique_ptr<Object3D> scene; // same as above
 private:
