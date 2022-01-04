@@ -13,6 +13,7 @@
 #include "objects/triangle.h"
 #include "objects/group.h"
 #include "objects/obj_import.h"
+#include "objects/mesh.h"
 #include "objects/object3d.h"
 
 #include "core/ray.h"
@@ -88,7 +89,18 @@ std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
 
     } else if (node_type == "load_obj") {
         const std::string &obj_file = node["obj"].as<std::string>();
-        return std::make_unique<ObjImport>(obj_file);
+        Vector3f scale = node["scale"] ? parse_vector(node["scale"].as<std::string>()) : Vector3f(1, 1, 1);
+        Vector3f translate = node["translate"] ? parse_vector(node["translate"].as<std::string>()) : Vector3f(0, 0, 0);
+        Material *material = node["mat"] ? parse_material(node["mat"]) : nullptr;
+        return std::make_unique<ObjImport>(obj_file, scale, translate, material);
+
+    } else if (node_type == "bbox") {
+        auto material = parse_material(node["mat"]);
+        auto bbox = new BoundingBox(material);
+        for (const auto &point_node: node["points"]) {
+            bbox->AddVertex(parse_vector(point_node.as<std::string>()));
+        }
+        return std::unique_ptr<Object3D>(bbox);
 
     } else {
         CHECK(false) << "unsupported object type";

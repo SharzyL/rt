@@ -25,7 +25,9 @@ public:
     SimpleObject3D(const Material *material, const Texture *texture) : material(material), texture(texture) {};
 
     [[nodiscard]] virtual Vector3f AmbientColorAtHit(const Ray &r, const Hit &hit) const = 0;
-protected:
+
+    [[nodiscard]] const Material *GetMaterial() const { return material; }
+
     const Material *material;
     const Texture *texture;  // maybe nullptr, which means no texture for it
 };

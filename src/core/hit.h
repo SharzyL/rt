@@ -33,7 +33,7 @@ public:
 private:
     float t;
     const Material *material;
-    const SimpleObject3D *texture_calculator;
+    const SimpleObject3D *texture_calculator = nullptr;
 
     Vector3f normal;
 };

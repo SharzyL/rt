@@ -13,10 +13,10 @@ newmtl floor
 newmtl ceiling
   illum 1
   Ka 0.725 0.71 0.68
-  Ke 0.5 0.5 0.5
 
 newmtl backWall
-  illum 1
+  illum 2
+  Ns 2
   Ka 0.725 0.71 0.68
 
 newmtl shortBox
@@ -31,4 +31,4 @@ newmtl tallBox
 newmtl light
   illum 1
   Ka 0.78 0.78 0.78
-  Ke 12 12 12
+  Ke 20 20 20
