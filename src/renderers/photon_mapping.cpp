@@ -22,7 +22,6 @@ PhotonMappingRender::PhotonMappingRender(
 }
 
 void PhotonMappingRender::Render(const std::string &output_file) {
-
     const int num_rounds = 5;
     const int photons_per_round = 100;
 
@@ -37,7 +36,7 @@ void PhotonMappingRender::Render(const std::string &output_file) {
 
         for (const auto &light: lights) {
             for (int p = 0; p < photons_per_round; p++) {
-                Ray ray = light->EmitRay();
+                auto ray = light->EmitRay();
                 Photon photon;
                 trace_photon(photon, ray);
             }
@@ -54,12 +53,17 @@ void PhotonMappingRender::Render(const std::string &output_file) {
             img.SetPixel(x, y, color);
         }
     }
+    img.SaveImage(output_file.c_str());
 }
 
 void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray) {
     Ray tracing_ray(ray);
     vp.attenuation = Vector3f(1, 1, 1);
-    for (int depth = 0; depth < 5; depth++) {
+    int depth = 0;
+    while (true) {
+        depth++;
+        if (depth > 5) return;
+
         Hit hit;
         bool is_hit = obj->Intersect(tracing_ray, hit, 0);
         if (!is_hit) {
@@ -79,9 +83,9 @@ void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray) 
     }
 }
 
-void PhotonMappingRender::trace_photon(Photon &photon, const Ray &ray) {
-    Ray tracing_ray(ray);
-    Vector3f attenuation = Vector3f(5.f, 5.f, 5.f);  // TODO: replace it with the lightness of light
+void PhotonMappingRender::trace_photon(Photon &photon, const ColoredRay &ray) {
+    Ray tracing_ray = ray;
+    Vector3f attenuation = ray.GetColor();  // TODO: replace it with the lightness of light
     int depth = 0;
     while (true) {
         depth ++;

@@ -46,7 +46,7 @@ public:
 
 private:
     void trace_visible_point(VisiblePoint &vp, const Ray &ray);
-    void trace_photon(Photon &photon, const Ray &ray);
+    void trace_photon(Photon &photon, const ColoredRay &ray);
     void update_nearby_vp(const Photon &photon, const Vector3f &attenuation);
 
     int width, height;
