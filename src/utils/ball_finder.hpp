@@ -9,8 +9,6 @@
 
 #include <Vector3f.h>
 
-#include <fmt/core.h>
-
 namespace RT {
 
 // This data structure stores a set of balls in space
@@ -28,7 +26,6 @@ public:
         auto grid_size = (float) std::pow(2.f, grid_size_log);
         float x = p.x() / grid_size, y = p.y() / grid_size, z = p.z() / grid_size;
         int xf = std::floor(x), yf = std::floor(y), zf = std::floor(z);
-        fmt::print("insert ({}, {}, {}) / {} (r = {}): ({}, {}, {})\n",  t->center.x(), t->center.y(), t->center.z(), grid_size, t->radius, xf, yf, zf);
         ball_grids[grid_size_log][std::make_tuple(xf, yf, zf)].emplace_back(t);
     };
 
@@ -40,15 +37,12 @@ public:
             float x = p.x() / grid_size, y = p.y() / grid_size, z = p.z() / grid_size;
             float xf = std::round(x), yf = std::round(y), zf = std::round(z);
             int xi = (int) xf, yi = (int) yf, zi = (int) zf;
-//            fmt::print("floored value:  ({}, {}, {})\n",  xf, yf, zf);
-            fmt::print("locate ({}, {}, {}) / {}: ({}, {}, {})\n",  p.x(), p.y(), p.z(), grid_size, xi, yi, zi);
             for (int xii = xi - 1; xii <= xi; xii++) {
                 for (int yii = yi - 1; yii <= yi; yii++) {
                     for (int zii = zi - 1; zii <= zi; zii++) {
                         std::list<T*> &balls_in_grid = ball_grid[std::make_tuple(xii, yii, zii)];
                         balls_in_grid.remove_if([=](T *t) -> bool {
                             float dist = (t->center - p).length();
-                            fmt::print("grid ({}, {}, {}) dist: {} ({} desired)\n", xii, yii, zii, dist, t->radius);
                             if (dist <= t->radius) {
                                 float new_radius = f(t);
                                 if (new_radius > 0) {
