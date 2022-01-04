@@ -1,13 +1,14 @@
 #ifndef MATERIAL_H
 #define MATERIAL_H
 
-#include <tiny_obj_loader.h>
-
 #include "vecmath.h"
 
-#include "core/texture.h"
 #include "hit.h"
 #include "ray.h"
+
+namespace tinyobj {
+    class material_t;
+}
 
 namespace RT {
 
@@ -34,8 +35,8 @@ public:
 
     virtual ~Material() = default;
 
+    // energy conservation: \int_{x on sphere} PDF(x) * BRDF(x) d x = 1
     [[nodiscard]] Vector3f Sample(const Ray &ray_in, const Hit &hit) const;
-
     [[nodiscard]] float BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
 
     IlluminationModel illumination_model;

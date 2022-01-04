@@ -5,11 +5,14 @@
 #include <memory>
 #include <map>
 
-#include <yaml-cpp/yaml.h>
-
 #include "objects/object3d.h"
 #include "core/camera.h"
 #include "core/texture.h"
+#include "core/material.h"
+
+namespace YAML {
+    class Node;
+}
 
 namespace RT {
 

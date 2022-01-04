@@ -3,13 +3,12 @@
 
 #include <vector>
 
-#include <tiny_obj_loader.h>
-
-#include "Vector2f.h"
-#include "Vector3f.h"
-
-#include "objects/object3d.h"
 #include "objects/triangle.h"
+
+// forward declaration
+namespace tinyobj {
+    class shape_t;
+}
 
 namespace RT {
 class BoundingBox {

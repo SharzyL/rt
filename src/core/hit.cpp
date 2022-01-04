@@ -1,9 +1,8 @@
 #include <limits>
 
 #include "./hit.h"
+#include "objects/object3d.h"
 #include "core/material.h"
-
-#include "debug.h"
 
 namespace RT {
 

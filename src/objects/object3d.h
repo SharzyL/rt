@@ -1,15 +1,12 @@
 #ifndef OBJECT3D_H
 #define OBJECT3D_H
 
-#include "core/hit.h"
-#include "core/material.h"
-#include "core/texture.h"
-#include "core/ray.h"
-
 namespace RT {
 
 class Hit;
 class Material;
+class Texture;
+class Ray;
 
 // Base class for all 3d entities.
 class Object3D {

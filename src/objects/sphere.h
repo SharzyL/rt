@@ -4,7 +4,6 @@
 #include "vecmath.h"
 
 #include "objects/object3d.h"
-#include "core/material.h"
 
 namespace RT {
 

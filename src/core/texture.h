@@ -2,6 +2,7 @@
 #define RT_TEXTURE_H
 
 #include <string>
+#include <vector>
 
 #include <Vector3f.h>
 

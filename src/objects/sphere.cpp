@@ -1,5 +1,10 @@
 #include <cmath>
 
+#include "core/ray.h"
+#include "core/hit.h"
+#include "core/texture.h"
+#include "core/material.h"
+
 #include "./sphere.h"
 
 namespace RT {

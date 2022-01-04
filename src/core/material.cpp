@@ -1,7 +1,11 @@
-#include <cassert>
+#include <tiny_obj_loader.h>
+
+#include "util.h"
+
+#include "core/ray.h"
+#include "core/hit.h"
 
 #include "./material.h"
-#include "util.h"
 
 namespace RT {
 
@@ -29,20 +33,7 @@ Material::Material(const tinyobj::material_t &mat) {
 }
 
 float Material::BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const {
-    switch (illumination_model) {
-        case IlluminationModel::blinn: {
-            const Vector3f &norm = hit.GetNormal();
-            const Vector3f &ray_out_dir = -ray_out.GetDirection().normalized();
-            const Vector3f &ray_in_dir = ray_in.GetDirection().normalized();
-            Vector3f reflection = 2 * Vector3f::dot(norm, ray_in_dir) * norm - ray_in_dir;
-//            float diffuse = clamp(Vector3f::dot(ray_in_dir, norm));
-            float specular = std::pow(clamp(Vector3f::dot(ray_out_dir, reflection)), shininess);
-            return specular;
-        }
-        default: {
-            return 1 / M_PI;
-        }
-    }
+    return 1.f;
 }
 
 Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
@@ -53,15 +44,11 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
     Vector3f ray_side_norm = norm_in_diff_side ? -norm : norm;
 
     switch (illumination_model) {
-        case IlluminationModel::diffuse:  // 1
+        case IlluminationModel::diffuse: {  // 1
+            return ray_side_norm + random_normalized_vector();
+        }
         case IlluminationModel::blinn: {  // 2
-            const Vector3f front = (dir - norm * Vector3f::dot(norm, dir)).normalized();
-            const Vector3f side = Vector3f::cross(norm, front);
-            float theta = rng.RandUniformFloat() * (float)M_PI * 2; // random angle
-            float norm_part = rng.RandUniformFloat();             // random projection on norm
-            Vector3f reflection_dir = (front * std::cos(theta) + side * std::sin(theta)) * std::sqrt(1 - norm_part);
-            reflection_dir += norm * std::sqrt(norm_part);
-            return reflection_dir;
+            return dir - 2 * norm * Vector3f::dot(norm, dir) + random_normalized_vector() * std::min(1.f, 1 / shininess);
         }
         case IlluminationModel::reflective: {  // 3
             return dir - 2 * norm * Vector3f::dot(norm, dir);

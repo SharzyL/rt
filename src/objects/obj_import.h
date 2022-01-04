@@ -1,12 +1,8 @@
-#ifndef GROUP_OBJ_IMPORT
-#define GROUP_OBJ_IMPORT
+#ifndef RT_OBJ_IMPORT
+#define RT_OBJ_IMPORT
 
 #include <vector>
 
-#include "core/hit.h"
-#include "core/ray.h"
-
-#include "objects/object3d.h"
 #include "objects/group.h"
 
 namespace RT {

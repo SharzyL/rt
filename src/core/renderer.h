@@ -1,6 +1,8 @@
 #ifndef RT_RENDERER_H
 #define RT_RENDERER_H
 
+#include <string>
+
 #include "core/camera.h"
 #include "objects/object3d.h"
 
