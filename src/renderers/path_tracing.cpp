@@ -1,7 +1,7 @@
-#include "renderer.h"
-#include "image.h"
-#include "util.h"
-#include "debug.h"
+#include "path_tracing.h"
+#include "utils/image.h"
+#include "utils/math_util.h"
+#include "utils/debug.h"
 
 #include "core/hit.h"
 #include "core/material.h"
@@ -9,9 +9,9 @@
 
 namespace RT {
 
-Renderer::Renderer(int sub_pixel, int sub_sample, float gamma) : sub_pixel(sub_pixel), sub_sample(sub_sample), gamma(gamma) {}
+PathTracingRender::PathTracingRender(int sub_pixel, int sub_sample, float gamma) : sub_pixel(sub_pixel), sub_sample(sub_sample), gamma(gamma) {}
 
-void Renderer::Render(const Object3D &obj, const Camera &camera, const std::string &output_file) {
+void PathTracingRender::Render(const Object3D &obj, const Camera &camera, const std::string &output_file) {
     Image img(camera.getWidth(), camera.getHeight());
 
     int ok_pixels = 0;
@@ -53,7 +53,7 @@ void Renderer::Render(const Object3D &obj, const Camera &camera, const std::stri
     img.SaveBMP(output_file.c_str());
 }
 
-Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
+Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth) {
     Hit hit;
     bool is_hit = obj.Intersect(ray, hit, 0);
     if (!is_hit) {

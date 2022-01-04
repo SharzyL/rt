@@ -36,13 +36,16 @@ set(SOURCES
         src/core/material.cpp
         src/core/ray.cpp
         src/core/camera.cpp
-        src/core/renderer.cpp
         src/core/texture.cpp
 
-        src/image.cpp
+        src/renderers/path_tracing.cpp
+        src/renderers/photon_mapping.cpp
+
+        src/utils/image.cpp
+        src/utils/math_util.cpp
+        src/utils/scene_parser.cpp
+
         src/main.cpp
-        src/util.cpp
-        src/scene_parser.cpp
         )
 
 set(CMAKE_CXX_STANDARD 17)
@@ -61,5 +64,5 @@ target_link_libraries(${PROJECT_NAME}
         )
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 
-add_executable(test_ src/test.cpp)
+add_executable(test_ src/utils/test.cpp)
 target_link_libraries(test_ args)

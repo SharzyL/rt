@@ -3,7 +3,7 @@
 
 #include <tiny_obj_loader.h>
 
-#include "debug.h"
+#include "utils/debug.h"
 #include "core/material.h"
 #include "objects/mesh.h"
 
