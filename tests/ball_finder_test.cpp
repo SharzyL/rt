@@ -14,7 +14,6 @@ struct Ball {
 
 TEST(BallFinder, BasicTests) {
     for (int i = 0; i < 100; i++) {
-        fmt::print("\n");
         BallFinder<Ball> bf;
         Vector3f center = 10 * rng.RandNormalizedVector();
         Ball b1{center, 0.48f};
