@@ -37,6 +37,7 @@ set(SOURCES
         src/core/ray.cpp
         src/core/camera.cpp
         src/core/texture.cpp
+        src/core/light.cpp
 
         src/renderers/path_tracing.cpp
         src/renderers/photon_mapping.cpp

@@ -2,6 +2,7 @@
 #include "utils/image.h"
 #include "utils/math_util.h"
 #include "utils/debug.h"
+#include "utils/prog_bar.h"
 
 #include "core/hit.h"
 #include "core/material.h"
@@ -15,10 +16,9 @@ void PathTracingRender::Render(const Object3D &obj, const Camera &camera, const 
     Image img(camera.getWidth(), camera.getHeight());
 
     int ok_pixels = 0;
-    int total_pixels = camera.getWidth() * camera.getHeight();
-    const int progress_per_pixel = std::max(total_pixels / 2000, 1);
+    ProgressBar bar("Path tracing", camera.getWidth() * camera.getHeight());
 
-#pragma omp parallel for collapse(2) schedule(dynamic, 4) shared(camera, img, obj, ok_pixels, progress_per_pixel, total_pixels, rng) default(none)
+#pragma omp parallel for collapse(2) schedule(dynamic, 4) shared(camera, img, obj, ok_pixels, bar, rng) default(none)
     for (int y = 0; y < camera.getHeight(); y++) {
         for (int x = 0; x < camera.getWidth(); x++) {
             Vector3f pixel_color;
@@ -39,14 +39,7 @@ void PathTracingRender::Render(const Object3D &obj, const Camera &camera, const 
             }
             pixel_color = gamma_correct(pixel_color / (float) sub_pixel / (float) sub_pixel / (float) sub_sample, gamma);
             img.SetPixel(x, y, pixel_color);
-
-            // report progress
-# pragma omp critical
-            ok_pixels += 1;
-            if (ok_pixels % progress_per_pixel == 0) {
-                float complete_rate = (float) ok_pixels * 100.f / (float) total_pixels;
-                LOG(ERROR) << fmt::format("complete {:.2f}% ({}/{} pixels)", complete_rate, ok_pixels, total_pixels);
-            }
+            bar.Step();
         }
     }
 

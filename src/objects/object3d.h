@@ -11,8 +11,6 @@ class Ray;
 // Base class for all 3d entities.
 class Object3D {
 public:
-    Object3D() = default;
-
     virtual ~Object3D() = default;
 
     // MayIntersect Ray with this object. If hit, store information in hit

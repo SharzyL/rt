@@ -1,9 +1,7 @@
 #include <args.hxx>
 
-#include "core/camera.h"
 #include "renderers/path_tracing.h"
 #include "utils/debug.h"
-#include "utils/math_util.h"
 #include "utils/scene_parser.h"
 
 int main(int argc, char *argv[]) {
