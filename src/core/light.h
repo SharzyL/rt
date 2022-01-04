@@ -3,19 +3,20 @@
 
 #include <Vector3f.h>
 
+#include <core/ray.h>
+
 namespace RT {
 
-class Photon {};
-
 class Light {
-    [[nodiscard]] virtual Photon EmitPhoton() const = 0;
+public:
+    [[nodiscard]] virtual Ray EmitRay() const = 0;
 };
 
 class PointLight : Light {
+public:
+    PointLight(const Vector3f &center, const Vector3f &color);
 
-    PointLight(const Vector3f &center, const Vector3f &color) : Light() {}
-
-    [[nodiscard]] Photon EmitPhoton() const override;
+    [[nodiscard]] Ray EmitRay() const override;
 
 private:
     Vector3f center;

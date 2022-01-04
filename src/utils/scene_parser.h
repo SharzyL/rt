@@ -8,6 +8,7 @@
 #include "core/camera.h"
 #include "core/material.h"
 #include "core/texture.h"
+#include "core/light.h"
 #include "objects/object3d.h"
 
 namespace YAML {
@@ -23,8 +24,11 @@ public:
     void parse(const std::string &scene_file);
 
     float gamma = 2.2;
+    Vector3f bg_color = Vector3f(0.f, 0.f, 0.f);
     std::unique_ptr<Camera> camera;  // use pointer because it is an abstract class
     std::unique_ptr<Object3D> scene; // same as above
+    std::vector<std::unique_ptr<Light>> lights;
+
 private:
     std::unique_ptr<Object3D> parse_obj(const YAML::Node &node);
 

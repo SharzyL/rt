@@ -71,4 +71,8 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
     }
 }
 
+bool Material::IsDiffuse() const {
+    return illumination_model == IlluminationModel::diffuse || illumination_model == IlluminationModel::blinn;
+}
+
 } // namespace RT

@@ -22,7 +22,7 @@ class SimpleObject3D : public Object3D {
 public:
     SimpleObject3D(const Material *material, const Texture *texture) : material(material), texture(texture){};
 
-    [[nodiscard]] virtual Vector3f AmbientColorAtHit(const Ray &r, const Hit &hit) const = 0;
+    [[nodiscard]] virtual Vector3f AmbientColorAtHit(const Hit &hit) const = 0;
 
     [[nodiscard]] const Material *GetMaterial() const { return material; }
 

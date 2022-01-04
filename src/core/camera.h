@@ -1,5 +1,5 @@
-#ifndef CAMERA_H
-#define CAMERA_H
+#ifndef RT_CAMERA_H
+#define RT_CAMERA_H
 
 #include <Vector2f.h>
 #include <Vector3f.h>
@@ -44,4 +44,4 @@ protected:
 
 } // namespace RT
 
-#endif // CAMERA_H
+#endif // RT_CAMERA_H
