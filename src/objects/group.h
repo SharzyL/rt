@@ -1,5 +1,5 @@
-#ifndef GROUP_H
-#define GROUP_H
+#ifndef RT_GROUP_H
+#define RT_GROUP_H
 
 #include <iostream>
 #include <vector>
@@ -7,6 +7,7 @@
 
 #include "core/hit.h"
 #include "core/ray.h"
+#include "core/material.h"
 
 #include "objects/object3d.h"
 

@@ -4,9 +4,11 @@
 
 #include <tiny_obj_loader.h>
 
-#include "./obj_import.h"
 #include "debug.h"
+#include "core/material.h"
 #include "objects/mesh.h"
+
+#include "./obj_import.h"
 
 namespace RT {
 

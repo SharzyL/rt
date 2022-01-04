@@ -1,13 +1,16 @@
-#include <tiny_obj_loader.h>
 #include <limits>
 #include <cassert>
 #include <algorithm>
 
+#include <tiny_obj_loader.h>
+
+#include <Vector3f.h>
+
 #include "core/hit.h"
 #include "core/ray.h"
-#include "./mesh.h"
+#include "core/material.h"
 
-#include "debug.h"
+#include "./mesh.h"
 
 namespace RT {
 

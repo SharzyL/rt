@@ -1,6 +1,8 @@
 #include <cassert>
 #include <memory>
 
+#include <yaml-cpp/yaml.h>
+
 #include <Vector3f.h>
 
 #include "util.h"
@@ -12,6 +14,10 @@
 #include "objects/group.h"
 #include "objects/obj_import.h"
 #include "objects/object3d.h"
+
+#include "core/ray.h"
+#include "core/texture.h"
+#include "core/material.h"
 
 #include "./scene_parser.h"
 

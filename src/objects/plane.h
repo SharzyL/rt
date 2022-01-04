@@ -1,9 +1,6 @@
 #ifndef PLANE_H
 #define PLANE_H
 
-#include <cmath>
-#include <memory>
-
 #include "vecmath.h"
 
 #include "objects/object3d.h"

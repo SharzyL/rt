@@ -1,6 +1,11 @@
 #include <stdexcept>
 
 #include "util.h"
+
+#include "core/ray.h"
+#include "core/hit.h"
+#include "core/material.h"
+
 #include "./triangle.h"
 
 namespace RT {

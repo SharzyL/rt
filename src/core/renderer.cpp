@@ -3,6 +3,10 @@
 #include "util.h"
 #include "debug.h"
 
+#include "core/hit.h"
+#include "core/material.h"
+#include "core/ray.h"
+
 namespace RT {
 
 Renderer::Renderer(int sub_pixel, int sub_sample, float gamma) : sub_pixel(sub_pixel), sub_sample(sub_sample), gamma(gamma) {}
@@ -70,11 +74,10 @@ Vector3f Renderer::trace(const Ray &ray, const Object3D &obj, int depth) {
     float brdf = mat->BRDF(ray, sample_ray, hit);
 
     float cos_theta = std::abs(Vector3f::dot(sample_dir, hit.GetNormal()));
-    float p = 1 / (2 * M_PI);
 
     Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1);
 
-    return mat->emissionColor + hit_ambient * sample_ray_color * cos_theta * brdf / p;
+    return mat->emissionColor + hit_ambient * sample_ray_color * brdf;
 }
 
 } // namespace RT

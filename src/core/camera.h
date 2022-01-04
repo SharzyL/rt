@@ -1,12 +1,12 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 
-#include <vector>
-
-#include "ray.h"
-#include "vecmath.h"
+#include <Vector3f.h>
+#include <Vector2f.h>
 
 namespace RT {
+
+class Ray;
 
 class Camera {
 public:

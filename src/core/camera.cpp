@@ -1,3 +1,10 @@
+#include <cmath>
+
+#include <Vector3f.h>
+#include <Vector2f.h>
+
+#include "core/ray.h"
+
 #include "./camera.h"
 
 namespace RT {

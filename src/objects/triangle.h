@@ -1,9 +1,6 @@
 #ifndef TRIANGLE_H
 #define TRIANGLE_H
 
-#include <cmath>
-#include <iostream>
-
 #include "vecmath.h"
 
 #include "objects/object3d.h"

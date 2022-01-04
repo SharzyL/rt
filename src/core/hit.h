@@ -1,18 +1,13 @@
-#ifndef HIT_H
-#define HIT_H
-
-#include <memory>
-#include <optional>
+#ifndef RT_HIT_H
+#define RT_HIT_H
 
 #include "vecmath.h"
-
-#include "ray.h"
-#include "objects/object3d.h"
 
 namespace RT {
 
 class Material;
 class SimpleObject3D;
+class Ray;
 
 class Hit {
 public:

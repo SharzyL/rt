@@ -1,3 +1,8 @@
+#include "core/ray.h"
+#include "core/hit.h"
+#include "core/texture.h"
+#include "core/material.h"
+
 #include "./plane.h"
 
 namespace RT {
