@@ -43,7 +43,7 @@ void PathTracingRender::Render(const Object3D &obj, const Camera &camera, const 
         }
     }
 
-    img.SaveBMP(output_file.c_str());
+    img.SaveImage(output_file.c_str());
 }
 
 Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth) {

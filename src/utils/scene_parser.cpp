@@ -19,6 +19,7 @@
 #include "core/ray.h"
 #include "core/texture.h"
 #include "core/material.h"
+#include "core/light.h"
 
 #include "./scene_parser.h"
 
@@ -32,6 +33,17 @@ std::unique_ptr<Camera> SceneParser::parse_camera(const YAML::Node &node) {
     auto height = node["height"].as<float>();
     auto angle = to_radian(node["angle"].as<float>());
     return std::make_unique<PerspectiveCamera>(pos, dir, up, width, height, angle);
+}
+
+void SceneParser::parse_light(const YAML::Node &node) {
+    const std::string &node_type = node["type"].as<std::string>();
+    if (node_type == "point") {
+        Vector3f center = parse_vector(node["center"].as<std::string>());
+        Vector3f color = parse_vector(node["color"].as<std::string>());
+        all_lights.emplace_back(std::make_unique<PointLight>(center, color));
+    } else {
+        CHECK(false) << "unsupported object type";
+    }
 }
 
 Material *SceneParser::parse_material(const YAML::Node &node) {
@@ -56,7 +68,6 @@ Texture *SceneParser::parse_texture(const YAML::Node &node) {
 }
 
 std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
-    CHECK(node.IsMap());
     const std::string &node_type = node["type"].as<std::string>();
 
     if (node_type == "group") {
@@ -123,12 +134,14 @@ void SceneParser::parse(const std::string &scene_file) {
     }
     scene.reset(world_group);
 
-    YAML::Node light_node = root_node["light"];
-    if (light_node) {
-        // TODO: parse light
+    YAML::Node lights_node = root_node["lights"];
+    if (lights_node) {
+        for (const auto &light_node: lights_node) {
+            parse_light(light_node);
+        }
     }
 
-    YAML::Node bg_color_node = root_node["light"];
+    YAML::Node bg_color_node = root_node["bg_color"];
     if (bg_color_node) {
         bg_color = parse_vector(bg_color_node.as<std::string>());
     }

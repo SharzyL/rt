@@ -8,6 +8,11 @@ camera:
   height: 640
   angle: 50
 
+lights:
+  - type: point
+    center: 0 0 2.5
+    color: 3 3 3
+
 world:
   - type: load_obj
     obj: scenes/cornell.obj
@@ -34,7 +39,6 @@ world:
       illum: 4
       Ni: 1.5
       Ka: 0.8 0.8 0.8
-
 
   - type: plane  # back
     normal: 0 0 1

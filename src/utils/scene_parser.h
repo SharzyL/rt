@@ -35,9 +35,11 @@ private:
     std::unique_ptr<Camera> parse_camera(const YAML::Node &node);
     Material *parse_material(const YAML::Node &node); // no ownership transfer, no need of unique_ptr
     Texture *parse_texture(const YAML::Node &node);
+    void parse_light(const YAML::Node &node);
 
     std::vector<std::unique_ptr<Material>> all_materials;
     std::vector<std::unique_ptr<Texture>> all_textures;
+    std::vector<std::unique_ptr<Light>> all_lights;
 };
 
 } // namespace RT

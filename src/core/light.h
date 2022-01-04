@@ -7,16 +7,28 @@
 
 namespace RT {
 
-class Light {
+class ColoredRay: public Ray {
 public:
-    [[nodiscard]] virtual Ray EmitRay() const = 0;
+    ColoredRay(const Ray &ray, const Vector3f &color): Ray(ray), color(color) {};
+    ColoredRay(const Vector3f &orig, const Vector3f &dir, const Vector3f &color): Ray(orig, dir), color(color) {};
+
+    [[nodiscard]] const Vector3f &GetColor() const { return color; }
+
+private:
+    Vector3f color;
 };
 
-class PointLight : Light {
+class Light {
+public:
+    [[nodiscard]] virtual ColoredRay EmitRay() const = 0;
+    virtual ~Light() = default;
+};
+
+class PointLight : public Light {
 public:
     PointLight(const Vector3f &center, const Vector3f &color);
 
-    [[nodiscard]] Ray EmitRay() const override;
+    [[nodiscard]] ColoredRay EmitRay() const override;
 
 private:
     Vector3f center;

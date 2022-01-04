@@ -1,9 +1,12 @@
-#include "light.h"
+#include "utils/math_util.h"
+
+#include "./light.h"
 
 namespace RT {
 
-Ray PointLight::EmitRay() const {
-    // TODO: emit ray for it
+ColoredRay PointLight::EmitRay() const {
+    Vector3f dir = rng.RandNormalizedVector();
+    return {center, dir, color};
 }
 
 PointLight::PointLight(const Vector3f &center, const Vector3f &color): center(center), color(color) {}
