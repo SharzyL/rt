@@ -7,7 +7,7 @@
 #include "ray.h"
 
 namespace tinyobj {
-    class material_t;
+class material_t;
 }
 
 namespace RT {
@@ -17,10 +17,10 @@ class Hit;
 class Material {
 public:
     enum class IlluminationModel {
-        diffuse = 1,           // random reflection
-        blinn = 2,             // random reflection (to be improved)
-        reflective = 3,        // total reflective
-        transparent = 4,       // refractive
+        diffuse = 1,     // random reflection
+        blinn = 2,       // random reflection (to be improved)
+        reflective = 3,  // total reflective
+        transparent = 4, // refractive
         fresnelReflection,
         transparentNoReflection,
         transparentReflection,
@@ -29,7 +29,7 @@ public:
         castShadows
     };
 
-    explicit Material(IlluminationModel model): illumination_model(model) {};
+    explicit Material(IlluminationModel model) : illumination_model(model){};
 
     explicit Material(const tinyobj::material_t &mat);
 

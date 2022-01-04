@@ -1,10 +1,10 @@
-#ifndef RT_UTIL_H
-#define RT_UTIL_H
+#ifndef RT_MATH_UTIL_H
+#define RT_MATH_UTIL_H
 
 #include <random>
 #include <string>
 
-#include <Vector3f.h>
+#include "Vector3f.h"
 
 namespace RT {
 
@@ -14,6 +14,7 @@ public:
     float RandUniformFloat();
     float RandNormalFloat();
     float RandTentFloat();
+
 private:
     std::random_device rd;
     std::mt19937 gen;
@@ -49,9 +50,8 @@ inline Vector3f parse_vector(const std::string &str) {
 inline Vector3f clamp1(Vector3f v) { return {clamp1(v.x()), clamp1(v.y()), clamp1(v.z())}; }
 
 inline float tri_det(const Vector3f &v0, const Vector3f &v1, const Vector3f &v2) {
-    return v0[0] * (v1[1] * v2[2] - v1[2] * v2[1])
-           - v0[1] * (v1[0] * v2[2] - v1[2] * v2[0])
-           + v0[2] * (v1[0] * v2[1] - v1[1] * v2[0]);
+    return v0[0] * (v1[1] * v2[2] - v1[2] * v2[1]) - v0[1] * (v1[0] * v2[2] - v1[2] * v2[0]) +
+           v0[2] * (v1[0] * v2[1] - v1[1] * v2[0]);
 }
 
 inline Vector3f gamma_correct(const Vector3f &v, float gamma) {
@@ -66,4 +66,4 @@ inline float fsquare(float x) { return x * x; }
 
 } // namespace RT
 
-#endif // RT_UTIL_H
+#endif // RT_MATH_UTIL_H

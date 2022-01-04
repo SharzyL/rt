@@ -10,7 +10,7 @@
 #include "core/ray.h"
 #include "core/material.h"
 
-#include "debug.h"
+#include "utils/debug.h"
 
 #include "./mesh.h"
 

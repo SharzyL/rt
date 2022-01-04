@@ -1,10 +1,10 @@
 #include <args.hxx>
 
 #include "core/camera.h"
-#include "core/renderer.h"
-#include "debug.h"
-#include "util.h"
-#include "scene_parser.h"
+#include "renderers/path_tracing.h"
+#include "utils/debug.h"
+#include "utils/math_util.h"
+#include "utils/scene_parser.h"
 
 int main(int argc, char *argv[]) {
     google::InitGoogleLogging(argv[0]);
@@ -27,6 +27,6 @@ int main(int argc, char *argv[]) {
     RT::SceneParser scene_parser;
     scene_parser.parse(args::get(input));
 
-    RT::Renderer renderer(args::get(subp), args::get(samples), scene_parser.gamma);
+    RT::PathTracingRender renderer(args::get(subp), args::get(samples), scene_parser.gamma);
     renderer.Render(*scene_parser.scene, *scene_parser.camera, args::get(output));
 }

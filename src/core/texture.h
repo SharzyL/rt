@@ -14,12 +14,13 @@ public:
     virtual ~Texture() = default;
 };
 
-class MappedTexture: public Texture {
+class MappedTexture : public Texture {
 public:
     explicit MappedTexture(const std::string &filename, float gamma);
     [[nodiscard]] Vector3f At(float u, float v) const override;
 
     ~MappedTexture() override = default;
+
 private:
     // Not supporting alpha channel yet
     std::vector<Vector3f> texture_data;
@@ -29,4 +30,4 @@ private:
 
 } // namespace RT
 
-#endif //RT_TEXTURE_H
+#endif // RT_TEXTURE_H

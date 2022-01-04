@@ -20,16 +20,16 @@ public:
     virtual bool Intersect(const Ray &r, Hit &h, float tmin) const = 0;
 };
 
-class SimpleObject3D: public Object3D {
+class SimpleObject3D : public Object3D {
 public:
-    SimpleObject3D(const Material *material, const Texture *texture) : material(material), texture(texture) {};
+    SimpleObject3D(const Material *material, const Texture *texture) : material(material), texture(texture){};
 
     [[nodiscard]] virtual Vector3f AmbientColorAtHit(const Ray &r, const Hit &hit) const = 0;
 
     [[nodiscard]] const Material *GetMaterial() const { return material; }
 
     const Material *material;
-    const Texture *texture;  // maybe nullptr, which means no texture for it
+    const Texture *texture; // maybe nullptr, which means no texture for it
 };
 
 } // namespace RT

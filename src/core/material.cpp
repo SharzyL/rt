@@ -1,6 +1,6 @@
 #include <tiny_obj_loader.h>
 
-#include "util.h"
+#include "utils/math_util.h"
 
 #include "core/ray.h"
 #include "core/hit.h"

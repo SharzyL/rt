@@ -2,12 +2,12 @@
 #define RT_GROUP_H
 
 #include <iostream>
-#include <vector>
 #include <memory>
+#include <vector>
 
 #include "core/hit.h"
-#include "core/ray.h"
 #include "core/material.h"
+#include "core/ray.h"
 
 #include "objects/object3d.h"
 

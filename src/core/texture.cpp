@@ -3,7 +3,7 @@
 #include <lodepng.h>
 
 #include "texture.h"
-#include "debug.h"
+#include "utils/debug.h"
 
 namespace RT {
 
