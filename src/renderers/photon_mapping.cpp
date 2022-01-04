@@ -1,5 +1,5 @@
-#include "utils/prog_bar.h"
-#include "utils/ball_finder.h"
+#include "utils/prog_bar.hpp"
+#include "utils/ball_finder.hpp"
 #include "utils/image.h"
 #include "utils/math_util.h"
 
@@ -103,11 +103,11 @@ void PhotonMappingRender::trace_photon(Photon &photon, const Ray &ray) {
 }
 
 void PhotonMappingRender::update_nearby_vp(const Photon &photon, const Vector3f &attenuation) {
-    ball_finder.operate_and_update_balls(photon.center, [&, this] (VisiblePoint &vp) -> float {
-        float radius_factor = ((float) vp.num_photons * alpha + alpha) / ((float) vp.num_photons + 1);
-        vp.num_photons++;
-        vp.photon_flux = (vp.photon_flux + vp.attenuation * attenuation) * radius_factor;
-        return vp.radius * radius_factor;
+    ball_finder.OperateAndUpdateBalls(photon.center, [&, this](VisiblePoint *vp) -> float {
+        float radius_factor = ((float) vp->num_photons * alpha + alpha) / ((float) vp->num_photons + 1);
+        vp->num_photons++;
+        vp->photon_flux = (vp->photon_flux + vp->attenuation * attenuation) * radius_factor;
+        return vp->radius * radius_factor;
     });
 }
 

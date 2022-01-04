@@ -1,5 +1,5 @@
-#ifndef RT_PROG_BAR_H
-#define RT_PROG_BAR_H
+#ifndef RT_PROG_BAR_HPP
+#define RT_PROG_BAR_HPP
 
 #include <chrono>
 #include <mutex>
@@ -45,4 +45,4 @@ private:
     std::string name;
 };
 
-#endif //RT_PROG_BAR_H
+#endif //RT_PROG_BAR_HPP

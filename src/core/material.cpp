@@ -9,10 +9,6 @@
 
 namespace RT {
 
-Vector3f random_normalized_vector() {
-    return Vector3f{rng.RandNormalFloat(), rng.RandNormalFloat(), rng.RandNormalFloat()}.normalized();
-}
-
 float schlick(float cos, float refr_idx) {  // return rate of reflection
     float r0 = fsquare((1.f - refr_idx) / (1.f + refr_idx));
     return r0 + (1 - r0) * std::pow(1.f - cos, 5.f);
@@ -45,10 +41,10 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
 
     switch (illumination_model) {
         case IlluminationModel::diffuse: {  // 1
-            return ray_side_norm + random_normalized_vector();
+            return ray_side_norm + rng.RandNormalizedVector();
         }
         case IlluminationModel::blinn: {  // 2
-            return dir - 2 * norm * Vector3f::dot(norm, dir) + random_normalized_vector() * std::min(1.f, 1 / shininess);
+            return dir - 2 * norm * Vector3f::dot(norm, dir) + rng.RandNormalizedVector() * std::min(1.f, 1 / shininess);
         }
         case IlluminationModel::reflective: {  // 3
             return dir - 2 * norm * Vector3f::dot(norm, dir);

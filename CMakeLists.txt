@@ -11,8 +11,9 @@ FetchContent_Declare(glog GIT_REPOSITORY https://github.com/google/glog GIT_TAG 
 FetchContent_Declare(args GIT_REPOSITORY https://github.com/Taywee/args GIT_TAG 6.3.0)
 FetchContent_Declare(yaml-cpp GIT_REPOSITORY https://github.com/jbeder/yaml-cpp GIT_TAG yaml-cpp-0.7.0)
 FetchContent_Declare(lodepng GIT_REPOSITORY https://github.com/lvandeve/lodepng GIT_TAG 8c6a9e30576f07bf470ad6f09458a2dcd7a6a84a)
+FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googletest GIT_TAG release-1.11.0)
 
-FetchContent_MakeAvailable(tinyobjloader fmt glog args yaml-cpp lodepng)
+FetchContent_MakeAvailable(tinyobjloader fmt glog args yaml-cpp lodepng googletest)
 
 # handle lodepng compilation manually
 include_directories(${lodepng_SOURCE_DIR})
@@ -35,6 +36,9 @@ set(EXTERNAL_LIBS
         OpenMP::OpenMP_CXX
         )
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+
 set(SOURCES
         src/objects/obj_import.cpp
         src/objects/group.cpp
@@ -53,25 +57,30 @@ set(SOURCES
         src/utils/image.cpp
         src/utils/math_util.cpp
         src/utils/scene_parser.cpp
-        src/utils/kdtree.cpp
         )
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+include_directories(${PROJECT_NAME} PRIVATE src)
 
 add_executable(${PROJECT_NAME}
         ${SOURCES}
         src/renderers/path_tracing.cpp
         src/pt_main.cpp
         )
+target_link_libraries(${PROJECT_NAME} PRIVATE ${EXTERNAL_LIBS})
 
 add_executable(${PROJECT_NAME}_sppm
         ${SOURCES}
         src/renderers/photon_mapping.cpp
         src/sppm_main.cpp
         )
-
-target_link_libraries(${PROJECT_NAME} PRIVATE ${EXTERNAL_LIBS})
 target_link_libraries(${PROJECT_NAME}_sppm PRIVATE ${EXTERNAL_LIBS})
 
-include_directories(${PROJECT_NAME} PRIVATE src)
+add_executable(ball_finder_test
+        tests/ball_finder_test.cpp
+        src/utils/ball_finder.hpp
+        src/utils/math_util.cpp
+        )
+target_link_libraries(ball_finder_test gtest_main vecmath fmt)
+
+include(GoogleTest)
+gtest_discover_tests(ball_finder_test)
