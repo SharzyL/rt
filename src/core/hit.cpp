@@ -37,7 +37,11 @@ void Hit::Set(float _t, const Material *m, const Vector3f &n, const SimpleObject
 }
 
 Vector3f Hit::GetAmbient(const Ray &ray) const {
-    return texture_calculator->AmbientColorAtHit(ray, *this);
+    if (texture_calculator) {
+        return texture_calculator->AmbientColorAtHit(ray, *this);
+    } else {
+        return material->ambientColor;
+    }
 }
 
 inline std::ostream &operator<<(std::ostream &os, const Hit &h) {
