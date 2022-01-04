@@ -1,5 +1,5 @@
-#ifndef MATERIAL_H
-#define MATERIAL_H
+#ifndef RT_MATERIAL_H
+#define RT_MATERIAL_H
 
 #include "vecmath.h"
 
@@ -38,6 +38,7 @@ public:
     // energy conservation: \int_{x on sphere} PDF(x) * BRDF(x) d x = 1
     [[nodiscard]] Vector3f Sample(const Ray &ray_in, const Hit &hit) const;
     [[nodiscard]] float BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
+    [[nodiscard]] bool IsDiffuse() const;
 
     IlluminationModel illumination_model;
 
@@ -51,4 +52,4 @@ public:
 };
 
 } // namespace RT
-#endif // MATERIAL_H
+#endif // RT_MATERIAL_H

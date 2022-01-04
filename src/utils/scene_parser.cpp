@@ -122,7 +122,16 @@ void SceneParser::parse(const std::string &scene_file) {
         world_group->objects.emplace_back(parse_obj(obj_node));
     }
     scene.reset(world_group);
-}
 
+    YAML::Node light_node = root_node["light"];
+    if (light_node) {
+        // TODO: parse light
+    }
+
+    YAML::Node bg_color_node = root_node["light"];
+    if (bg_color_node) {
+        bg_color = parse_vector(bg_color_node.as<std::string>());
+    }
+}
 
 } // namespace RT

@@ -24,6 +24,17 @@ add_subdirectory(deps/vecmath)
 # find openmp from system
 find_package(OpenMP)
 
+set(EXTERNAL_LIBS
+        vecmath
+        glog
+        fmt
+        tinyobjloader
+        args
+        yaml-cpp
+        lodepng_lib
+        OpenMP::OpenMP_CXX
+        )
+
 set(SOURCES
         src/objects/obj_import.cpp
         src/objects/group.cpp
@@ -39,31 +50,28 @@ set(SOURCES
         src/core/texture.cpp
         src/core/light.cpp
 
-        src/renderers/path_tracing.cpp
-        src/renderers/photon_mapping.cpp
-
         src/utils/image.cpp
         src/utils/math_util.cpp
         src/utils/scene_parser.cpp
-
-        src/main.cpp
+        src/utils/kdtree.cpp
         )
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-add_executable(${PROJECT_NAME} ${SOURCES})
-target_link_libraries(${PROJECT_NAME}
-        PRIVATE
-        vecmath
-        glog
-        fmt
-        tinyobjloader
-        args
-        yaml-cpp
-        lodepng_lib
-        OpenMP::OpenMP_CXX
-        )
-target_include_directories(${PROJECT_NAME} PRIVATE src)
 
-add_executable(test_ src/utils/test.cpp)
-target_link_libraries(test_ args)
+add_executable(${PROJECT_NAME}
+        ${SOURCES}
+        src/renderers/path_tracing.cpp
+        src/pt_main.cpp
+        )
+
+add_executable(${PROJECT_NAME}_sppm
+        ${SOURCES}
+        src/renderers/photon_mapping.cpp
+        src/sppm_main.cpp
+        )
+
+target_link_libraries(${PROJECT_NAME} PRIVATE ${EXTERNAL_LIBS})
+target_link_libraries(${PROJECT_NAME}_sppm PRIVATE ${EXTERNAL_LIBS})
+
+include_directories(${PROJECT_NAME} PRIVATE src)

@@ -111,14 +111,14 @@ bool BoundingBox::Intersect(const Ray &ray, Hit &hit, float tmin) const {
     }
     if (tmin < t && t < hit.GetT() && t < out){
         if (Vector3f::dot(norm, dir) > 0) norm = -norm;
-        hit.Set(t, material, norm, nullptr);
+        hit.Set(t, material, norm, ray.PointAtParameter(t), nullptr);
         return true;
     } else {
         return false;
     }
 }
 
-Vector3f BoundingBox::AmbientColorAtHit(const Ray &r, const Hit &hit) const {
+Vector3f BoundingBox::AmbientColorAtHit(const Hit &hit) const {
     throw std::runtime_error("bbox texture not implemented");
 }
 

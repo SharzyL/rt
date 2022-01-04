@@ -58,9 +58,9 @@ Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth
         return mat->emissionColor;
     }
 
-    const Vector3f &hit_ambient = hit.GetAmbient(ray);
+    const Vector3f &hit_ambient = hit.GetAmbient();
 
-    Vector3f hit_point = ray.PointAtParameter(hit.GetT());
+    Vector3f hit_point = hit.GetPos();
 
     Vector3f sample_dir = mat->Sample(ray, hit);
     Ray sample_ray = Ray(hit_point + 0.0001 * sample_dir, sample_dir);

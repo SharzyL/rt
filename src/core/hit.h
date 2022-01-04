@@ -14,8 +14,6 @@ public:
     // constructors
     Hit();
 
-    Hit(float _t, const Material *m, const Vector3f &n);
-
     Hit(const Hit &h);
 
     // destructor
@@ -24,11 +22,12 @@ public:
     [[nodiscard]] float GetT() const;
 
     [[nodiscard]] const Material *GetMaterial() const;
-
     [[nodiscard]] const Vector3f &GetNormal() const;
-    [[nodiscard]] Vector3f GetAmbient(const Ray &ray) const;
+    [[nodiscard]] const Vector3f &GetPos() const;
 
-    void Set(float _t, const Material *m, const Vector3f &n, const SimpleObject3D *object);
+    [[nodiscard]] Vector3f GetAmbient() const;
+
+    void Set(float _t, const Material *m, const Vector3f &n, const Vector3f &hit_point, const SimpleObject3D *object);
 
 private:
     float t;
@@ -36,8 +35,9 @@ private:
     const SimpleObject3D *texture_calculator = nullptr;
 
     Vector3f normal;
+    Vector3f pos;
 };
 
 } // namespace RT
 
-#endif // HIT_H
+#endif // RT_HIT_H

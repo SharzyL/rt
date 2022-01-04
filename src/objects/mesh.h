@@ -17,7 +17,7 @@ public:
     explicit BoundingBox(const Material *mat);
     void AddVertex(const Vector3f &v);
 
-    [[nodiscard]] Vector3f AmbientColorAtHit(const Ray &r, const Hit &hit) const override;
+    [[nodiscard]] Vector3f AmbientColorAtHit(const Hit &hit) const override;
 
     [[nodiscard]] bool MayIntersect(const Ray &ray, float tmin, float tmax) const;
     [[nodiscard]] bool Intersect(const Ray &ray, Hit &hit, float tmin) const override;
