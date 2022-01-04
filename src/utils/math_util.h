@@ -14,6 +14,7 @@ public:
     float RandUniformFloat();
     float RandNormalFloat();
     float RandTentFloat();
+    Vector3f RandNormalizedVector();
 
 private:
     std::random_device rd;

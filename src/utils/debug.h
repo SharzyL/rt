@@ -1,11 +1,7 @@
-//
-// Created by sharzy on 12/30/21.
-//
-
 #ifndef RT_DEBUG_H
 #define RT_DEBUG_H
 
-#include "Vector3f.h"
+#include <Vector3f.h>
 
 #include "fmt/core.h"
 #include "fmt/ranges.h"

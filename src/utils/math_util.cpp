@@ -21,6 +21,10 @@ float RNG::RandTentFloat() {
     }
 }
 
+Vector3f RNG::RandNormalizedVector() {
+    return Vector3f{RandNormalFloat(), RandNormalFloat(), RandNormalFloat()}.normalized();
+}
+
 RNG rng;
 
 } // namespace RT

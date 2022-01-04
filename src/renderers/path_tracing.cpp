@@ -2,7 +2,7 @@
 #include "utils/image.h"
 #include "utils/math_util.h"
 #include "utils/debug.h"
-#include "utils/prog_bar.h"
+#include "utils/prog_bar.hpp"
 
 #include "core/hit.h"
 #include "core/material.h"

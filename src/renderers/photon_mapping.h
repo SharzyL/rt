@@ -10,7 +10,7 @@
 #include "core/light.h"
 #include "core/hit.h"
 #include "objects/object3d.h"
-#include "utils/ball_finder.h"
+#include "utils/ball_finder.hpp"
 #include "utils/scene_parser.h"
 
 namespace RT {
