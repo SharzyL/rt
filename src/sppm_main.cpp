@@ -16,7 +16,7 @@ int main(int argc, char *argv[]) {
     args::ValueFlag<int> photons_per_round(parser, "photons", "photons per round", {'p', "photons"}, 10000);
     args::ValueFlag<int> num_rounds(parser, "rounds", "rounds", {'n', "rounds"}, 5);
 
-    args::ValueFlag<float> alpha(parser, "alpha", "ppm alpha", {'a', "alpha"}, 0.5);
+    args::ValueFlag<float> alpha(parser, "alpha", "ppm alpha", {'a', "alpha"}, 0.7);
     args::ValueFlag<float> init_radius(parser, "init-radius", "init radius", {'r', "radius"}, 0.001);
 
     try {
