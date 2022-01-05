@@ -6,9 +6,9 @@
 #include <string>
 
 #include "core/camera.h"
+#include "core/light.h"
 #include "core/material.h"
 #include "core/texture.h"
-#include "core/light.h"
 #include "objects/object3d.h"
 
 namespace YAML {
@@ -39,7 +39,6 @@ private:
 
     std::vector<std::unique_ptr<Material>> all_materials;
     std::vector<std::unique_ptr<Texture>> all_textures;
-    std::vector<std::unique_ptr<Light>> all_lights;
 };
 
 } // namespace RT
