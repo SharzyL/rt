@@ -41,6 +41,11 @@ void SceneParser::parse_light(const YAML::Node &node) {
         Vector3f center = parse_vector(node["center"].as<std::string>());
         Vector3f color = parse_vector(node["color"].as<std::string>());
         lights.emplace_back(std::make_unique<PointLight>(center, color));
+    } else if (node_type == "sphere") {
+        Vector3f center = parse_vector(node["center"].as<std::string>());
+        auto radius = node["radius"].as<float>();
+        Vector3f color = parse_vector(node["color"].as<std::string>());
+        lights.emplace_back(std::make_unique<SphereLight>(center, radius, color));
     } else {
         CHECK(false) << "unsupported object type";
     }

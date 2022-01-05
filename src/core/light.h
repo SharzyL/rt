@@ -37,6 +37,18 @@ private:
     Vector3f color;
 };
 
+
+class SphereLight : public Light {
+public:
+    SphereLight(const Vector3f &center, float radius, const Vector3f &color);
+
+    [[nodiscard]] ColoredRay EmitRay(RNG &rng) const override;
+
+private:
+    Vector3f center;
+    Vector3f color;
+    float radius;
+};
 } // namespace RT
 
 #endif // RT_LIGHT_H
