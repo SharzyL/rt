@@ -4,6 +4,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+#include <mutex>
 
 #include <Vector3f.h>
 
@@ -19,14 +20,19 @@ class Ray;
 class Camera;
 
 struct VisiblePoint {
+    VisiblePoint(): mtx(new std::mutex) {};
     Vector3f center;
-    float radius;
 
-    Vector3f photon_flux;
+    // determined in forward process
     Vector3f forward_flux;
     Vector3f attenuation;
 
+    // determined in backward process
+    Vector3f photon_flux;
     int num_photons = 0;
+    float radius = -1;
+
+    std::unique_ptr<std::mutex> mtx;
 };
 
 class PhotonMappingRender {
@@ -54,7 +60,9 @@ private:
     int photons_per_round;
     int vp_per_pixel;
 
+    std::vector<Vector3f> img_data;
     std::vector<VisiblePoint> visible_point_map;
+    std::mutex vp_map_lock;
 
     BallFinder<VisiblePoint> ball_finder;
 };
