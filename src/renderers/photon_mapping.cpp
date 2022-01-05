@@ -41,22 +41,28 @@ void PhotonMappingRender::Render(const std::string &output_file) {
     size_t true_photons_per_round = photons_per_light * lights.size();
 
     for (int r = 0; r < num_rounds; r++) {
-        RNG rng;
         ProgressBar bar_forward(fmt::format("Forward round {}", r + 1), width * height);
+#pragma omp parallel for schedule(dynamic, 4) collapse(2) default(none) shared(bar_forward)
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                const Ray &ray = camera->generateRay({
-                        (float) x + rng.RandUniformFloat(),
-                        (float) y + rng.RandUniformFloat()
+                RNG per_thread_rng;
+                Ray ray = camera->generateRay({
+                        (float) x + per_thread_rng.RandUniformFloat(),
+                        (float) y + per_thread_rng.RandUniformFloat()
                 });
                 // modifies vp, ball_finder
-                trace_visible_point(visible_point_map[y * width + x], ray, rng);
+                auto &vp = visible_point_map[y * width + x];
+                trace_visible_point(vp, ray, per_thread_rng);
+                if (vp.radius > 0) {
+#pragma omp critical
+                    ball_finder.AddBall(&vp);
+                }
                 bar_forward.Step();
             }
         }
 
         ProgressBar bar_back(fmt::format("Back round {}", r + 1), true_photons_per_round);
-#pragma omp parallel for schedule(dynamic, 20) collapse(2) default(none) shared(rng, bar_back, photons_per_light)
+#pragma omp parallel for schedule(dynamic, 20) collapse(2) default(none) shared(bar_back, photons_per_light)
         for (int l = 0; l < lights.size(); l++) {
             for (int p = 0; p < photons_per_light; p++) {
                 RNG per_thread_rng;
@@ -72,8 +78,7 @@ void PhotonMappingRender::Render(const std::string &output_file) {
             for (int x = 0; x < camera->getWidth(); x++) {
                 VisiblePoint &vp = visible_point_map[y * width + x];
                 Vector3f photon_color = vp.photon_flux / ((float) M_PI * fsquare(vp.radius));
-                Vector3f forward_color = vp.forward_flux;
-                Vector3f color = photon_color / (float) photons_per_round + forward_color;
+                Vector3f color = photon_color / (float) photons_per_round + vp.forward_flux;
                 img_data[y * width + x] += color;
             }
         }
@@ -92,6 +97,7 @@ void PhotonMappingRender::Render(const std::string &output_file) {
 void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray, RNG &rng) {
     Ray tracing_ray(ray);
     vp.attenuation = Vector3f(1, 1, 1);
+    vp.radius = -1;
     int depth = 0;
     while (true) {
         depth++;
@@ -100,17 +106,16 @@ void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray, 
         Hit hit;
         bool is_hit = obj->Intersect(tracing_ray, hit, 0);
         if (!is_hit) {
-            vp.forward_flux = vp.attenuation * bg_color;  // hit not in scene, no pos, radius = -1 by default
+            vp.forward_flux = vp.attenuation * bg_color;
             return;
         }
         const Material *mat = hit.GetMaterial();
 
         vp.attenuation = vp.attenuation * hit.GetAmbient();
+        vp.forward_flux = vp.attenuation * mat->emissionColor;
+        vp.center = hit.GetPos();
+        vp.radius = init_radius;
         if (mat->IsDiffuse()) {
-            vp.center = hit.GetPos();
-            vp.forward_flux = vp.attenuation * mat->emissionColor;
-            vp.radius = init_radius;
-            ball_finder.AddBall(&vp);
             return;
         } else {
             auto ray_out_dir = mat->Sample(tracing_ray, hit, rng);
@@ -125,7 +130,7 @@ void PhotonMappingRender::trace_photon(const ColoredRay &ray, RNG &rng) {
     int depth = 0;
     while (true) {
         depth ++;
-        if (depth > 5) return;
+        if (depth > 10) return;
 
         Hit hit;
         bool is_hit = obj->Intersect(tracing_ray, hit, 0);
