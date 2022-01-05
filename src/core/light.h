@@ -7,6 +7,8 @@
 
 namespace RT {
 
+class RNG;
+
 class ColoredRay : public Ray {
 public:
     ColoredRay(const Ray &ray, const Vector3f &color) : Ray(ray), color(color){};
@@ -20,7 +22,7 @@ private:
 
 class Light {
 public:
-    [[nodiscard]] virtual ColoredRay EmitRay() const = 0;
+    [[nodiscard]] virtual ColoredRay EmitRay(RNG &rng) const = 0;
     virtual ~Light() = default;
 };
 
@@ -28,7 +30,7 @@ class PointLight : public Light {
 public:
     PointLight(const Vector3f &center, const Vector3f &color);
 
-    [[nodiscard]] ColoredRay EmitRay() const override;
+    [[nodiscard]] ColoredRay EmitRay(RNG &rng) const override;
 
 private:
     Vector3f center;

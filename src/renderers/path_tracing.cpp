@@ -18,9 +18,11 @@ void PathTracingRender::Render(const Object3D &obj, const Camera &camera, const 
     int ok_pixels = 0;
     ProgressBar bar("Path tracing", camera.getWidth() * camera.getHeight());
 
-#pragma omp parallel for collapse(2) schedule(dynamic, 4) shared(camera, img, obj, ok_pixels, bar, rng) default(none)
+#pragma omp parallel for collapse(2) schedule(dynamic, 4) shared(camera, img, obj, ok_pixels, bar) default(none)
     for (int y = 0; y < camera.getHeight(); y++) {
         for (int x = 0; x < camera.getWidth(); x++) {
+            // thread starting from here
+            RNG rng;
             Vector3f pixel_color;
             for (int sx = 0; sx < sub_pixel; sx++) {
                 for (int sy = 0; sy < sub_pixel; sy++) {
@@ -30,7 +32,7 @@ void PathTracingRender::Render(const Object3D &obj, const Camera &camera, const 
                         float disturb_x = (1 + rng.RandTentFloat()) / (float) sub_pixel / 2;
                         float disturb_y = (1 + rng.RandTentFloat()) / (float) sub_pixel / 2;
                         Ray r = camera.generateRay(Vector2f(sub_x + disturb_x, sub_y + disturb_y));
-                        Vector3f sample_color = trace(r, obj, 0);
+                        Vector3f sample_color = trace(r, obj, 0, rng);
                         pixel_color += sample_color;
 //                        LOG(ERROR) << fmt::format("cast ray ({}, {}) ({} -> {}) = {}", x, y, r.GetOrigin(),
 //                                                 r.GetDirection(), sample_color);
@@ -46,7 +48,7 @@ void PathTracingRender::Render(const Object3D &obj, const Camera &camera, const 
     img.SaveImage(output_file.c_str());
 }
 
-Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth) {
+Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth, RNG &rng) {
     Hit hit;
     bool is_hit = obj.Intersect(ray, hit, 0);
     if (!is_hit) {
@@ -62,13 +64,13 @@ Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth
 
     Vector3f hit_point = hit.GetPos();
 
-    Vector3f sample_dir = mat->Sample(ray, hit);
+    Vector3f sample_dir = mat->Sample(ray, hit, rng);
     Ray sample_ray = Ray(hit_point + 0.0001 * sample_dir, sample_dir);
     float brdf = mat->BRDF(ray, sample_ray, hit);
 
     float cos_theta = std::abs(Vector3f::dot(sample_dir, hit.GetNormal()));
 
-    Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1);
+    Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1, rng);
 
     return mat->emissionColor + hit_ambient * sample_ray_color * brdf;
 }

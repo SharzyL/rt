@@ -13,6 +13,7 @@ struct Ball {
 };
 
 TEST(BallFinder, BasicTests) {
+    RNG rng;
     for (int i = 0; i < 100; i++) {
         BallFinder<Ball> bf;
         Vector3f center = 10 * rng.RandNormalizedVector();

@@ -36,6 +36,7 @@ PhotonMappingRender::PhotonMappingRender(
 void PhotonMappingRender::Render(const std::string &output_file) {
     visible_point_map.resize(width * height);
     for (int r = 0; r < num_rounds; r++) {
+        RNG rng;
         ProgressBar bar_forward(fmt::format("Forward round {}", r + 1), width * height);
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -48,8 +49,8 @@ void PhotonMappingRender::Render(const std::string &output_file) {
         ProgressBar bar_back(fmt::format("Back round {}", r + 1), lights.size() * photons_per_round);
         for (const auto &light: lights) {
             for (int p = 0; p < photons_per_round; p++) {
-                auto ray = light->EmitRay();
-                trace_photon(ray);
+                auto ray = light->EmitRay(rng);
+                trace_photon(ray, rng);
                 bar_back.Step();
             }
         }
@@ -69,7 +70,7 @@ void PhotonMappingRender::Render(const std::string &output_file) {
     img.SaveImage(output_file.c_str());
 }
 
-void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray) {
+void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray, RNG &rng) {
     Ray tracing_ray(ray);
     vp.attenuation = Vector3f(1, 1, 1);
     int depth = 0;
@@ -93,13 +94,13 @@ void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray) 
             ball_finder.AddBall(&vp);
             return;
         } else {
-            auto ray_out_dir = mat->Sample(tracing_ray, hit);
+            auto ray_out_dir = mat->Sample(tracing_ray, hit, rng);
             tracing_ray.set(hit.GetPos(), ray_out_dir);
         }
     }
 }
 
-void PhotonMappingRender::trace_photon(const ColoredRay &ray) {
+void PhotonMappingRender::trace_photon(const ColoredRay &ray, RNG &rng) {
     Ray tracing_ray = ray;
     Vector3f attenuation = ray.GetColor();
     int depth = 0;
@@ -117,7 +118,7 @@ void PhotonMappingRender::trace_photon(const ColoredRay &ray) {
             attenuation = attenuation * hit.GetAmbient();
             update_nearby_vp(hit.GetPos(), attenuation);
         } else {
-            auto ray_out_dir = mat->Sample(tracing_ray, hit);
+            auto ray_out_dir = mat->Sample(tracing_ray, hit, rng);
             tracing_ray.set(hit.GetPos(), ray_out_dir);
         }
     }

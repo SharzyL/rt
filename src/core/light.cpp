@@ -4,7 +4,7 @@
 
 namespace RT {
 
-ColoredRay PointLight::EmitRay() const {
+ColoredRay PointLight::EmitRay(RNG &rng) const {
     Vector3f dir = rng.RandNormalizedVector();
     return {center, dir, color};
 }
