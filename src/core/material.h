@@ -1,10 +1,11 @@
 #ifndef RT_MATERIAL_H
 #define RT_MATERIAL_H
 
-#include "vecmath.h"
+#include <Vector3f.h>
 
-#include "hit.h"
-#include "ray.h"
+#include "utils/math_util.h"
+#include "core/hit.h"
+#include "core/ray.h"
 
 namespace tinyobj {
 class material_t;
@@ -13,7 +14,6 @@ class material_t;
 namespace RT {
 
 class Hit;
-class RNG;
 
 class Material {
 public:
