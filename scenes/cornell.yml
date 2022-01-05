@@ -10,8 +10,17 @@ camera:
 
 lights:
   - type: point
-    center: 0 0 2.5
-    color: 3 3 3
+    center: 0 1.5 0
+    color: 10 10 10
+  - type: point
+    center: 0 1.6 0
+    color: 10 10 10
+  - type: point
+    center: 0 1.6 0.1
+    color: 10 10 10
+  - type: point
+    center: 0 1.5 0.1
+    color: 10 10 10
 
 world:
 #  - type: load_obj
