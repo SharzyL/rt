@@ -32,7 +32,7 @@ float Material::BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) cons
     return 1.f;
 }
 
-Vector3f Material::Sample(const Ray &ray_in, const Hit &hit) const {
+Vector3f Material::Sample(const Ray &ray_in, const Hit &hit, RNG &rng) const {
     const Vector3f &norm = hit.GetNormal();
     const Vector3f &dir = ray_in.GetDirection();
     float cos_ray_in = Vector3f::dot(norm, dir);

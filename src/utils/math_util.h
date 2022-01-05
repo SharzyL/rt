@@ -9,6 +9,7 @@
 namespace RT {
 
 class RNG {
+    // Notice: do not use a global RNG for thread safety
 public:
     RNG() noexcept;
     float RandUniformFloat();
@@ -22,8 +23,6 @@ private:
     std::uniform_real_distribution<float> uniform_dist{0, 1};
     std::normal_distribution<float> normal_dist{0, 1};
 };
-
-extern RNG rng;
 
 inline float to_radian(float x) { return x / 180.f * (float)M_PI; }
 

@@ -13,6 +13,7 @@ class material_t;
 namespace RT {
 
 class Hit;
+class RNG;
 
 class Material {
 public:
@@ -36,7 +37,7 @@ public:
     virtual ~Material() = default;
 
     // energy conservation: \int_{x on sphere} PDF(x) * BRDF(x) d x = 1
-    [[nodiscard]] Vector3f Sample(const Ray &ray_in, const Hit &hit) const;
+    [[nodiscard]] Vector3f Sample(const Ray &ray_in, const Hit &hit, RNG &rng) const;
     [[nodiscard]] float BRDF(const Ray &ray_in, const Ray &ray_out, const Hit &hit) const;
     [[nodiscard]] bool IsDiffuse() const;
 

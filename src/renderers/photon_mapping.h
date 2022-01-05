@@ -15,6 +15,7 @@
 
 namespace RT {
 
+class RNG;
 class Ray;
 class Camera;
 
@@ -37,8 +38,8 @@ public:
     void Render(const std::string &output_file);
 
 private:
-    void trace_visible_point(VisiblePoint &vp, const Ray &ray);
-    void trace_photon(const ColoredRay &ray);
+    void trace_visible_point(VisiblePoint &vp, const Ray &ray, RNG &rng);
+    void trace_photon(const ColoredRay &ray, RNG &rng);
     void update_nearby_vp(const Vector3f &pos, const Vector3f &attenuation);
 
     int width, height;
