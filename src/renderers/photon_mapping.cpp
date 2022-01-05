@@ -41,12 +41,12 @@ void PhotonMappingRender::Render(const std::string &output_file) {
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 const Ray &ray = camera->generateRay(Vector2f((float) x + 0.5f, (float) y + 0.5f));
-                trace_visible_point(visible_point_map[y * width + x], ray);
+                trace_visible_point(visible_point_map[y * width + x], ray, rng);
                 bar_forward.Step();
             }
         }
 
-        ProgressBar bar_back(fmt::format("Back round {}", r + 1), lights.size() * photons_per_round);
+        ProgressBar bar_back(fmt::format("Back round {}", r + 1), (int) lights.size() * photons_per_round);
         for (const auto &light: lights) {
             for (int p = 0; p < photons_per_round; p++) {
                 auto ray = light->EmitRay(rng);
