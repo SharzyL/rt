@@ -40,7 +40,7 @@ void SceneParser::parse_light(const YAML::Node &node) {
     if (node_type == "point") {
         Vector3f center = parse_vector(node["center"].as<std::string>());
         Vector3f color = parse_vector(node["color"].as<std::string>());
-        all_lights.emplace_back(std::make_unique<PointLight>(center, color));
+        lights.emplace_back(std::make_unique<PointLight>(center, color));
     } else {
         CHECK(false) << "unsupported object type";
     }

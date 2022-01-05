@@ -31,7 +31,7 @@ public:
 
     // for each ball containing p, invoke f(center, radius)
     // and update the radius of the ball to the return value of f
-    void OperateAndUpdateBalls(const Vector3f &p, const std::function<float(T*)> &f) {
+    void FindAndResizeBalls(const Vector3f &p, const std::function<float(T*)> &f) {
         for (auto &[grid_size_log, ball_grid]: ball_grids) {
             float grid_size = (float) std::pow(2.f, grid_size_log);
             float x = p.x() / grid_size, y = p.y() / grid_size, z = p.z() / grid_size;

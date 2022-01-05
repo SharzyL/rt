@@ -14,8 +14,8 @@ lights:
     color: 3 3 3
 
 world:
-  - type: load_obj
-    obj: scenes/cornell.obj
+#  - type: load_obj
+#    obj: scenes/cornell.obj
 
 #  - type: load_obj
 #    obj: scenes/dragon.obj
