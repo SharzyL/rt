@@ -47,6 +47,7 @@ set(SOURCES
         src/objects/mesh.cpp
         src/objects/plane.cpp
         src/objects/sphere.cpp
+        src/objects/curve.cpp
 
         src/core/hit.cpp
         src/core/material.cpp

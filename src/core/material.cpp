@@ -41,7 +41,7 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit, RNG &rng) const {
 
     switch (illumination_model) {
         case IlluminationModel::diffuse: {  // 1
-            return ray_side_norm + rng.RandNormalizedVector();
+            return ray_side_norm + rng.RandNormalizedVector();  // TODO: change to lambertian
         }
         case IlluminationModel::blinn: {  // 2
             return dir - 2 * norm * Vector3f::dot(norm, dir) + rng.RandNormalizedVector() * std::min(1.f, 1 / shininess);

@@ -97,6 +97,7 @@ void PhotonMappingRender::Render(const std::string &output_file) {
 
 void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray, RNG &rng) {
     Ray tracing_ray(ray);
+    vp.num_photons = 0;
     vp.attenuation = Vector3f(1, 1, 1);
     vp.forward_flux = Vector3f::ZERO;
     vp.radius = -1;
@@ -111,13 +112,13 @@ void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray, 
             vp.forward_flux = vp.attenuation * bg_color;
             return;
         }
+        vp.attenuation = vp.attenuation * hit.GetAmbient();
         const Material *mat = hit.GetMaterial();
 
-        vp.attenuation = vp.attenuation * hit.GetAmbient();
-        vp.forward_flux = vp.attenuation * mat->emissionColor;
-        vp.center = hit.GetPos();
-        vp.radius = init_radius;
         if (mat->IsDiffuse()) {
+            vp.forward_flux = vp.attenuation * mat->emissionColor;
+            vp.center = hit.GetPos();
+            vp.radius = init_radius;
             return;
         } else {
             auto ray_out_dir = mat->Sample(tracing_ray, hit, rng);
@@ -144,9 +145,9 @@ void PhotonMappingRender::trace_photon(const ColoredRay &ray, RNG &rng) {
 
         if (mat->IsDiffuse()) {
             update_nearby_vp(hit.GetPos(), attenuation);
-            if (rng.RandUniformFloat() < hit_ambient.max_component()) return;
+            attenuation = attenuation * hit_ambient;
+            if (depth > 5 && rng.RandUniformFloat() < hit_ambient.max_component()) return;
         }
-        attenuation = attenuation * hit_ambient;
         auto ray_out_dir = mat->Sample(tracing_ray, hit, rng);
         tracing_ray.set(hit.GetPos() + ray_out_dir * 0.0001, ray_out_dir);
     }
