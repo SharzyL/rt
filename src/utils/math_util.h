@@ -25,6 +25,8 @@ private:
     std::normal_distribution<float> normal_dist{0, 1};
 };
 
+float fast_uniform_float(int i, int j);
+
 inline float to_radian(float x) { return x / 180.f * (float)M_PI; }
 
 inline float clamp(float x) { return x >= 0 ? x : 0; }
