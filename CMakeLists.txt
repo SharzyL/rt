@@ -48,6 +48,7 @@ set(SOURCES
         src/objects/plane.cpp
         src/objects/sphere.cpp
         src/objects/curve.cpp
+        src/objects/rotate_bezier.cpp
 
         src/core/hit.cpp
         src/core/material.cpp
@@ -83,6 +84,12 @@ add_executable(ball_finder_test
         src/utils/math_util.cpp
         )
 target_link_libraries(ball_finder_test gtest_main vecmath fmt)
+
+add_executable(bezier_test
+        tests/bezier_intersection_test.cpp
+        ${SOURCES}
+        )
+target_link_libraries(bezier_test ${EXTERNAL_LIBS} gtest_main)
 
 include(GoogleTest)
 gtest_discover_tests(ball_finder_test)

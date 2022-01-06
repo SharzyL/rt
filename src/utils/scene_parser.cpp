@@ -27,9 +27,9 @@
 namespace RT {
 
 std::unique_ptr<Camera> SceneParser::parse_camera(const YAML::Node &node) {
-    Vector3f pos = parse_vector(node["pos"].as<std::string>());
-    Vector3f dir = parse_vector(node["dir"].as<std::string>());
-    Vector3f up = parse_vector(node["up"].as<std::string>());
+    Vector3f pos = parse_vector3f(node["pos"].as<std::string>());
+    Vector3f dir = parse_vector3f(node["dir"].as<std::string>());
+    Vector3f up = parse_vector3f(node["up"].as<std::string>());
     auto width = node["width"].as<float>();
     auto height = node["height"].as<float>();
     auto angle = to_radian(node["angle"].as<float>());
@@ -39,13 +39,13 @@ std::unique_ptr<Camera> SceneParser::parse_camera(const YAML::Node &node) {
 void SceneParser::parse_light(const YAML::Node &node) {
     const std::string &node_type = node["type"].as<std::string>();
     if (node_type == "point") {
-        Vector3f center = parse_vector(node["center"].as<std::string>());
-        Vector3f color = parse_vector(node["color"].as<std::string>());
+        Vector3f center = parse_vector3f(node["center"].as<std::string>());
+        Vector3f color = parse_vector3f(node["color"].as<std::string>());
         lights.emplace_back(std::make_unique<PointLight>(center, color));
     } else if (node_type == "sphere") {
-        Vector3f center = parse_vector(node["center"].as<std::string>());
+        Vector3f center = parse_vector3f(node["center"].as<std::string>());
         auto radius = node["radius"].as<float>();
-        Vector3f color = parse_vector(node["color"].as<std::string>());
+        Vector3f color = parse_vector3f(node["color"].as<std::string>());
         lights.emplace_back(std::make_unique<SphereLight>(center, radius, color));
     } else {
         CHECK(false) << "unsupported object type";
@@ -54,10 +54,10 @@ void SceneParser::parse_light(const YAML::Node &node) {
 
 Material *SceneParser::parse_material(const YAML::Node &node) {
     auto material = new Material((Material::IlluminationModel) node["illum"].as<int>());
-    if (node["Ka"]) material->ambientColor = parse_vector(node["Ka"].as<std::string>());
-    if (node["Kd"]) material->diffuseColor = parse_vector(node["Kd"].as<std::string>());
-    if (node["Ks"]) material->specularColor = parse_vector(node["Ks"].as<std::string>());
-    if (node["Ke"]) material->emissionColor = parse_vector(node["Ke"].as<std::string>());
+    if (node["Ka"]) material->ambientColor = parse_vector3f(node["Ka"].as<std::string>());
+    if (node["Kd"]) material->diffuseColor = parse_vector3f(node["Kd"].as<std::string>());
+    if (node["Ks"]) material->specularColor = parse_vector3f(node["Ks"].as<std::string>());
+    if (node["Ke"]) material->emissionColor = parse_vector3f(node["Ke"].as<std::string>());
     if (node["Ns"]) material->shininess = node["Ns"].as<float>();
     if (node["Ni"]) material->refraction = node["Ni"].as<float>();
     if (node["name"]) material->name = node["name"].as<std::string>();
@@ -84,30 +84,30 @@ std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
         return std::unique_ptr<Object3D>(group);
 
     } else if (node_type == "sphere") {
-        auto center = parse_vector(node["center"].as<std::string>());
+        auto center = parse_vector3f(node["center"].as<std::string>());
         auto radius = node["r"].as<float>();
         auto material = parse_material(node["mat"]);
         auto texture = parse_texture(node["texture"]);
         return std::make_unique<Sphere>(center, radius, material, texture);
 
     } else if (node_type == "plane") {
-        auto normal = parse_vector(node["normal"].as<std::string>());
+        auto normal = parse_vector3f(node["normal"].as<std::string>());
         auto d = node["d"].as<float>();
         auto material = parse_material(node["mat"]);
         auto texture = parse_texture(node["texture"]);
         return std::make_unique<Plane>(normal, d, material, texture);
 
     } else if (node_type == "triangle") {
-        auto a = parse_vector(node["a"].as<std::string>());
-        auto b = parse_vector(node["b"].as<std::string>());
-        auto c = parse_vector(node["c"].as<std::string>());
+        auto a = parse_vector3f(node["a"].as<std::string>());
+        auto b = parse_vector3f(node["b"].as<std::string>());
+        auto c = parse_vector3f(node["c"].as<std::string>());
         auto material = parse_material(node["mat"]);
         return std::make_unique<Triangle>(a, b, c, material);
 
     } else if (node_type == "load_obj") {
         const std::string &obj_file = node["obj"].as<std::string>();
-        Vector3f scale = node["scale"] ? parse_vector(node["scale"].as<std::string>()) : Vector3f(1, 1, 1);
-        Vector3f translate = node["translate"] ? parse_vector(node["translate"].as<std::string>()) : Vector3f(0, 0, 0);
+        Vector3f scale = node["scale"] ? parse_vector3f(node["scale"].as<std::string>()) : Vector3f(1, 1, 1);
+        Vector3f translate = node["translate"] ? parse_vector3f(node["translate"].as<std::string>()) : Vector3f(0, 0, 0);
         Material *material = node["mat"] ? parse_material(node["mat"]) : nullptr;
         return std::make_unique<ObjImport>(obj_file, scale, translate, material);
 
@@ -115,14 +115,14 @@ std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
         auto material = parse_material(node["mat"]);
         auto bbox = new BoundingBox(material);
         for (const auto &point_node: node["points"]) {
-            bbox->AddVertex(parse_vector(point_node.as<std::string>()));
+            bbox->AddVertex(parse_vector3f(point_node.as<std::string>()));
         }
         return std::unique_ptr<Object3D>(bbox);
     } else if (node_type == "curve") {
         auto material = parse_material(node["mat"]);
         std::vector<Vector3f> points = {{0, 0, 0}, {0.5, 0.3, 0}, {0.5, 0.7, 0}, {0, 1, 0}};
         BezierCurve c(std::move(points));
-        return makeMesh(&c, material);
+        return makeMeshFromRotateCurve(&c, material);
     } else {
         CHECK(false) << "unsupported object type";
     }
@@ -153,7 +153,7 @@ void SceneParser::parse(const std::string &scene_file) {
 
     YAML::Node bg_color_node = root_node["bg_color"];
     if (bg_color_node) {
-        bg_color = parse_vector(bg_color_node.as<std::string>());
+        bg_color = parse_vector3f(bg_color_node.as<std::string>());
     }
 }
 

@@ -4,7 +4,8 @@
 #include <random>
 #include <string>
 
-#include "Vector3f.h"
+#include <Vector3f.h>
+#include <Vector2f.h>
 
 namespace RT {
 
@@ -36,16 +37,9 @@ inline float clamp1(float x) {
     return x;
 }
 
-inline Vector3f parse_vector(const std::string &str) {
-    Vector3f v;
-    const char *start = str.c_str();
-    char *end = nullptr;
-    for (int i = 0; i < 3; i++) {
-        v[i] = std::strtof(start, &end);
-        start = end + 1;
-    }
-    return v;
-}
+Vector3f parse_vector3f(const std::string &str);
+
+Vector2f parse_vector2f(const std::string &str);
 
 inline Vector3f clamp1(Vector3f v) { return {clamp1(v.x()), clamp1(v.y()), clamp1(v.z())}; }
 
