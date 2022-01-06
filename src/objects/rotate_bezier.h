@@ -15,7 +15,7 @@
 
 namespace RT {
 
-class RotateBezier: SimpleObject3D {
+class RotateBezier: public SimpleObject3D {
 public:
     RotateBezier(std::vector<Vector2f> &&controls, Vector2f axis, Material *mat, Texture *texture);
 
@@ -23,13 +23,12 @@ public:
 
     [[nodiscard]] Vector3f AmbientColorAtHit(const Hit &hit) const override;
 
-    [[nodiscard]] std::pair<Vector2f, Vector2f> bezier_evaluate(float bt) const;
+    [[nodiscard]] std::pair<Vector2f, Vector2f> bezier_evaluate(float bt, float min_t = 0.f, float max_t = 1.f) const;
 
     std::vector<Vector2f> controls;
     Vector2f axis;
     float ymin, ymax;
 };
-
 
 } // namespace RT
 #endif //RT_ROTATE_BEZIER_H
