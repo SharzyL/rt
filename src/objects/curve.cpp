@@ -137,7 +137,7 @@ void BsplineCurve::discretize(int resolution, std::vector<CurvePoint> &data) con
     }
 }
 
-std::unique_ptr<Mesh> makeMesh(const Curve *curve, const Material *mat) {
+std::unique_ptr<Mesh> makeMeshFromRotateCurve(const Curve *curve, const Material *mat) {
     std::vector<Triangle> triangles;
 
     using Tup3u = std::tuple<unsigned, unsigned, unsigned>;

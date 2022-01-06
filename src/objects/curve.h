@@ -51,7 +51,7 @@ public:
     void discretize(int resolution, std::vector<CurvePoint> &data) const override;
 };
 
-std::unique_ptr<Mesh> makeMesh(const Curve *curve, const Material *mat);
+std::unique_ptr<Mesh> makeMeshFromRotateCurve(const Curve *curve, const Material *mat);
 
 } // namespace RT
 #endif // CURVE_HPP
