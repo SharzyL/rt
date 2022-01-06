@@ -17,8 +17,7 @@
 namespace RT {
 
 bool Mesh::Intersect(const Ray &r, Hit &h, float tmin) const {
-    if (num_faces > 100) return bbox.Intersect(r, h, tmin);
-    if (!bbox.MayIntersect(r, tmin, h.GetT())) return false;
+    if (num_faces > 20 && !bbox.MayIntersect(r, tmin, h.GetT())) return false;
     bool result = false;
     for (const auto &triangle: triangles) {
         result |= triangle.Intersect(r, h, tmin);
@@ -47,6 +46,15 @@ Mesh::Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, c
         bbox.AddVertex(v3);
 
         index_offset += 3;
+    }
+}
+
+Mesh::Mesh(std::vector<Triangle> &&triangles, const Material *mat): triangles(triangles), bbox(mat) {
+    num_faces = triangles.size();
+    for (const auto &tri: triangles) {
+        bbox.AddVertex(tri.a);
+        bbox.AddVertex(tri.b);
+        bbox.AddVertex(tri.c);
     }
 }
 

@@ -22,7 +22,6 @@ class Camera;
 struct VisiblePoint {
     VisiblePoint(): mtx(new std::mutex) {};
     Vector3f center;
-    Vector3f norm;
 
     // determined in forward process
     Vector3f forward_flux;

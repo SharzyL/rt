@@ -32,6 +32,8 @@ public:
     Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, const tinyobj::shape_t &shape,
          const Material *default_mat = nullptr);
 
+    Mesh(std::vector<Triangle> &&vs, const Material *mat);
+
     bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
 private:

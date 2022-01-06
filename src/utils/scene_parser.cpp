@@ -15,6 +15,7 @@
 #include "objects/obj_import.h"
 #include "objects/mesh.h"
 #include "objects/object3d.h"
+#include "objects/curve.h"
 
 #include "core/ray.h"
 #include "core/texture.h"
@@ -117,7 +118,11 @@ std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
             bbox->AddVertex(parse_vector(point_node.as<std::string>()));
         }
         return std::unique_ptr<Object3D>(bbox);
-
+    } else if (node_type == "curve") {
+        auto material = parse_material(node["mat"]);
+        std::vector<Vector3f> points = {{0, 0, 0}, {0.5, 0.3, 0}, {0.5, 0.7, 0}, {0, 1, 0}};
+        BezierCurve c(std::move(points));
+        return makeMesh(&c, material);
     } else {
         CHECK(false) << "unsupported object type";
     }
