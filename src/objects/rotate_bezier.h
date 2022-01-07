@@ -27,7 +27,7 @@ public:
 
     std::vector<Vector2f> controls;
     Vector2f axis;
-    float ymin, ymax;
+    float yfirst, ylast;
 };
 
 } // namespace RT

@@ -112,14 +112,6 @@ std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
         Material *material = node["mat"] ? parse_material(node["mat"]) : nullptr;
         return std::make_unique<ObjImport>(obj_file, scale, translate, material);
 
-    } else if (node_type == "bbox") {
-        auto material = parse_material(node["mat"]);
-        auto bbox = new BoundingBox(material);
-        for (const auto &point_node: node["points"]) {
-            bbox->AddVertex(parse_vector3f(point_node.as<std::string>()));
-        }
-        return std::unique_ptr<Object3D>(bbox);
-
     } else if (node_type == "rotate_curve_mesh") {
         auto material = parse_material(node["mat"]);
         std::vector<Vector3f> points = {{0, 0, 0}, {0.5, 0.3, 0}, {0.5, 0.7, 0}, {0, 1, 0}};

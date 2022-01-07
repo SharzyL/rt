@@ -10,7 +10,10 @@
 namespace RT {
 
 Sphere::Sphere(const Vector3f &center, float radius, const Material *material, const Texture *texture)
-    : SimpleObject3D(material, texture), center(center), radius(radius) {}
+    : SimpleObject3D(material, texture), center(center), radius(radius) {
+    box.AddVertex(Vector3f(center.x() + radius, center.y() + radius, center.z() + radius));
+    box.AddVertex(Vector3f(center.x() - radius, center.y() - radius, center.z() - radius));
+}
 
 Sphere::~Sphere() = default;
 

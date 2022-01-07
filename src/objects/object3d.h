@@ -1,6 +1,8 @@
 #ifndef OBJECT3D_H
 #define OBJECT3D_H
 
+#include "utils/aabb.h"
+
 namespace RT {
 
 class Hit;
@@ -16,6 +18,10 @@ public:
     // MayIntersect Ray with this object. If hit, store information in hit
     // structure.
     virtual bool Intersect(const Ray &r, Hit &h, float tmin) const = 0;
+    const AABB& GetBox() { return box; }
+
+protected:
+    AABB box;
 };
 
 class SimpleObject3D : public Object3D {
