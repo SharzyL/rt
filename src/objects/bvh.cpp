@@ -1,4 +1,5 @@
 #include "./bvh.h"
+#include "utils/debug.h"
 
 namespace RT {
 
@@ -13,8 +14,7 @@ void BVH::Build() {
 void BVH::build_impl(Node *node) {
     int l = node->l_idx, r = node->r_idx;
     for (int i = l; i < r; i++) {
-        auto obj = objects[i];
-        node->box.FitBox(obj->GetBox());
+        node->box.FitBox(objects[i]->GetBox());
     }
     if (r - l < 5) {  // leaf node
         return;
@@ -27,10 +27,10 @@ void BVH::build_impl(Node *node) {
     node->l_child = std::make_unique<Node>();
     node->l_child->l_idx = l;
     node->l_child->r_idx = mid;
+    build_impl(node->l_child.get());
     node->r_child = std::make_unique<Node>();
     node->r_child->l_idx = mid;
     node->r_child->r_idx = r;
-    build_impl(node->l_child.get());
     build_impl(node->r_child.get());
 }
 
@@ -41,7 +41,7 @@ bool BVH::Intersect(const Ray &r, Hit &h, float tmin) const {
 bool BVH::node_intersect(const Ray &ray, Hit &h, float fmin, Node *node) const {
     int l = node->l_idx, r = node->r_idx;
     bool result = false;
-    if (!node->box.IsNull() && !node->box.MayIntersect(ray, fmin, h.GetT())) return false;
+    if (!node->box.MayIntersect(ray, fmin, h.GetT())) return false;
 
     if (node->l_child != nullptr) {  // non-leaf
         result |= node_intersect(ray, h, fmin, node->l_child.get());

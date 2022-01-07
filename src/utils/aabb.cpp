@@ -10,6 +10,7 @@ void AABB::Reset() {
     x0 = y0 = z0 = std::numeric_limits<float>::max();
     x1 = y1 = z1 = -std::numeric_limits<float>::max();
     num_v = 0;
+    x_sum = y_sum = z_sum = 0.f;
 }
 
 bool AABB::IsNull() const {
@@ -31,6 +32,7 @@ void AABB::AddVertex(const Vector3f &v) {
 }
 
 bool AABB::MayIntersect(const Ray &ray, float tmin, float tmax) const {
+    if (num_v == 0) return true;
     const Vector3f &dir = ray.GetDirection();
     const Vector3f &origin = ray.GetOrigin();
     float intersect_x0 = (x0 - origin.x()) / dir.x();
@@ -62,6 +64,7 @@ void AABB::FitBox(const AABB &box) {
     x_sum += box.x_sum;
     y_sum += box.y_sum;
     z_sum += box.z_sum;
+    center = {x_sum / (float) num_v, y_sum / (float) num_v, z_sum / (float) num_v};
 }
 
 int AABB::MaxSpanAxis() const {
@@ -70,7 +73,7 @@ int AABB::MaxSpanAxis() const {
     float z_span = z1 - z0;
     if (x_span >= y_span && x_span >= z_span) {
         return 0;
-    } else if (y_span >= z_sum) {
+    } else if (y_span >= z_span) {
         return 1;
     } else {
         return 2;
