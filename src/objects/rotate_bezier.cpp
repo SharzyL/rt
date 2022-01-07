@@ -10,8 +10,19 @@ static RNG rng;
 
 RotateBezier::RotateBezier(std::vector<Vector2f> &&controls_points, Vector2f axis, Material *mat, Texture *texture) :
         SimpleObject3D(mat, texture), controls(std::move(controls_points)), axis(axis) {
-    ymin = controls[0].y();
-    ymax = controls.back().y();
+    yfirst = controls[0].y();
+    ylast = controls.back().y();
+
+    float ymin = std::numeric_limits<float>::max();
+    float ymax = -std::numeric_limits<float>::max();
+    float xmax = -std::numeric_limits<float>::max();
+    for (const auto &cp: controls_points) {
+        ymin = std::min(ymin, cp.y());
+        ymax = std::max(ymax, cp.y());
+        xmax = std::max(xmax, std::abs(cp.x()));
+    }
+    box.AddVertex({axis.x() - xmax, ymin, axis.y() - xmax});
+    box.AddVertex({axis.x() + xmax, ymax, axis.y() + xmax});
 }
 
 bool RotateBezier::Intersect(const Ray &ray, Hit &hit, float tmin) const {
@@ -73,9 +84,9 @@ bool RotateBezier::Intersect(const Ray &ray, Hit &hit, float tmin) const {
 
 std::pair<Vector2f, Vector2f> RotateBezier::bezier_evaluate(float bt, float min_t, float max_t) const {
     if (bt < min_t) {
-        return {Vector2f(controls[0].x(), ymin + bt * (ymax - ymin)), Vector2f(0, ymax - ymin)};
+        return {Vector2f(controls[0].x(), yfirst + bt * (ylast - yfirst)), Vector2f(0, ylast - yfirst)};
     } else if (bt > max_t) {
-        return {Vector2f(controls.back().x(), ymin + bt * (ymax - ymin)), Vector2f(0, ymax - ymin)};
+        return {Vector2f(controls.back().x(), yfirst + bt * (ylast - yfirst)), Vector2f(0, ylast - yfirst)};
     }
     std::vector<Vector2f> val;
     std::vector<Vector2f> deriv;

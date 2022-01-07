@@ -49,6 +49,7 @@ set(SOURCES
         src/objects/sphere.cpp
         src/objects/curve.cpp
         src/objects/rotate_bezier.cpp
+        src/objects/bvh.cpp
 
         src/core/hit.cpp
         src/core/material.cpp
@@ -60,6 +61,7 @@ set(SOURCES
         src/utils/image.cpp
         src/utils/math_util.cpp
         src/utils/scene_parser.cpp
+        src/utils/aabb.cpp
         )
 
 include_directories(${PROJECT_NAME} PRIVATE src)

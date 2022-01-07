@@ -13,6 +13,9 @@ namespace RT {
 Triangle::Triangle(const Vector3f &a, const Vector3f &b, const Vector3f &c, const Material *m)
     : SimpleObject3D(m, nullptr), a(a), b(b), c(c) {  // not supporting texture yet
     normal = Vector3f::cross(b - a, c - a).normalized();
+    box.AddVertex(a);
+    box.AddVertex(b);
+    box.AddVertex(c);
 }
 
 bool Triangle::Intersect(const Ray &r, Hit &h, float tmin) const {

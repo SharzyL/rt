@@ -11,7 +11,7 @@
 class ProgressBar {
 public:
     explicit ProgressBar(std::string name, size_t size): total(size), progress(0), name(std::move(name)) {
-        print_interval = size / 2000;
+        print_interval = std::max(size / 10000, 1UL);
         start_time = std::chrono::high_resolution_clock::now();
     };
 
