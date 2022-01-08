@@ -20,7 +20,15 @@ bool Mesh::Intersect(const Ray &r, Hit &h, float tmin) const {
     return bvh.Intersect(r, h, tmin);
 }
 
-Mesh::Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, const tinyobj::shape_t &shape, const Material *default_mat) {
+Mesh::Mesh(
+        const std::vector<Vector3f> &vs,
+        const std::vector<Vector3f> &normals,
+        const std::vector<Vector2f> &tex_cord,
+        const std::vector<Material> &mats,
+        const tinyobj::shape_t &shape,
+        const Material *default_mat,
+        const Texture *default_tex
+        ) {
     num_faces = shape.mesh.num_face_vertices.size();
     size_t index_offset = 0;
     bvh.Reserve(num_faces);
@@ -28,15 +36,37 @@ Mesh::Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, c
 
     for (size_t f = 0; f < num_faces; f++) { // iterate faces
         int this_mat_idx = shape.mesh.material_ids[f];
-        CHECK((this_mat_idx >= 0 && this_mat_idx < mats.size()) || default_mat != nullptr) << "No material is given, and no default material";
+
+        CHECK((this_mat_idx >= 0 && this_mat_idx < mats.size()) || default_mat != nullptr)
+                        << "No material is given, and no default material";
         const Material *mat = this_mat_idx >= 0 ? &mats[this_mat_idx] : default_mat;
         CHECK(mat != nullptr) << "nullptr material detected";
-
         CHECK(shape.mesh.num_face_vertices[f] == 3) << "non-triangle face in a mesh";
-        const Vector3f &v1 = vs[shape.mesh.indices[index_offset + 0].vertex_index];
-        const Vector3f &v2 = vs[shape.mesh.indices[index_offset + 1].vertex_index];
-        const Vector3f &v3 = vs[shape.mesh.indices[index_offset + 2].vertex_index];
-        Triangle &tri = triangles.emplace_back(v1, v2, v3, mat);
+
+        auto v1_idx = shape.mesh.indices[index_offset + 0];
+        auto v2_idx = shape.mesh.indices[index_offset + 1];
+        auto v3_idx = shape.mesh.indices[index_offset + 2];
+        const Vector3f &v1 = vs[v1_idx.vertex_index];
+        const Vector3f &v2 = vs[v2_idx.vertex_index];
+        const Vector3f &v3 = vs[v3_idx.vertex_index];
+        Triangle &tri = triangles.emplace_back(v1, v2, v3, mat, default_tex);
+
+        if (v1_idx.normal_index >= 0) {
+            assert(v2_idx.normal_index >= 0 && v3_idx.normal_index >= 0);
+            tri.SetVertexNormal(
+                    normals[v1_idx.normal_index],
+                    normals[v2_idx.normal_index],
+                    normals[v3_idx.normal_index]
+            );
+        }
+        if (v1_idx.texcoord_index >= 0) {
+            assert(v2_idx.texcoord_index >= 0 && v3_idx.texcoord_index >= 0);
+            tri.SetTextureCoord(
+                    tex_cord[v1_idx.texcoord_index],
+                    tex_cord[v2_idx.texcoord_index],
+                    tex_cord[v3_idx.texcoord_index]
+            );
+        }
         bvh.AddObject(&tri);
         index_offset += 3;
     }
@@ -44,7 +74,7 @@ Mesh::Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, c
     box = bvh.GetBox();
 }
 
-Mesh::Mesh(std::vector<Triangle> &&triangles, const Material *mat): triangles(triangles) {
+Mesh::Mesh(std::vector<Triangle> &&triangles, const Material *mat) : triangles(triangles) {
     num_faces = triangles.size();
     for (Triangle &tri: this->triangles) {
         bvh.AddObject(&tri);

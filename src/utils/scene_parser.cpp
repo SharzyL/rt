@@ -110,7 +110,8 @@ std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
         Vector3f scale = node["scale"] ? parse_vector3f(node["scale"].as<std::string>()) : Vector3f(1, 1, 1);
         Vector3f translate = node["translate"] ? parse_vector3f(node["translate"].as<std::string>()) : Vector3f(0, 0, 0);
         Material *material = node["mat"] ? parse_material(node["mat"]) : nullptr;
-        return std::make_unique<ObjImport>(obj_file, scale, translate, material);
+        Texture *texture = node["texture"] ? parse_texture(node["texture"]) : nullptr;
+        return std::make_unique<ObjImport>(obj_file, scale, translate, material, texture);
 
     } else if (node_type == "rotate_curve_mesh") {
         auto material = parse_material(node["mat"]);
