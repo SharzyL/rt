@@ -16,8 +16,15 @@ namespace RT {
 class Mesh : public Object3D {
 
 public:
-    Mesh(const std::vector<Vector3f> &vs, const std::vector<Material> &mats, const tinyobj::shape_t &shape,
-         const Material *default_mat = nullptr);
+    Mesh(
+            const std::vector<Vector3f> &vs,
+            const std::vector<Vector3f> &normals,
+            const std::vector<Vector2f> &tex_cord,
+            const std::vector<Material> &mats,
+            const tinyobj::shape_t &shape,
+            const Material *default_mat = nullptr,
+            const Texture *default_te = nullptr
+    );
 
     Mesh(std::vector<Triangle> &&vs, const Material *mat);
 
