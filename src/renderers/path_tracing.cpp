@@ -50,7 +50,7 @@ void PathTracingRender::Render(const Object3D &obj, const Camera &camera, const 
 
 Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth, RNG &rng) {
     Hit hit;
-    bool is_hit = obj.Intersect(ray, hit, 0);
+    bool is_hit = obj.Intersect(ray, hit, 0.0001);
     if (!is_hit) {
         return Vector3f::ZERO;
     }
@@ -65,7 +65,7 @@ Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth
     Vector3f hit_point = hit.GetPos();
 
     Vector3f sample_dir = mat->Sample(ray, hit, rng);
-    Ray sample_ray = Ray(hit_point + 0.0001 * sample_dir, sample_dir);
+    Ray sample_ray = Ray(hit_point, sample_dir);
     float brdf = mat->BRDF(ray, sample_ray, hit);
 
     Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1, rng);
