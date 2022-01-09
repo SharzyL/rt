@@ -53,7 +53,7 @@ void PhotonMappingRender::Render(const std::string &output_file) {
                 });
                 // modifies vp, ball_finder
                 auto &vp = visible_point_map[y * width + x];
-                trace_visible_point(vp, ray, per_thread_rng);
+                trace_visible_point(vp, ray, per_thread_rng, 0);
                 if (vp.radius > 0) {
 #pragma omp critical
                     ball_finder.AddBall(&vp);
@@ -69,25 +69,25 @@ void PhotonMappingRender::Render(const std::string &output_file) {
                 RNG per_thread_rng;
                 auto ray = lights[l]->EmitRay(per_thread_rng);
                 // modifies some vp
-                trace_photon(ray, per_thread_rng);
+                trace_photon(ray, per_thread_rng, 0);
                 bar_back.Step();
             }
         }
         ball_finder.Reset();
 
-        for (int y = 0; y < camera->getHeight(); y++) {
-            for (int x = 0; x < camera->getWidth(); x++) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 VisiblePoint &vp = visible_point_map[y * width + x];
-                Vector3f photon_color = vp.photon_flux / ((float) M_PI * fsquare(vp.radius));
-                Vector3f color = photon_color / (float) photons_per_round + vp.forward_flux;
+                Vector3f photon_color = vp.photon_flux / ((float) M_PI * fsquare(vp.radius) * (float) photons_per_round);
+                Vector3f color = photon_color + vp.forward_flux;
                 img_data[y * width + x] += color;
             }
         }
     }
 
     Image img(width, height);
-    for (int y = 0; y < camera->getHeight(); y++) {
-        for (int x = 0; x < camera->getWidth(); x++) {
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
             Vector3f color = img_data[y * width + x] / (float) num_rounds;
             img.SetPixel(x, y, gamma_correct(color, gamma));
         }
@@ -95,62 +95,49 @@ void PhotonMappingRender::Render(const std::string &output_file) {
     img.SaveImage(output_file.c_str());
 }
 
-void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray, RNG &rng) {
-    Ray tracing_ray(ray);
-    vp.num_photons = 0;
-    vp.attenuation = Vector3f(1, 1, 1);
-    vp.forward_flux = Vector3f::ZERO;
-    vp.radius = -1;
-    int depth = 0;
-    while (true) {
-        depth++;
-        if (depth > 10) return;
+void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray, RNG &rng, int depth) {
+    if (depth > 10) return;
 
-        Hit hit;
-        bool is_hit = obj->Intersect(tracing_ray, hit, 0);
-        if (!is_hit) {
-            vp.forward_flux = vp.attenuation * bg_color;
-            return;
-        }
-        vp.attenuation = vp.attenuation * hit.GetAmbient();
-        const Material *mat = hit.GetMaterial();
+    Hit hit;
+    bool is_hit = obj->Intersect(ray, hit, 0);
+    if (!is_hit) {
+        vp.forward_flux = vp.attenuation * bg_color;
+        return;
+    }
+    vp.attenuation = vp.attenuation * hit.GetAmbient();
+    const Material *mat = hit.GetMaterial();
 
-        if (mat->IsDiffuse()) {
-            vp.forward_flux = vp.attenuation * mat->emissionColor;
-            vp.center = hit.GetPos();
-            vp.radius = init_radius;
-            return;
-        } else {
-            auto ray_out_dir = mat->Sample(tracing_ray, hit, rng);
-            tracing_ray.set(hit.GetPos() + ray_out_dir * 0.0001, ray_out_dir);
-        }
+    if (mat->IsDiffuse()) {
+        vp.forward_flux = vp.attenuation * mat->emissionColor;
+        vp.center = hit.GetPos();
+        vp.radius = init_radius;
+        return;
+    } else {
+        auto ray_out_dir = mat->Sample(ray, hit, rng);
+        Ray out_ray(hit.GetPos() + 0.0001 * ray_out_dir, ray_out_dir);
+        trace_visible_point(vp, out_ray, rng, depth + 1);
     }
 }
 
-void PhotonMappingRender::trace_photon(const ColoredRay &ray, RNG &rng) {
-    Ray tracing_ray = ray;
-    Vector3f attenuation = ray.GetColor();
-    int depth = 0;
-    while (true) {
-        depth ++;
-        if (depth > 20) return;
+void PhotonMappingRender::trace_photon(const ColoredRay &ray, RNG &rng, int depth) {
+    if (depth > 20) return;
 
-        Hit hit;
-        bool is_hit = obj->Intersect(tracing_ray, hit, 0);
-        if (!is_hit) return;
+    Hit hit;
+    bool is_hit = obj->Intersect(ray, hit, 0);
+    if (!is_hit) return;
 
-        const Material *mat = hit.GetMaterial();
+    const Material *mat = hit.GetMaterial();
+    Vector3f hit_ambient = hit.GetAmbient();
 
-        Vector3f hit_ambient = hit.GetAmbient();
-
-        if (mat->IsDiffuse()) {
-            update_nearby_vp(hit.GetPos(), attenuation);
-            attenuation = attenuation * hit_ambient;
-            if (depth > 5 && rng.RandUniformFloat() < hit_ambient.max_component()) return;
+    if (mat->IsDiffuse()) {
+        update_nearby_vp(hit.GetPos(), ray.GetColor());
+        if (depth > 5 && rng.RandUniformFloat() < hit_ambient.max_component()) {
+            return;
         }
-        auto ray_out_dir = mat->Sample(tracing_ray, hit, rng);
-        tracing_ray.set(hit.GetPos() + ray_out_dir * 0.0001, ray_out_dir);
     }
+    auto ray_out_dir = mat->Sample(ray, hit, rng);
+    ColoredRay out_ray(hit.GetPos() + 0.0001 * ray_out_dir, ray_out_dir, hit_ambient * ray.GetColor());
+    trace_photon(out_ray, rng, depth + 1);
 }
 
 void PhotonMappingRender::update_nearby_vp(const Vector3f &pos, const Vector3f &attenuation) {

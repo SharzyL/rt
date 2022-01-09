@@ -24,11 +24,11 @@ struct VisiblePoint {
     Vector3f center;
 
     // determined in forward process
-    Vector3f forward_flux;
-    Vector3f attenuation;
+    Vector3f forward_flux = Vector3f::ZERO;
+    Vector3f attenuation = Vector3f(1, 1, 1);
 
     // determined in backward process
-    Vector3f photon_flux;
+    Vector3f photon_flux = Vector3f::ZERO;
     int num_photons = 0;
     float radius = -1;
 
@@ -43,8 +43,8 @@ public:
     void Render(const std::string &output_file);
 
 private:
-    void trace_visible_point(VisiblePoint &vp, const Ray &ray, RNG &rng);
-    void trace_photon(const ColoredRay &ray, RNG &rng);
+    void trace_visible_point(VisiblePoint &vp, const Ray &ray, RNG &rng, int depth);
+    void trace_photon(const ColoredRay &ray, RNG &rng, int depth);
     void update_nearby_vp(const Vector3f &pos, const Vector3f &attenuation);
 
     int width, height;
