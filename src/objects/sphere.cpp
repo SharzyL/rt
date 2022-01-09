@@ -28,7 +28,7 @@ bool Sphere::Intersect(const Ray &r, Hit &h, float tmin) const {
         return false;
     } else {
         float t_prime = std::sqrt(radius * radius - dist * dist);
-        float t = dist_to_center > radius ? tp - t_prime : tp + t_prime;
+        float t = tp >= t_prime + tmin ? tp - t_prime : tp + t_prime;
         if (t >= tmin && t < h.GetT()) {
             Vector3f intersection = r.PointAtParameter(t);
             Vector3f normal_at_intersection = (intersection - center).normalized();

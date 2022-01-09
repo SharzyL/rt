@@ -99,7 +99,7 @@ void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray, 
     if (depth > 10) return;
 
     Hit hit;
-    bool is_hit = obj->Intersect(ray, hit, 0);
+    bool is_hit = obj->Intersect(ray, hit, 0.0001);
     if (!is_hit) {
         vp.forward_flux = vp.attenuation * bg_color;
         return;
@@ -114,7 +114,7 @@ void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray, 
         return;
     } else {
         auto ray_out_dir = mat->Sample(ray, hit, rng);
-        Ray out_ray(hit.GetPos() + 0.0001 * ray_out_dir, ray_out_dir);
+        Ray out_ray(hit.GetPos(), ray_out_dir);
         trace_visible_point(vp, out_ray, rng, depth + 1);
     }
 }
@@ -123,7 +123,7 @@ void PhotonMappingRender::trace_photon(const ColoredRay &ray, RNG &rng, int dept
     if (depth > 20) return;
 
     Hit hit;
-    bool is_hit = obj->Intersect(ray, hit, 0);
+    bool is_hit = obj->Intersect(ray, hit, 0.0001);
     if (!is_hit) return;
 
     const Material *mat = hit.GetMaterial();
@@ -136,7 +136,7 @@ void PhotonMappingRender::trace_photon(const ColoredRay &ray, RNG &rng, int dept
         }
     }
     auto ray_out_dir = mat->Sample(ray, hit, rng);
-    ColoredRay out_ray(hit.GetPos() + 0.0001 * ray_out_dir, ray_out_dir, hit_ambient * ray.GetColor());
+    ColoredRay out_ray(hit.GetPos(), ray_out_dir, hit_ambient * ray.GetColor());
     trace_photon(out_ray, rng, depth + 1);
 }
 
