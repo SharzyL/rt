@@ -26,7 +26,7 @@ public:
             const Texture *default_te = nullptr
     );
 
-    Mesh(std::vector<Triangle> &&vs, const Material *mat);
+    Mesh(std::vector<Triangle> &&vs);
 
     bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
