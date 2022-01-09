@@ -31,7 +31,7 @@ void PathTracingRender::Render(const Object3D &obj, const Camera &camera, const 
                     for (int s = 0; s < sub_sample; s++) {
                         float disturb_x = (1 + rng.RandTentFloat()) / (float) sub_pixel / 2;
                         float disturb_y = (1 + rng.RandTentFloat()) / (float) sub_pixel / 2;
-                        Ray r = camera.generateRay(Vector2f(sub_x + disturb_x, sub_y + disturb_y));
+                        Ray r = camera.generateRay(Vector2f(sub_x + disturb_x, sub_y + disturb_y), rng);
                         Vector3f sample_color = trace(r, obj, 0, rng);
                         pixel_color += sample_color;
 //                        LOG(ERROR) << fmt::format("cast ray ({}, {}) ({} -> {}) = {}", x, y, r.GetOrigin(),
@@ -67,8 +67,6 @@ Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth
     Vector3f sample_dir = mat->Sample(ray, hit, rng);
     Ray sample_ray = Ray(hit_point + 0.0001 * sample_dir, sample_dir);
     float brdf = mat->BRDF(ray, sample_ray, hit);
-
-    float cos_theta = std::abs(Vector3f::dot(sample_dir, hit.GetNormal()));
 
     Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1, rng);
 

@@ -50,7 +50,7 @@ void PhotonMappingRender::Render(const std::string &output_file) {
                 Ray ray = camera->generateRay({
                         (float) x + 0.5f + 0.5f * per_thread_rng.RandTentFloat(),
                         (float) y + 0.5f + 0.5f * per_thread_rng.RandTentFloat()
-                });
+                }, per_thread_rng);
                 // modifies vp, ball_finder
                 auto &vp = visible_point_map[y * width + x];
                 trace_visible_point(vp, ray, per_thread_rng, 0);

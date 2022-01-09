@@ -6,6 +6,7 @@
 #include "core/ray.h"
 
 #include "./camera.h"
+#include "utils/math_util.h"
 
 namespace RT {
 
@@ -13,8 +14,8 @@ Camera::Camera(const Vector3f &center, const Vector3f &direction, const Vector3f
     this->center = center;
     this->direction = direction.normalized();
     this->up = (up - this->direction* Vector3f::dot(up, this->direction)).normalized();
-    this->horizontal = Vector3f::cross(this->direction, this->up);
-    this->up = Vector3f::cross(this->horizontal, this->direction);
+    this->right = Vector3f::cross(this->direction, this->up);
+    this->up = Vector3f::cross(this->right, this->direction);
     this->width = imgW;
     this->height = imgH;
 }
@@ -26,18 +27,27 @@ Camera::~Camera() = default;
 [[nodiscard]] int Camera::getHeight() const { return height; }
 
 PerspectiveCamera::PerspectiveCamera(const Vector3f &center, const Vector3f &_direction, const Vector3f &_up, int imgW,
-                                     int imgH, float angle)
-    : Camera(center, _direction, _up, imgW, imgH) {
+                                     int imgH, float angle, float focal_len, float aperture)
+    : Camera(center, _direction, _up, imgW, imgH), focal_len(focal_len), aperture(aperture) {
     // angle is in radian.
     auto w = (float)imgW, h = (float)imgH;
-    float distToCanvas = h / 2 / std::tan(angle / 2);
-    Vector3f canvasCenter = center + direction * distToCanvas;
-    canvasOrigin = canvasCenter - horizontal * (w / 2) - up * (w / 2);
+    dist_to_pixel_plane = h / 2 / std::tan(angle / 2);
+    focal_scale = focal_len / dist_to_pixel_plane;  // the ratio between focal_plane / pixel_plane
+    Vector3f focal_center = center + direction * focal_len;
+    focal_origin = focal_center - (right * (w / 2) + up * (w / 2)) * focal_scale;
 }
 
-Ray PerspectiveCamera::generateRay(const Vector2f &point) const {
-    Vector3f pointOnCanvas = canvasOrigin + horizontal * point.x() + up * point.y();
-    return {center, pointOnCanvas - center};
+Ray PerspectiveCamera::generateRay(const Vector2f &point, RNG &rng) const {
+    Vector3f point_on_focal = focal_origin + (right * point.x() + up * point.y()) * focal_scale;
+
+    float x_disturb, y_disturb;
+    do {
+        x_disturb = 2 * rng.RandUniformFloat() - 1;
+        y_disturb = 2 * rng.RandUniformFloat() - 1;
+    } while (x_disturb * x_disturb + y_disturb * y_disturb > 1);
+
+    Vector3f ray_point = center + right * aperture * x_disturb + up * aperture * y_disturb;
+    return {ray_point, point_on_focal - ray_point};
 }
 
 } // namespace RT
