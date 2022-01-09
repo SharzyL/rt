@@ -73,7 +73,7 @@ Mesh::Mesh(
     box = bvh.GetBox();
 }
 
-Mesh::Mesh(std::vector<Triangle> &&triangles, const Material *mat) : triangles(triangles) {
+Mesh::Mesh(std::vector<Triangle> &&triangles) : triangles(triangles) {
     num_faces = triangles.size();
     for (Triangle &tri: this->triangles) {
         bvh.AddObject(&tri);
