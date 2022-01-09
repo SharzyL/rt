@@ -4,6 +4,8 @@
 #include <Vector2f.h>
 #include <Vector3f.h>
 
+#include "utils/math_util.h"
+
 namespace RT {
 
 class Ray;
@@ -13,7 +15,7 @@ public:
     Camera(const Vector3f &center, const Vector3f &direction, const Vector3f &up, int imgW, int imgH);
 
     // Generate rays for each screen-space coordinate
-    [[nodiscard]] virtual Ray generateRay(const Vector2f &point) const = 0;
+    [[nodiscard]] virtual Ray generateRay(const Vector2f &point, RNG &rng) const = 0;
     virtual ~Camera();
 
     [[nodiscard]] int getWidth() const;
@@ -24,7 +26,7 @@ protected:
     Vector3f center;
     Vector3f direction;
     Vector3f up;
-    Vector3f horizontal;
+    Vector3f right;
     // Intrinsic parameters
     int width;
     int height;
@@ -34,12 +36,13 @@ class PerspectiveCamera : public Camera {
 
 public:
     PerspectiveCamera(const Vector3f &center, const Vector3f &_direction, const Vector3f &_up, int imgW, int imgH,
-                      float angle);
+                      float angle, float focal_len, float aperture);
 
-    [[nodiscard]] Ray generateRay(const Vector2f &point) const override;
+    [[nodiscard]] Ray generateRay(const Vector2f &point, RNG &rng) const override;
 
 protected:
-    Vector3f canvasOrigin;
+    Vector3f focal_origin;
+    float dist_to_pixel_plane, focal_len, aperture, focal_scale;
 };
 
 } // namespace RT

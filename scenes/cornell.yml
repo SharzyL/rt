@@ -7,6 +7,8 @@ camera:
   width: 1024
   height: 768
   angle: 50
+  aperture: 0.1
+  focal: 2
 
 lights:
   - type: point
@@ -34,13 +36,37 @@ world:
 #      illum: 1
 #      Ka: 0.725 0.73 0.68
 
-  - type: load_obj
-    obj: scenes/dragon.obj
+#  - type: load_obj
+#    obj: scenes/dragon.obj
+#    translate: 0 0.001 0
+#    texture:
+#      file: scenes/textures/brick.png
+#    mat:
+#      illum: 1
+#      Ka: 0.725 0.73 0.68
+
+  - type: sphere
+    center: -0.6, 1, 1
+    r: 0.3
     mat:
       illum: 1
-      Ka: 0.725 0.73 0.68
+      Ka: 1 1 1
 
-  #  - type: sphere
+  - type: sphere
+    center: 0, 1, 1.5
+    r: 0.3
+    mat:
+      illum: 1
+      Ka: 1 1 1
+
+  - type: sphere
+    center: 0.6, 1, 2
+    r: 0.3
+    mat:
+      illum: 1
+      Ka: 1 1 1
+
+#  - type: sphere
 #    center: -0.5, 0.5, 0.5
 #    r: 0.5
 #    mat:
@@ -49,7 +75,7 @@ world:
 #      Ka: 1 1 1
 
 #  - type: sphere
-#    center: 0.5, 0.33, 0
+#    center: 0.5, 0.33, -1
 #    r: 0.3
 #    mat:
 #      illum: 3
@@ -57,7 +83,7 @@ world:
 
   - type: plane  # back
     normal: 0 0 1
-    d: -1
+    d: -5
     mat:
       illum: 1
       Ka: 1 1 1
@@ -77,6 +103,7 @@ world:
     mat:
       illum: 1
       Ka: 1 1 1
+      Ke: 0.2 0.2 0.2
 
   - type: plane  # bottom
     normal: 0 1 0

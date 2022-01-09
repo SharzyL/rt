@@ -34,7 +34,9 @@ std::unique_ptr<Camera> SceneParser::parse_camera(const YAML::Node &node) {
     auto width = node["width"].as<float>();
     auto height = node["height"].as<float>();
     auto angle = to_radian(node["angle"].as<float>());
-    return std::make_unique<PerspectiveCamera>(pos, dir, up, width, height, angle);
+    auto aperture = node["aperture"] ? node["aperture"].as<float>() : 0.f;
+    auto focal_len = node["focal"] ? node["focal"].as<float>() : 1.f;
+    return std::make_unique<PerspectiveCamera>(pos, dir, up, width, height, angle, focal_len, aperture);
 }
 
 void SceneParser::parse_light(const YAML::Node &node) {
