@@ -44,7 +44,7 @@ ObjImport::ObjImport(const std::string &obj_file_path,
     all_normals.reserve(n_num_3 / 3);
     for (size_t i = 0; i < n_num_3; i += 3) {
         auto v = Vector3f(attrib.normals[i], attrib.normals[i + 1], attrib.normals[i + 2]);
-        all_normals.emplace_back(v * scale + translate);
+        all_normals.emplace_back(v);  // TODO: correct scale
     }
 
     // prepare texture coordinates
