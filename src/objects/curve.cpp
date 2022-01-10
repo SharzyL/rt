@@ -183,7 +183,7 @@ std::unique_ptr<Mesh> makeMeshFromRotateCurve(const Curve *curve, const Material
         );
     }
 
-    return std::make_unique<Mesh>(std::move(triangles), mat);
+    return std::make_unique<Mesh>(std::move(triangles));
 };
 
 } // namespace RT
