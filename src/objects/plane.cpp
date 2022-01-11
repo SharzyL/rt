@@ -11,8 +11,18 @@ Plane::Plane(
         const Vector3f &normal,
         float d,
         const Material *material,
-        const Texture *texture
-): normal(normal.normalized()), d(d), SimpleObject3D(material, texture) {}
+        const Texture *texture,
+        float texture_scale,
+        const Vector2f &texture_translate,
+        const Vector3f &texture_up
+) : normal(normal.normalized()),
+    d(d),
+    SimpleObject3D(material, texture),
+    texture_scale(texture_scale),
+    texture_translate(texture_translate) {
+    this->texture_up = (texture_up - this->normal * Vector3f::dot(this->normal, texture_up)).normalized();
+    this->texture_right = Vector3f::cross(texture_up, normal);
+}
 
 bool Plane::Intersect(const Ray &r, Hit &h, float tmin) const {
     const Vector3f &dir = r.GetDirection();
@@ -28,10 +38,8 @@ bool Plane::Intersect(const Ray &r, Hit &h, float tmin) const {
 Vector3f Plane::AmbientColorAtHit(const Hit &hit) const {
     if (texture != nullptr) {
         const auto &hit_point = hit.GetPos();
-        // TODO: improve locating method
-        float scale = 2;
-        auto x = (hit_point.x() + 1) / scale;
-        auto y = hit_point.y() / scale;
+        auto x = (Vector3f::dot(hit_point, texture_right) + texture_translate.x()) / texture_scale;
+        auto y = (Vector3f::dot(hit_point, texture_up) + texture_translate.y()) / texture_scale;
         auto u = x - std::floor(x);
         auto v = y - std::floor(y);
         return texture->At(u / 2, v / 2);

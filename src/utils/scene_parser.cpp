@@ -93,10 +93,20 @@ std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
 
     } else if (node_type == "plane") {
         auto normal = parse_vector3f(node["normal"].as<std::string>());
+        Vector3f texture_up = node["texture_up"]
+                ? parse_vector3f(node["texture_up"].as<std::string>())
+                : Vector3f(0, 1, 0);
+        Vector2f texture_translate = node["texture_translate"]
+              ? parse_vector2f(node["texture_translate"].as<std::string>())
+              : Vector2f(0, 0);
+        float texture_scale = node["texture_scale"]
+                ? node["texture_scale"].as<float>()
+                : 1.f;
         auto d = node["d"].as<float>();
         auto material = parse_material(node["mat"]);
         auto texture = parse_texture(node["texture"]);
-        return std::make_unique<Plane>(normal, d, material, texture);
+        return std::make_unique<Plane>(normal, d, material, texture,
+                                       texture_scale, texture_translate, texture_up);
 
     } else if (node_type == "triangle") {
         auto a = parse_vector3f(node["a"].as<std::string>());
