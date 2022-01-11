@@ -10,6 +10,26 @@ DEBUG_BUILD=$(DEBUG_BUILD_DIR)/$(BIN_NAME)
 SPPM_RELEASE_BUILD=$(RELEASE_BUILD_DIR)/$(SPPM_BIN_NAME)
 SPPM_DEBUG_BUILD=$(DEBUG_BUILD_DIR)/$(SPPM_BIN_NAME)
 
+# for final results
+cornell-2ball: $(RELEASE_BUILD)
+	$^ -i scenes/cornell-2ball.yml -o output/final/cornell-2ball.bmp -p4 -s1024
+
+cornell-bezier: $(RELEASE_BUILD)
+	$^ -i scenes/cornell-bezier.yml -o output/final/cornell-bezier.bmp -p4 -s1024
+
+big-mesh: $(RELEASE_BUILD)
+	$^ -i scenes/big-mesh.yml -o output/final/big-mesh.bmp -p4 -s1024
+
+cornell-depth: $(RELEASE_BUILD)
+	$^ -i scenes/cornell-depth.yml -o output/final/cornell-depth.bmp -p4 -s1024
+
+cornell-2ball-ppm: $(SPPM_RELEASE_BUILD)
+	$^ -i scenes/cornell-2ball.yml -o output/final/cornell-2ball-sppm.bmp -p 10000000 -n 100 -r 0.008
+
+final: cornell-2ball cornell-2ball-ppm cornell-depth cornell-bezier big-mesh
+
+
+# for debug
 cornell: $(RELEASE_BUILD)
 	$^ -i scenes/cornell.yml -o output/cornell.bmp $(args)
 

@@ -1,0 +1,72 @@
+gamma: 2.2
+
+camera:
+  pos: 0, 1, 4
+  dir: 0, 0.2, -1
+  up: 0, 1, 0
+  width: 1920
+  height: 1080
+  angle: 50
+  aperture: 0
+  focal: 2
+
+lights:
+  - type: point
+    center: 0 1.2 0
+    radius: 0.2
+    color: 30 30 30
+
+world:
+  - type: load_obj
+    obj: scenes/cornell.obj
+
+  - type: load_obj
+    obj: scenes/dragon.obj
+    translate: 0 0.001 0
+    mat:
+      illum: 1
+      Ka: 0.725 0.73 0.68
+
+  - type: plane  # back
+    normal: 0 0 1
+    d: -1
+    mat:
+      illum: 1
+      Ka: 1 1 1
+    texture:
+      file: scenes/textures/brick.png
+
+  - type: plane  # bottom
+    normal: 0 1 0
+    d: 0
+    mat:
+      illum: 1
+      Ka: 1 1 1
+
+  - type: plane  # top
+    normal: 0 1 0
+    d: 2
+    mat:
+      illum: 1
+      Ka: 1 1 1
+
+  - type: plane  # bottom
+    normal: 0 1 0
+    d: 0
+    mat:
+      illum: 1
+      Ka: 1 1 1
+
+  - type: plane  # left
+    normal: 1 0 0
+    d: -1.5
+    mat:
+      illum: 1
+      Ka: 0.75 0.25 0.25
+
+  - type: plane  # right
+    normal: 1 0 0
+    d: 1.5
+    mat:
+      illum: 1
+      Ka: 0.25 0.25 0.75
