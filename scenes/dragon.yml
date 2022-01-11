@@ -1,12 +1,12 @@
 gamma: 2.2
 
 camera:
-  pos: 0, 0.5, 2
+  pos: 0, 0.3, 1.2
   dir: 0, 0, -1
   up: 0, 1, 0
   width: 1920
   height: 1080
-  angle: 50
+  angle: 45
   aperture: 0
   focal: 2
 
@@ -21,23 +21,20 @@ world:
     obj: assets/cornell.obj
 
   - type: load_obj
-    obj: assets/ring.obj
+    obj: assets/dragon.obj
     scale: 0.5 0.5 0.5
     translate: 0 0.001 0
     mat:
       illum: 2
-      Ni: 1.5
       Ns: 3
-      Ka: 1 1 1
+      Ka: 0.9 0.8 0
 
   - type: plane  # back
     normal: 0 0 1
-    d: -1
+    d: -2
     mat:
       illum: 1
       Ka: 1 1 1
-    texture:
-      file: assets/textures/marble.png
 
   - type: plane  # bottom
     normal: 0 1 0
@@ -62,14 +59,14 @@ world:
 
   - type: plane  # left
     normal: 1 0 0
-    d: -1
+    d: -2
     mat:
       illum: 1
-      Ka: 0.75 0.25 0.25
+      Ka: 1 1 1
 
   - type: plane  # right
     normal: 1 0 0
-    d: 1
+    d: 2
     mat:
       illum: 1
-      Ka: 0.25 0.25 0.75
+      Ka: 1 1 1

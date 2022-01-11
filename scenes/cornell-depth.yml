@@ -2,11 +2,11 @@ gamma: 2.2
 
 camera:
   pos: 0, 1, 2
-  dir: 0, 0.2, -1
+  dir: 0, 0, -1
   up: 0, 1, 0
   width: 1920
   height: 1080
-  angle: 50
+  angle: 45
   aperture: 0.1
   focal: 2
 
