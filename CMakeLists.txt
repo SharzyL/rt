@@ -47,7 +47,6 @@ set(SOURCES
         src/objects/mesh.cpp
         src/objects/plane.cpp
         src/objects/sphere.cpp
-        src/objects/curve.cpp
         src/objects/rotate_bezier.cpp
         src/objects/bvh.cpp
 

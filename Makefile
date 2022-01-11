@@ -18,7 +18,7 @@ cornell-bezier: $(RELEASE_BUILD)
 	$^ -i scenes/cornell-bezier.yml -o output/final/cornell-bezier.bmp -p4 -s1024
 
 big-mesh: $(RELEASE_BUILD)
-	$^ -i scenes/big-mesh.yml -o output/final/big-mesh.bmp -p4 -s1024
+	$^ -i scenes/big-mesh.yml -o output/final/big-mesh.bmp -p4 -s512
 
 cornell-depth: $(RELEASE_BUILD)
 	$^ -i scenes/cornell-depth.yml -o output/final/cornell-depth.bmp -p4 -s1024
