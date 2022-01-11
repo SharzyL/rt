@@ -40,19 +40,13 @@ world:
     normal: 0 1 0
     d: 0
     mat:
-      illum: 1
+      illum: 3
       Ka: 1 1 1
+      Ns: 3
 
   - type: plane  # top
     normal: 0 1 0
     d: 2
-    mat:
-      illum: 1
-      Ka: 1 1 1
-
-  - type: plane  # bottom
-    normal: 0 1 0
-    d: 0
     mat:
       illum: 1
       Ka: 1 1 1
