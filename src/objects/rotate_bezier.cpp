@@ -112,9 +112,6 @@ std::pair<Vector2f, Vector2f> RotateBezier::bezier_evaluate(float bt, float min_
 std::unique_ptr<Mesh> RotateBezier::MakeMesh(const Material *mat, const Texture *tex, int density_x, int density_y) const {
     using Tup3u = std::tuple<unsigned, unsigned, unsigned>;
     std::vector<Vector3f> vertices;
-    std::vector<Vector3f> normals;
-    std::vector<Tup3u> indices;
-
     std::vector<Vector2f> curve_points;
     std::vector<Vector2f> curve_tangents;
     curve_points.reserve(density_y);
@@ -124,7 +121,12 @@ std::unique_ptr<Mesh> RotateBezier::MakeMesh(const Material *mat, const Texture 
         curve_tangents.emplace_back(dx);
     }
 
-    for (int ci = 0; ci < curve_points.size(); ++ci) {
+    int points_num = density_x * density_y;
+    std::vector<Vector3f> normals; normals.reserve(points_num);
+    std::vector<Tup3u> indices; indices.reserve(points_num);
+    std::vector<Vector2f> tex_coord; tex_coord.reserve(points_num);
+
+    for (int ci = 0; ci < density_y; ++ci) {
         for (int i = 0; i < density_x; ++i) {
             Vector2f cp = curve_points[ci];
             float angle = (float) i / (float) density_x * 2 * (float) M_PI;
@@ -142,6 +144,10 @@ std::unique_ptr<Mesh> RotateBezier::MakeMesh(const Material *mat, const Texture 
                 std::sin(angle) * dx.y()
             };
             normals.emplace_back(normal.normalized());
+            tex_coord.emplace_back(Vector2f{
+                (float) i / (float) density_x,
+                (float) ci / (float) density_y
+            });
             int i1 = (i + 1 == density_x) ? 0 : i + 1;
             if (ci != curve_points.size() - 1) {
                 indices.emplace_back((ci + 1) * density_x + i, ci * density_x + i1, ci * density_x + i);
@@ -162,6 +168,11 @@ std::unique_ptr<Mesh> RotateBezier::MakeMesh(const Material *mat, const Texture 
                 normals[std::get<0>(i)],
                 normals[std::get<1>(i)],
                 normals[std::get<2>(i)]
+        );
+        tri.SetTextureCoord(
+                tex_coord[std::get<0>(i)],
+                tex_coord[std::get<1>(i)],
+                tex_coord[std::get<2>(i)]
         );
     }
 

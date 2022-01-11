@@ -20,7 +20,7 @@ Supported features:
     4. Refractive material. Reflection rate calculated by Fresnel-Schlick formula
 
 - Additional features
-    1. Texture mapping for mesh, plane and sphere
+    1. Texture mapping for mesh, plane, sphere and Bezier surface
     2. Super-sampling for anti-aliasing
     3. Camera with field-of-depth
     4. Intersection finding accelerated by AABB and BVH data structure.
