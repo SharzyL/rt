@@ -83,9 +83,9 @@ bool RotateBezier::Intersect(const Ray &ray, Hit &hit, float tmin) const {
 }
 
 std::pair<Vector2f, Vector2f> RotateBezier::bezier_evaluate(float bt, float min_t, float max_t) const {
-    if (bt < min_t) {
+    if (bt < min_t - 0.0001) {
         return {Vector2f(controls[0].x(), yfirst + bt * (ylast - yfirst)), Vector2f(0, ylast - yfirst)};
-    } else if (bt > max_t) {
+    } else if (bt > max_t + 0.0001) {
         return {Vector2f(controls.back().x(), yfirst + bt * (ylast - yfirst)), Vector2f(0, ylast - yfirst)};
     }
     std::vector<Vector2f> val;
@@ -108,4 +108,49 @@ std::pair<Vector2f, Vector2f> RotateBezier::bezier_evaluate(float bt, float min_
     return {val[0], deriv[0]};
 }
 
+
+std::unique_ptr<Mesh> RotateBezier::MakeMesh(const Material *mat, const Texture *tex, int density_x, int density_y) const {
+    using Tup3u = std::tuple<unsigned, unsigned, unsigned>;
+    std::vector<Vector3f> vertices;
+    std::vector<Vector3f> normals;
+    std::vector<Tup3u> indices;
+
+    std::vector<Vector2f> curve_points;
+    std::vector<Vector2f> curve_tangents;
+    curve_points.reserve(density_y);
+    for (int i = 0; i < density_y; i++) {
+        auto [x, dx] = bezier_evaluate((float) i / (float) (density_y - 1));
+        curve_points.emplace_back(x);
+        curve_tangents.emplace_back(dx);
+    }
+
+    for (int ci = 0; ci < curve_points.size(); ++ci) {
+        for (int i = 0; i < density_x; ++i) {
+            Vector2f cp = curve_points[ci];
+            float angle = (float) i / (float) density_x * 2 * (float) M_PI;
+            Vector3f pnew{
+                cp.x() * std::cos(angle) + axis.x(),
+                cp.y(),
+                cp.x() * std::sin(angle) + axis.y()};
+            vertices.push_back(pnew);
+            int i1 = (i + 1 == density_x) ? 0 : i + 1;
+            if (ci != curve_points.size() - 1) {
+                indices.emplace_back((ci + 1) * density_x + i, ci * density_x + i1, ci * density_x + i);
+                indices.emplace_back((ci + 1) * density_x + i, (ci + 1) * density_x + i1, ci * density_x + i1);
+            }
+        }
+    }
+
+    std::vector<Triangle> triangles;
+    for (auto & i : indices) {
+        Triangle &tri = triangles.emplace_back(
+                vertices[std::get<0>(i)],
+                vertices[std::get<1>(i)],
+                vertices[std::get<2>(i)],
+                mat, tex
+        );
+    }
+
+    return std::make_unique<Mesh>(std::move(triangles));
+};
 } // namespace RT

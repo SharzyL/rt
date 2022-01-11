@@ -10,6 +10,7 @@
 #include "core/hit.h"
 
 #include "objects/object3d.h"
+#include "objects/mesh.h"
 
 #include "utils/math_util.h"
 
@@ -22,6 +23,8 @@ public:
     bool Intersect(const Ray &ray, Hit &hit, float tmin) const override;
 
     [[nodiscard]] Vector3f AmbientColorAtHit(const Hit &hit) const override;
+
+    std::unique_ptr<Mesh> MakeMesh(const Material *mat, const Texture *tex, int density_x, int density_y) const;
 
     [[nodiscard]] std::pair<Vector2f, Vector2f> bezier_evaluate(float bt, float min_t = 0.f, float max_t = 1.f) const;
 

@@ -27,6 +27,6 @@ int main(int argc, char *argv[]) {
     RT::SceneParser scene_parser;
     scene_parser.parse(args::get(input));
 
-    RT::PathTracingRender renderer(args::get(subp), args::get(samples), scene_parser.gamma);
+    RT::PathTracingRender renderer(args::get(subp), args::get(samples), scene_parser);
     renderer.Render(*scene_parser.scene, *scene_parser.camera, args::get(output));
 }

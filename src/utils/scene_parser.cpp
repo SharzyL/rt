@@ -115,11 +115,19 @@ std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
         Texture *texture = node["texture"] ? parse_texture(node["texture"]) : nullptr;
         return std::make_unique<ObjImport>(obj_file, scale, translate, material, texture);
 
-    } else if (node_type == "rotate_curve_mesh") {
+    } else if (node_type == "rotate_bezier_mesh") {
         auto material = parse_material(node["mat"]);
-        std::vector<Vector3f> points = {{0, 0, 0}, {0.5, 0.3, 0}, {0.5, 0.7, 0}, {0, 1, 0}};
-        BezierCurve c(std::move(points));
-        return makeMeshFromRotateCurve(&c, material);
+        Texture *texture = node["texture"] ? parse_texture(node["texture"]) : nullptr;
+        std::vector<Vector2f> controls;
+        for (const auto &point_node: node["controls"]) {
+            controls.emplace_back(parse_vector2f(point_node.as<std::string>()));
+        }
+        auto axis = parse_vector2f(node["axis"].as<std::string>());
+        RotateBezier bezier(std::move(controls), axis, material, nullptr);
+        auto density_x = node["density_x"].as<int>();
+        auto density_y = node["density_y"].as<int>();
+
+        return bezier.MakeMesh(material, texture, density_x, density_y);
 
     } else if (node_type == "rotate_bezier") {
         auto material = parse_material(node["mat"]);
