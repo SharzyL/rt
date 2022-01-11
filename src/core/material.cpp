@@ -41,13 +41,17 @@ Vector3f Material::Sample(const Ray &ray_in, const Hit &hit, RNG &rng) const {
 
     switch (illumination_model) {
         case IlluminationModel::diffuse: {  // 1
-            return ray_side_norm + rng.RandNormalizedVector();  // TODO: change to lambertian
+            return ray_side_norm + rng.RandNormalizedVector();
         }
         case IlluminationModel::blinn: {  // 2
             return dir - 2 * norm * Vector3f::dot(norm, dir) + rng.RandNormalizedVector() * std::min(1.f, 1 / shininess);
         }
         case IlluminationModel::reflective: {  // 3
-            return dir - 2 * norm * Vector3f::dot(norm, dir);
+            if (shininess <= 1.0001 || rng.RandUniformFloat() >= 1 / shininess) {  // reflect with prob shininess
+                return dir - 2 * norm * Vector3f::dot(norm, dir);
+            } else {
+                return ray_side_norm + rng.RandNormalizedVector();
+            }
         }
         case IlluminationModel::transparent: {  // 4
             float cos_ray_in_abs = std::abs(cos_ray_in);
