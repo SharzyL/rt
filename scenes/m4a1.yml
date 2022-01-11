@@ -2,12 +2,12 @@ gamma: 2.2
 bg_color: 0.2 0.2 0.2
 
 camera:
-  pos: 2, 1, 0
+  pos: 1, 0.8, 0
   dir: -1, 0, 0
   up: 0, 1, 0
   width: 1920
   height: 1080
-  angle: 70
+  angle: 45
 
 lights:
   - type: point
@@ -19,7 +19,7 @@ world:
   - type: load_obj
     obj: assets/M4A1/M4A1.obj
     scale: 0.1 0.1 0.1
-    translate: -0.5 0.8 0
+    translate: -1.5 0.8 0
     mat:
       illum: 1
       Ka: 1 1 1
@@ -50,7 +50,7 @@ world:
 
   - type: plane  # left
     normal: 1 0 0
-    d: -3
+    d: -2
     mat:
       illum: 1
       Ka: 1 1 1

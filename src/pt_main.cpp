@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
     args::ArgumentParser parser("ray tracer");
 
     args::HelpFlag help(parser, "HELP", "Show this help menu.", {"help"});
-    args::ValueFlag<std::string> input(parser, "input_file", "input file", {'i', "input"}, "scenes/cornell.yml");
+    args::ValueFlag<std::string> input(parser, "input_file", "input file", {'i', "input"}, "scenes/tmp.yml");
     args::ValueFlag<std::string> output(parser, "output_file", "output file", {'o', "output"}, "output/output.bmp");
 
     args::ValueFlag<int> subp(parser, "subp", "sub pixel", {'p', "subp"}, 1);
