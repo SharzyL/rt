@@ -18,7 +18,7 @@ lights:
 
 world:
   - type: load_obj
-    obj: scenes/cornell.obj
+    obj: assets/cornell.obj
 
   - type: sphere
     center: -0.5, 1, -0.5
@@ -49,7 +49,7 @@ world:
       illum: 1
       Ka: 1 1 1
     texture:
-      file: scenes/textures/brick.png
+      file: assets/textures/brick.png
 
   - type: plane  # top
     normal: 0 1 0
