@@ -10,7 +10,8 @@
 
 namespace RT {
 
-PathTracingRender::PathTracingRender(int sub_pixel, int sub_sample, float gamma) : sub_pixel(sub_pixel), sub_sample(sub_sample), gamma(gamma) {}
+PathTracingRender::PathTracingRender(int sub_pixel, int sub_sample, const SceneParser &parser) :
+sub_pixel(sub_pixel), sub_sample(sub_sample), gamma(parser.gamma), bg_color(parser.bg_color) {}
 
 void PathTracingRender::Render(const Object3D &obj, const Camera &camera, const std::string &output_file) {
     Image img(camera.getWidth(), camera.getHeight());
@@ -52,7 +53,7 @@ Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth
     Hit hit;
     bool is_hit = obj.Intersect(ray, hit, 0.0001);
     if (!is_hit) {
-        return Vector3f::ZERO;
+        return bg_color;
     }
     const Material *mat = hit.GetMaterial();
 

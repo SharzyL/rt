@@ -22,9 +22,10 @@ public:
 
     [[nodiscard]] const Vector3f& Center() const;
 
+    float x0, x1, y0, y1, z0, z1;
+
 private:
     int num_v;
-    float x0, x1, y0, y1, z0, z1;
     float x_sum, y_sum, z_sum;  // for computing center
     Vector3f center;
 };

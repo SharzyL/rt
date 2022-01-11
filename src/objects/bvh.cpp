@@ -9,6 +9,8 @@ void BVH::Build() {
     root->r_idx = (int) objects.size();
     build_impl(root.get());
     box = root->box;  // for compatibility of GetBox() interface
+    LOG(ERROR) << fmt::format("bvh box: ({}, {}), ({}, {}), ({}, {})",
+                              box.x0, box.x1, box.y0, box.y1, box.z0, box.z1);
 }
 
 void BVH::build_impl(Node *node) {
@@ -16,7 +18,7 @@ void BVH::build_impl(Node *node) {
     for (int i = l; i < r; i++) {
         node->box.FitBox(objects[i]->GetBox());
     }
-    if (r - l < 5) {  // leaf node
+    if (r - l < 3) {  // leaf node
         return;
     }
     int dim = node->box.MaxSpanAxis();

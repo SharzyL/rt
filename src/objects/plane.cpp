@@ -7,8 +7,12 @@
 
 namespace RT {
 
-Plane::Plane(const Vector3f &normal, float d, const Material *material, const Texture *texture)
-        : normal(normal.normalized()), d(d), SimpleObject3D(material, texture) {}
+Plane::Plane(
+        const Vector3f &normal,
+        float d,
+        const Material *material,
+        const Texture *texture
+): normal(normal.normalized()), d(d), SimpleObject3D(material, texture) {}
 
 bool Plane::Intersect(const Ray &r, Hit &h, float tmin) const {
     const Vector3f &dir = r.GetDirection();
@@ -26,7 +30,7 @@ Vector3f Plane::AmbientColorAtHit(const Hit &hit) const {
         const auto &hit_point = hit.GetPos();
         // TODO: improve locating method
         float scale = 2;
-        auto x = hit_point.x() / scale;
+        auto x = (hit_point.x() + 1) / scale;
         auto y = hit_point.y() / scale;
         auto u = x - std::floor(x);
         auto v = y - std::floor(y);
