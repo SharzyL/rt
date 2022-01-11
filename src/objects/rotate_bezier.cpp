@@ -132,7 +132,16 @@ std::unique_ptr<Mesh> RotateBezier::MakeMesh(const Material *mat, const Texture 
                 cp.x() * std::cos(angle) + axis.x(),
                 cp.y(),
                 cp.x() * std::sin(angle) + axis.y()};
-            vertices.push_back(pnew);
+            vertices.emplace_back(pnew);
+
+            Vector2f cp_normalized = cp.normalized();
+            Vector2f dx = curve_tangents[ci];
+            Vector3f normal{
+                std::cos(angle) * dx.y(),
+                -dx.x(),
+                std::sin(angle) * dx.y()
+            };
+            normals.emplace_back(normal.normalized());
             int i1 = (i + 1 == density_x) ? 0 : i + 1;
             if (ci != curve_points.size() - 1) {
                 indices.emplace_back((ci + 1) * density_x + i, ci * density_x + i1, ci * density_x + i);
@@ -148,6 +157,11 @@ std::unique_ptr<Mesh> RotateBezier::MakeMesh(const Material *mat, const Texture 
                 vertices[std::get<1>(i)],
                 vertices[std::get<2>(i)],
                 mat, tex
+        );
+        tri.SetVertexNormal(
+                normals[std::get<0>(i)],
+                normals[std::get<1>(i)],
+                normals[std::get<2>(i)]
         );
     }
 
