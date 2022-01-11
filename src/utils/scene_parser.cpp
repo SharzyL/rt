@@ -13,9 +13,7 @@
 #include "objects/triangle.h"
 #include "objects/group.h"
 #include "objects/obj_import.h"
-#include "objects/mesh.h"
 #include "objects/object3d.h"
-#include "objects/curve.h"
 #include "objects/rotate_bezier.h"
 
 #include "core/ray.h"
