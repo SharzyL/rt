@@ -22,6 +22,8 @@ int main(int argc, char *argv[]) {
         return 0;
     }
 
+    LOG(ERROR) << fmt::format("input: {}, output: {}", input.Get(), output.Get());
+
     RT::SceneParser scene_parser;
     scene_parser.parse(args::get(input));
 

@@ -7,6 +7,7 @@
 
 #include "./camera.h"
 #include "utils/math_util.h"
+#include "utils/debug.h"
 
 namespace RT {
 
@@ -34,7 +35,7 @@ PerspectiveCamera::PerspectiveCamera(const Vector3f &center, const Vector3f &_di
     dist_to_pixel_plane = h / 2 / std::tan(angle / 2);
     focal_scale = focal_len / dist_to_pixel_plane;  // the ratio between focal_plane / pixel_plane
     Vector3f focal_center = center + direction * focal_len;
-    focal_origin = focal_center - (right * (w / 2) + up * (w / 2)) * focal_scale;
+    focal_origin = focal_center - (right * (w / 2) + up * (h / 2)) * focal_scale;
 }
 
 Ray PerspectiveCamera::generateRay(const Vector2f &point, RNG &rng) const {

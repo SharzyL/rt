@@ -25,9 +25,12 @@ Vector3f Plane::AmbientColorAtHit(const Hit &hit) const {
     if (texture != nullptr) {
         const auto &hit_point = hit.GetPos();
         // TODO: improve locating method
-        auto u = hit_point.x() - std::floor(hit_point.x());
-        auto v = hit_point.y() - std::floor(hit_point.y());
-        return texture->At(u, v);
+        float scale = 2;
+        auto x = hit_point.x() / scale;
+        auto y = hit_point.y() / scale;
+        auto u = x - std::floor(x);
+        auto v = y - std::floor(y);
+        return texture->At(u / 2, v / 2);
     } else {
         return material->ambientColor;
     }

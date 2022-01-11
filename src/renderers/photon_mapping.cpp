@@ -52,7 +52,7 @@ void PhotonMappingRender::Render(const std::string &output_file) {
                         (float) y + 0.5f + 0.5f * per_thread_rng.RandTentFloat()
                 }, per_thread_rng);
                 // modifies vp, ball_finder
-                auto &vp = visible_point_map[y * width + x];
+                auto &vp = visible_point_map[y * width + x] = VisiblePoint();
                 trace_visible_point(vp, ray, per_thread_rng, 0);
                 if (vp.radius > 0) {
 #pragma omp critical
