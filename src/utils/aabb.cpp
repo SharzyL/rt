@@ -46,7 +46,7 @@ bool AABB::MayIntersect(const Ray &ray, float tmin, float tmax) const {
     if (intersect_z0 > intersect_z1) std::swap(intersect_z0, intersect_z1);
     float into = std::max(intersect_x0, std::max(intersect_y0, intersect_z0));
     float out = std::min(intersect_x1, std::min(intersect_y1, intersect_z1));
-    return tmin - 0.0001 <= into && into <= out && out < tmax + 0.0001;
+    return into <= out + 0.0001 && tmin <= out + 0.0001 && into <= tmax + 0.0001;
 }
 
 const Vector3f& AABB::Center() const {
