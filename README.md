@@ -151,7 +151,7 @@ Supported features:
 
 Prerequisite:
 1. CMake no older than 3.14
-2. C++ compiler supporting C++17
+2. C++ compiler supporting C++17 and OpenMP
 3. Network connection to GitHub (for automatic dependency fetching)
 
 After cloning the repository:
