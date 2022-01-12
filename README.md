@@ -1,6 +1,6 @@
 # Yet Another Raytracer
 
-This is a ray tracer written in 2.3k lines of C++.
+This is a raytracer written in 2.3k lines of C++.
 
 Supported features:
 
@@ -32,7 +32,7 @@ Supported features:
 
 1. Reflective and refractive balls:
 ```shell
-./build/RT -i scenes/cornell-2ball.yml -o output/final/cornell-2ball.bmp -p4 -s1024`
+./build/RT -i scenes/cornell-2ball.yml -o output/final/cornell-2ball.bmp -p4 -s1024
 ```
 ![](results/cornell-2ball.png)
 
@@ -164,7 +164,7 @@ cmake .. -DCMAKE_BUILD_TYPE=Release --target RT_sppm  # compile SPPM
 
 Both binary requires a few command line arguments. Run with `--help` to find out.
 
-## External dependencies
+## External Dependencies
 
 1. `glog`: logging
 2. `fmt`: string interpolation
