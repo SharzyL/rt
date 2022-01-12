@@ -32,8 +32,8 @@ MappedTexture::MappedTexture(const std::string &filename, float gamma) {
 }
 
 Vector3f MappedTexture::At(float u, float v) const {
-    int x = (int) ((u - std::floor(u)) * width_f);
-    int y = (int) ((v - std::floor(v)) * height_f);
+    int x = std::min((int) ((u - std::floor(u)) * width_f), (int) width - 1);
+    int y = std::min((int) ((v - std::floor(v)) * height_f), (int) height - 1);
     return texture_data[y * width + x];
 }
 
