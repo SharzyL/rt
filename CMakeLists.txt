@@ -79,12 +79,13 @@ add_executable(${PROJECT_NAME}_sppm
         )
 target_link_libraries(${PROJECT_NAME}_sppm PRIVATE ${EXTERNAL_LIBS})
 
+# Tests
 add_executable(ball_finder_test
         tests/ball_finder_test.cpp
         src/utils/ball_finder.hpp
         src/utils/math_util.cpp
         )
-target_link_libraries(ball_finder_test gtest_main vecmath fmt)
+target_link_libraries(ball_finder_test PRIVATE ${EXTERNAL_LIBS} gtest_main)
 
 add_executable(bezier_test
         tests/bezier_intersection_test.cpp
