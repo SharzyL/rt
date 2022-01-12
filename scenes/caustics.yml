@@ -1,0 +1,62 @@
+gamma: 2.2
+
+camera:
+  pos: 0, 1, 3
+  dir: 0, -0.05, -1
+  up: 0, 1, 0
+  width: 1920
+  height: 1080
+  angle: 50
+  aperture: 0
+  focal: 2
+
+lights:
+  - type: sphere
+    center: 0 1.8 0
+    radius: 0.02
+    color: 30 30 30
+
+world:
+  - type: load_obj
+    obj: assets/dragon.obj
+    scale: 1.3 1.3 1.3
+    translate: 0 0.001 0
+    mat:
+      illum: 4
+      Ni: 1.4
+      Ka: 0.9 0.8 0
+
+  - type: plane  # back
+    normal: 0 0 1
+    d: -1
+    mat:
+      illum: 1
+      Ka: 1 1 1
+
+  - type: plane  # bottom
+    normal: 0 1 0
+    d: 0
+    mat:
+      illum: 1
+      Ka: 0.8 0.8 0.8
+
+  - type: plane  # top
+    normal: 0 1 0
+    d: 2
+    mat:
+      illum: 1
+      Ka: 1 1 1
+
+  - type: plane  # left
+    normal: 1 0 0
+    d: -2
+    mat:
+      illum: 1
+      Ka: 0.75 0.25 0.25
+
+  - type: plane  # right
+    normal: 1 0 0
+    d: 2
+    mat:
+      illum: 1
+      Ka: 0.25 0.25 0.75
