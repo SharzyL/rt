@@ -9,7 +9,7 @@ Supported features:
     2. Stochastic progressive photon mapping (SPPM)
 
 - Model
-    1. Basic geometry including triangle, plane, sphere
+    1. Triangle, plane, sphere
     2. Bézier curve rotating around an axis (solved by Newton's method or triangulation)
     3. Triangle mesh (imported from `.obj` file)
 
@@ -20,11 +20,13 @@ Supported features:
     4. Refractive material. Reflection rate calculated by Fresnel-Schlick formula
 
 - Additional features
-    1. Texture mapping for mesh, plane, sphere and Bezier surface
-    2. Super-sampling for anti-aliasing
-    3. Camera with field-of-depth
-    4. Intersection finding accelerated by AABB and BVH data structure.
-    5. OpenMP multi-threading
+    1. Texture u-v mapping for mesh, plane, sphere and Bezier surface
+    2. Normal interpolation based on barycentric coordinates
+    3. Soft shadow produced by light source sampling
+    4. Super-sampling for anti-aliasing
+    5. Depth of field
+    6. Intersection finding accelerated by AABB and BVH data structure
+    7. OpenMP multi-threading
 
 ## Gallery
 
@@ -76,6 +78,75 @@ Supported features:
 ```
 ![](results/caustics.png)
 
+## File Hierarchy
+
+```text
+.
+├── .gitignore                        # exclude some annoying files from git
+├── assets                            # .obj, .mtl and textures, not included in this repo
+├── CMakeLists.txt                    # yes, this project builds with CMake
+├── LICENSE                           # GPL3 licence, use with care
+├── Makefile                          # simply a script wrapper
+├── README.md                         # what you are reading now
+├── deps
+│     └── vecmath                     # a tiny library for vector/matrix operation
+├── results                           # output images (png and bmp)
+├── scenes                            # scene description file stored in yaml
+├── src                               # source code for our ray tracer
+│     ├── core
+│     │     ├── camera.cpp
+│     │     ├── camera.h              # perspective camera with depth of field
+│     │     ├── hit.cpp
+│     │     ├── hit.h                 # light hit the object
+│     │     ├── light.cpp
+│     │     ├── light.h               # light sources emit rays
+│     │     ├── material.cpp
+│     │     ├── material.h            # providing a few kind of materials
+│     │     ├── ray.cpp
+│     │     ├── ray.h                 # emitted from camera, or from light source
+│     │     ├── texture.cpp
+│     │     └── texture.h             # uv mapping of texture
+│     ├── objects
+│     │     ├── bvh.cpp
+│     │     ├── bvh.h                 # implementing BVH algorithm
+│     │     ├── group.cpp
+│     │     ├── group.h               # a collection of objects
+│     │     ├── mesh.cpp
+│     │     ├── mesh.h                # triangular mesh, powered by BVH
+│     │     ├── obj_import.cpp
+│     │     ├── obj_import.h          # import mesh from obj file
+│     │     ├── object3d.h            # abstract base class of all objects
+│     │     ├── plane.cpp
+│     │     ├── plane.h               # infinite size plane
+│     │     ├── rotate_bezier.cpp     # bezier curve rotating around an axis
+│     │     ├── rotate_bezier.h
+│     │     ├── sphere.cpp
+│     │     ├── sphere.h              # sphere
+│     │     ├── triangle.cpp
+│     │     └── triangle.h            # triangle, supporting normal interpolation
+│     ├── renderers
+│     │     ├── path_tracing.cpp
+│     │     ├── path_tracing.h        # implementing path tracing
+│     │     ├── photon_mapping.cpp
+│     │     └── photon_mapping.h      # implementing SPPM
+│     ├── pt_main.cpp                 # main file for path tracing
+│     ├── sppm_main.cpp               # main file for SPPM
+│     └── utils
+│         ├── aabb.cpp
+│         ├── aabb.h                  # axis-aligned bounding box
+│         ├── ball_finder.hpp         # a simple data structure to find spheres containing a point
+│         ├── debug.h                 # some debugging/logging stuff
+│         ├── image.cpp
+│         ├── image.h                 # write image to file
+│         ├── math_util.cpp
+│         ├── math_util.h             # random number generator, and some misc math functions
+│         ├── prog_bar.hpp            # showing progress bar for long-time rendering
+│         ├── scene_parser.cpp
+│         └── scene_parser.h          # parse scene from yaml file
+└── tests                             # additional correctness tests
+    ├── ball_finder_test.cpp
+    └── bezier_intersection_test.cpp
+```
 ## Compilation
 
 Prerequisite:
