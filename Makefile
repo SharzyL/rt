@@ -14,14 +14,20 @@ SPPM_DEBUG_BUILD=$(DEBUG_BUILD_DIR)/$(SPPM_BIN_NAME)
 cornell-2ball: $(RELEASE_BUILD)
 	$^ -i scenes/cornell-2ball.yml -o output/final/cornell-2ball.bmp -p4 -s1024
 
+bleeding: $(RELEASE_BUILD)
+	$^ -i scenes/bleeding.yml -o output/final/bleeding.bmp -p4 -s512
+
 cornell-bezier: $(RELEASE_BUILD)
-	$^ -i scenes/cornell-bezier.yml -o output/final/cornell-bezier.bmp -p4 -s1024
+	$^ -i scenes/cornell-bezier.yml -o output/final/cornell-bezier.bmp -p4 -s512
 
 dragon: $(RELEASE_BUILD)
-	$^ -i scenes/dragon.yml -o output/final/dragon.bmp -p4 -s1024
+	$^ -i scenes/dragon.yml -o output/final/dragon.bmp -p4 -s512
+
+caustics: $(SPPM_RELEASE_BUILD)
+	$^ -i scenes/caustics.yml -o output/final/caustics.bmp -p 10000000 -n 50 -r 0.008
 
 m4a1: $(RELEASE_BUILD)
-	$^ -i scenes/m4a1.yml -o output/final/m4a1.bmp -p4 -s1024
+	$^ -i scenes/m4a1.yml -o output/final/m4a1.bmp -p4 -s512
 
 cornell-depth: $(RELEASE_BUILD)
 	$^ -i scenes/cornell-depth.yml -o output/final/cornell-depth.bmp -p4 -s1024
