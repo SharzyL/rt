@@ -1,0 +1,142 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{sharzyutil}[2020/10/31 Sharzy's utils]
+
+% infrastructure
+\RequirePackage{fontspec}
+\RequirePackage{amsmath,amsthm,amsfonts,amssymb}
+\RequirePackage{graphicx,float,wrapfig,subcaption}
+\RequirePackage{listings}
+\RequirePackage{algorithm, algpseudocode}
+\RequirePackage{tabularx,booktabs,longtable}
+\RequirePackage{tikz} \usetikzlibrary{calc} \usetikzlibrary{math}
+
+% typography tuning
+\RequirePackage{setspace}
+\RequirePackage{fancyhdr}
+\RequirePackage{chngpage}
+\RequirePackage[shortlabels,inline]{enumitem}
+\RequirePackage[font=small, labelfont=bf]{caption}
+
+% marks, symbols, links
+\RequirePackage{esint,siunitx,bm}
+\RequirePackage[super]{nth}
+\RequirePackage{xcolor}
+\RequirePackage{hyperref}
+\RequirePackage{extramarks}
+
+% macros, TeX internal
+\RequirePackage{xparse,ifthen}
+\RequirePackage{lastpage}
+
+% package setup
+\hypersetup{colorlinks, urlcolor=blue, linkcolor=blue, citecolor=red}
+\setmonofont[Scale=0.9]{Roboto Mono}
+
+\definecolor{keywordcolor}{HTML}{22863a}
+\definecolor{stringcolor}{HTML}{c811ff}
+\definecolor{identifiercolor}{HTML}{6f42c1}
+\lstset{%
+  numbers=left,
+  stepnumber=1,
+  numbersep=5pt,
+  tabsize=4,
+  breaklines=true,
+  breakatwhitespace=true,
+  basicstyle=\footnotesize\color{black}\ttfamily,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{keywordcolor},
+  stringstyle=\color{stringcolor},
+  commentstyle=\color{gray},
+  identifierstyle=\color{black},
+}
+
+% customized shortcuts
+\allowdisplaybreaks[1]
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\norm}[2][]{\left\lVert #2 \right\rVert_{#1}}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\inner}[1]{\left\langle #1 \right\rangle}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\sign}{sign}
+
+\newcommand{\pf}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\df}[2]{\frac{\mathrm{d} #1}{\mathrm{d} #2}}
+\let\op=\operatorname
+
+\newcommand{\Li}{\mathrm{Li}}
+\NewDocumentCommand {\E} { o } {%
+    \mathbb{E}{\IfNoValueTF{#1} {} {\left[\,#1\,\right]}}
+}
+\RenewDocumentCommand {\Pr} { o } {%
+    \mathrm{Pr}{\IfNoValueTF{#1} {} {\left[\,#1\,\right]}}
+}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rp}{\mathbb{R}_+}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Zp}{\mathbb{Z}_+}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Qp}{\mathbb{Q}_+}
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\T}[1]{#1^{\mathsf T}}
+\newcommand{\e}{\mathrm e}
+\def\d{\,\mathrm{d}}
+\let\+=\mathbf
+
+\newcommand{\TODO}[1][]{\textbf{\textcolor{red}{TODO #1}}}
+
+% localization for Chinese
+\ifdefined\useCN
+    \RequirePackage{xeCJK}
+
+    \newCJKfontfamily\song{FandolSong}
+    \newCJKfontfamily\fangsong{FandolFang}
+    \newCJKfontfamily\kai{FandolKai}
+    \newCJKfontfamily\hei{FandolHei}
+
+    \setCJKmainfont{FandolSong}
+    \setCJKmonofont{FandolHei}
+    \setCJKsansfont{FandolHei}
+
+    \RequirePackage{indentfirst}
+
+    \renewcommand{\abstractname}{摘要}
+    \newcommand{\releasemode}{\renewcommand{\TODO}[1][1]{}}
+    \renewcommand*\contentsname{\centering 目录}
+    \renewcommand*{\proofname}{\bf 证明}
+    \captionsetup[figure]{name={图}}
+    \captionsetup[table]{name={表}}
+
+    \ifdefined\theorem\else
+        \newtheorem{theorem}{定理}[section]
+        \newtheorem*{theorem*}{定理}
+        \newtheorem{definition}[theorem]{定义}
+        \newtheorem*{definition*}{定义}
+        \newtheorem{lemma}[theorem]{引理}
+        \newtheorem*{lemma*}{引理}
+        \newtheorem{property}{性质}[theorem]
+        \newtheorem*{property*}{性质}
+        \newtheorem{corollary}[theorem]{推论}
+        \newtheorem*{corollary*}{推论}
+        \newtheorem{question}[theorem]{问题}
+        \newtheorem*{question*}{问题}
+    \fi
+\else
+    \ifdefined\theorem\else
+        \newtheorem{theorem}{Theorem}[section]
+        \newtheorem*{theorem*}{Theorem}
+        \newtheorem{definition}[theorem]{Definition}
+        \newtheorem*{definition*}{Definition}
+        \newtheorem{lemma}[theorem]{Lemma}
+        \newtheorem*{lemma*}{Lemma}
+        \newtheorem{property}{Property}[theorem]
+        \newtheorem*{property*}{Property}
+        \newtheorem{corollary}[theorem]{Corollary}
+        \newtheorem*{corollary*}{Corollary}
+        \newtheorem{question}[theorem]{Problem}
+        \newtheorem*{question*}{Problem}
+    \fi
+\fi

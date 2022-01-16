@@ -8,7 +8,7 @@
 }
 \DeclareOption*{\PassOptionsToClass{\CurrentOption}{article}}
 \ProcessOptions\relax
-\RequirePackage{sharzyutil}
+\RequirePackage{utils}
 \RequirePackage{framed}
 
 \bibliographystyle{acm}
