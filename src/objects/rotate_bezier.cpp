@@ -23,6 +23,8 @@ RotateBezier::RotateBezier(std::vector<Vector2f> &&controls_points, Vector2f axi
     }
     box.AddVertex({axis.x() - xmax, ymin, axis.y() - xmax});
     box.AddVertex({axis.x() + xmax, ymax, axis.y() + xmax});
+
+    surrounding_mesh = MakeMesh(mat, texture, 30, 30);
 }
 
 bool RotateBezier::Intersect(const Ray &ray, Hit &hit, float tmin) const {
@@ -31,16 +33,16 @@ bool RotateBezier::Intersect(const Ray &ray, Hit &hit, float tmin) const {
     const auto &dir = ray.GetDirection();
     float rx = dir.x(), ry = dir.y(), rz = dir.z();
 
-    Vector2f b, b_deriv;  // left out of while loop, for future use
 //    LOG(ERROR) << fmt::format(fg(fmt::color::purple), "find intersect orig={}, dir={}", orig, dir);
 
     // Newton iteration
-    bool found = false;
-    constexpr int segments = 10;
-    for (int i = 0; i < segments; i++) {
-        float t = 4.;
-        bool found_in_segment = false;
+    Hit fake_hit = hit;
+    bool hit_mesh = surrounding_mesh->Intersect(ray, fake_hit, tmin);
+    if (hit_mesh && tmin < fake_hit.GetT() && fake_hit.GetT() < hit.GetT()) {
+        bool found = false;
         int iter_times = 0;
+        float t = (hit.GetPos().y() - yfirst) / (ylast - yfirst);
+        Vector2f b, b_deriv;  // left out of while loop, for future use
         while (true) {
             iter_times++;
 
@@ -54,17 +56,18 @@ bool RotateBezier::Intersect(const Ray &ray, Hit &hit, float tmin) const {
             ft_deriv += 2 * (rz / ry) * (z0 + rz * (yt - y0) / ry) * yt_deriv;
             ft_deriv -= 2 * xt * xt_deriv;
             float t_delta = ft / ft_deriv;
-//                LOG(ERROR) << fmt::format("iterate {}: {} = {} - {} ({} / {}) ({}, {})\n", iter_times, t - t_delta, t, t_delta, ft, ft_deriv, b, b_deriv);
+//            LOG(ERROR) << fmt::format("iterate {}: {} = {} - {} ({} / {}) ({}, {})\n",
+//                                      iter_times, t - t_delta, t, t_delta, ft, ft_deriv, b, b_deriv);
             t = t - t_delta;  // t_{n + 1} = t_n - f(t) / f'(t)
             if (std::abs(ft) < 0.0001) {
-                found_in_segment = true;
+                found = true;
                 break;
             };
             if (iter_times > 10) break;
         }
+
         float ray_t = (b.y() - y0) / ry;
-        if (found_in_segment && tmin <= ray_t && ray_t < hit.GetT() && 0 <= t && t <= 1) {
-            found = true;
+        if (found && tmin <= ray_t && ray_t < hit.GetT() && 0 <= t && t <= 1) {
             auto hit_point = ray.PointAtParameter(ray_t);
             auto hit_point_to_axis = Vector2f(hit_point.x() - axis.x(), hit_point.z() - axis.y()).normalized();
             auto normal = Vector3f(
@@ -72,10 +75,14 @@ bool RotateBezier::Intersect(const Ray &ray, Hit &hit, float tmin) const {
                     -b_deriv.x(),
                     hit_point_to_axis.y() * b_deriv.y());
             hit.Set(ray_t, material, normal.normalized(), hit_point, nullptr);
-//                LOG(ERROR) << fmt::format(fg(fmt::color::blue), "hit {} (t = {}, normal = {})", hit_point, ray_t, normal);
+//            LOG(ERROR) << fmt::format(fg(fmt::color::blue), "hit {} (ray_t = {}, normal = {})", hit_point, ray_t, normal);
+        } else {
+//            LOG(ERROR) << fmt::format(fg(fmt::color::red), "not found since ray_t = {}, t = {}", ray_t, t);
         }
+        return found;
+    } else {
+        return false;
     }
-    return found;
 }
 
 [[nodiscard]] Vector3f RotateBezier::AmbientColorAtHit(const Hit &hit) const {
@@ -110,7 +117,7 @@ std::pair<Vector2f, Vector2f> RotateBezier::bezier_evaluate(float bt, float min_
 
 
 std::unique_ptr<Mesh> RotateBezier::MakeMesh(const Material *mat, const Texture *tex, int density_x, int density_y) const {
-    using Tup3u = std::tuple<unsigned, unsigned, unsigned>;
+    using Tup3u = std::tuple<unsigned, unsigned, unsigned>;  // idx_a, idx_b, idx_c, extra
     std::vector<Vector3f> vertices;
     std::vector<Vector2f> curve_points;
     std::vector<Vector2f> curve_tangents;
@@ -127,8 +134,8 @@ std::unique_ptr<Mesh> RotateBezier::MakeMesh(const Material *mat, const Texture 
     std::vector<Vector2f> tex_coord; tex_coord.reserve(points_num);
 
     for (int ci = 0; ci < density_y; ++ci) {
+        Vector2f cp = curve_points[ci];
         for (int i = 0; i < density_x; ++i) {
-            Vector2f cp = curve_points[ci];
             float angle = (float) i / (float) density_x * 2 * (float) M_PI;
             Vector3f pnew{
                 cp.x() * std::cos(angle) + axis.x(),

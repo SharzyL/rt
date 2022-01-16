@@ -31,6 +31,8 @@ public:
     std::vector<Vector2f> controls;
     Vector2f axis;
     float yfirst, ylast;
+
+    std::unique_ptr<Mesh> surrounding_mesh;
 };
 
 } // namespace RT
