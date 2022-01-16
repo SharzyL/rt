@@ -1,4 +1,4 @@
-name: Build and Release LaTeX document
+name: Build report.pdf
 
 on:
   workflow_dispatch:
