@@ -206,12 +206,12 @@ Image *Image::LoadPPM(const char *filename) {
 struct BMPHeader {
     char bfType[3];      /* "BM" */
     int bfSize;          /* Size of file in bytes */
-    int bfReserved;      /* set to 0 */
+    int bfReserved;      /* Set to 0 */
     int bfOffBits;       /* Byte offset to actual bitmap data (= 54) */
     int biSize;          /* Size of BITMAPINFOHEADER, in bytes (= 40) */
     int biWidth;         /* Width of image, in pixels */
     int biHeight;        /* Height of images, in pixels */
-    short biPlanes;      /* Number of planes in target device (set to 1) */
+    short biPlanes;      /* Number of planes in target device (Set to 1) */
     short biBitCount;    /* Bits per pixel (24 in this case) */
     int biCompression;   /* Type of compression (0 if no compression) */
     int biSizeImage;     /* Image size, in bytes (0 if no compression) */

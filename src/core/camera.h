@@ -12,7 +12,7 @@ class Ray;
 
 class Camera {
 public:
-    Camera(const Vector3f &center, const Vector3f &direction, const Vector3f &up, int imgW, int imgH);
+    Camera(const Vector3f &center, const Vector3f &direction, const Vector3f &up, int imgW, int imgH, float shutter_time);
 
     // Generate rays for each screen-space coordinate
     [[nodiscard]] virtual Ray generateRay(const Vector2f &point, RNG &rng) const = 0;
@@ -30,13 +30,15 @@ protected:
     // Intrinsic parameters
     int width;
     int height;
+
+    float shutter_time = 0;
 };
 
 class PerspectiveCamera : public Camera {
 
 public:
     PerspectiveCamera(const Vector3f &center, const Vector3f &_direction, const Vector3f &_up, int imgW, int imgH,
-                      float angle, float focal_len, float aperture);
+                      float angle, float focal_len, float aperture, float shutter_time);
 
     [[nodiscard]] Ray generateRay(const Vector2f &point, RNG &rng) const override;
 

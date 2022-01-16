@@ -34,7 +34,8 @@ std::unique_ptr<Camera> SceneParser::parse_camera(const YAML::Node &node) {
     auto angle = to_radian(node["angle"].as<float>());
     auto aperture = node["aperture"] ? node["aperture"].as<float>() : 0.f;
     auto focal_len = node["focal"] ? node["focal"].as<float>() : 1.f;
-    return std::make_unique<PerspectiveCamera>(pos, dir, up, width, height, angle, focal_len, aperture);
+    auto shutter_time = node["shutter_time"] ? node["shutter_time"].as<float>() : 0.f;
+    return std::make_unique<PerspectiveCamera>(pos, dir, up, width, height, angle, focal_len, aperture, shutter_time);
 }
 
 void SceneParser::parse_light(const YAML::Node &node) {
@@ -89,7 +90,8 @@ std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
         auto radius = node["r"].as<float>();
         auto material = parse_material(node["mat"]);
         auto texture = parse_texture(node["texture"]);
-        return std::make_unique<Sphere>(center, radius, material, texture);
+        auto v = node["v"] ? parse_vector3f(node["v"].as<std::string>()) : Vector3f();
+        return std::make_unique<Sphere>(center, radius, material, texture, v);
 
     } else if (node_type == "plane") {
         auto normal = parse_vector3f(node["normal"].as<std::string>());

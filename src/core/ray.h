@@ -11,21 +11,20 @@ namespace RT {
 class Ray {
 public:
     Ray() = delete;
-    Ray(const Vector3f &orig, const Vector3f &dir);
-
-    Ray(const Ray &r);
+    Ray(const Vector3f &orig, const Vector3f &dir, float time);
 
     [[nodiscard]] const Vector3f &GetOrigin() const;
 
     [[nodiscard]] const Vector3f &GetDirection() const;
 
-    [[nodiscard]] Vector3f PointAtParameter(float t) const;
+    [[nodiscard]] const float &GetTime() const;
 
-    void set(const Vector3f &orig, const Vector3f &dir);
+    [[nodiscard]] Vector3f PointAtParameter(float t) const;
 
 private:
     Vector3f origin;
     Vector3f direction;
+    float time = 0;  // for motion blur
 };
 
 inline std::ostream &operator<<(std::ostream &os, const Ray &r);

@@ -2,15 +2,7 @@
 
 namespace RT {
 
-Ray::Ray(const Vector3f &orig, const Vector3f &dir) {
-    origin = orig;
-    direction = dir.normalized();
-}
-
-Ray::Ray(const Ray &r) {
-    origin = r.origin;
-    direction = r.direction;
-}
+Ray::Ray(const Vector3f &orig, const Vector3f &dir, float time): origin(orig), direction(dir.normalized()), time(time) {};
 
 [[nodiscard]] const Vector3f &Ray::GetOrigin() const { return origin; }
 
@@ -18,9 +10,8 @@ Ray::Ray(const Ray &r) {
 
 [[nodiscard]] Vector3f Ray::PointAtParameter(float t) const { return origin + direction * t; }
 
-void Ray::set(const Vector3f &orig, const Vector3f &dir) {
-    this->origin = orig;
-    this->direction = dir;
+const float &Ray::GetTime() const {
+    return time;
 }
 
 inline std::ostream &operator<<(std::ostream &os, const Ray &r) {

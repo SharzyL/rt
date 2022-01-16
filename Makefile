@@ -32,10 +32,13 @@ m4a1: $(RELEASE_BUILD)
 cornell-depth: $(RELEASE_BUILD)
 	$^ -i scenes/cornell-depth.yml -o output/final/cornell-depth.bmp -p4 -s1024
 
+motion: $(RELEASE_BUILD)
+	$^ -i scenes/motion.yml -o output/final/motion.bmp -p4 -s512
+
 cornell-2ball-ppm: $(SPPM_RELEASE_BUILD)
 	$^ -i scenes/cornell-2ball.yml -o output/final/cornell-2ball-sppm.bmp -p 10000000 -n 50 -r 0.008
 
-final: cornell-2ball cornell-2ball-ppm cornell-depth cornell-bezier dragon m4a1
+final: cornell-2ball cornell-2ball-ppm cornell-depth cornell-bezier dragon m4a1 motion
 
 
 # for debug

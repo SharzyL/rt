@@ -66,7 +66,7 @@ Vector3f PathTracingRender::trace(const Ray &ray, const Object3D &obj, int depth
     Vector3f hit_point = hit.GetPos();
 
     Vector3f sample_dir = mat->Sample(ray, hit, rng);
-    Ray sample_ray = Ray(hit_point, sample_dir);
+    Ray sample_ray = Ray(hit_point, sample_dir, ray.GetTime());
     float brdf = mat->BRDF(ray, sample_ray, hit);
 
     Vector3f sample_ray_color = trace(sample_ray, obj, depth + 1, rng);

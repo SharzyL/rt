@@ -11,8 +11,8 @@ class RNG;
 
 class ColoredRay : public Ray {
 public:
-    ColoredRay(const Ray &ray, const Vector3f &color) : Ray(ray), color(color){};
-    ColoredRay(const Vector3f &orig, const Vector3f &dir, const Vector3f &color) : Ray(orig, dir), color(color){};
+    ColoredRay(const Ray &ray, const Vector3f &color, float time) : Ray(ray), color(color){};
+    ColoredRay(const Vector3f &orig, const Vector3f &dir, const Vector3f &color, float time) : Ray(orig, dir, time), color(color){};
 
     [[nodiscard]] const Vector3f &GetColor() const { return color; }
 

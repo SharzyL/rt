@@ -11,7 +11,7 @@
 
 namespace RT {
 
-// This data structure stores a set of balls in space
+// This data structure stores a Set of balls in space
 // For a point, it can find all balls containing the point quickly
 // T should have `radius` and `center` members thus behaves like a ball
 template<typename T>

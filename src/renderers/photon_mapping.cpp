@@ -114,7 +114,7 @@ void PhotonMappingRender::trace_visible_point(VisiblePoint &vp, const Ray &ray, 
         return;
     } else {
         auto ray_out_dir = mat->Sample(ray, hit, rng);
-        Ray out_ray(hit.GetPos(), ray_out_dir);
+        Ray out_ray(hit.GetPos(), ray_out_dir, ray.GetTime());
         trace_visible_point(vp, out_ray, rng, depth + 1);
     }
 }
@@ -136,7 +136,7 @@ void PhotonMappingRender::trace_photon(const ColoredRay &ray, RNG &rng, int dept
         }
     }
     auto ray_out_dir = mat->Sample(ray, hit, rng);
-    ColoredRay out_ray(hit.GetPos(), ray_out_dir, hit_ambient * ray.GetColor());
+    ColoredRay out_ray(hit.GetPos(), ray_out_dir, hit_ambient * ray.GetColor(), ray.GetTime());
     trace_photon(out_ray, rng, depth + 1);
 }
 
