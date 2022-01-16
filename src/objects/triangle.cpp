@@ -26,29 +26,19 @@ bool Triangle::Intersect(const Ray &r, Hit &h, float tmin) const {
     float beta = tri_det(rd, s, e2) / det_rd_e1_e2;  // weight of b
     float gamma = tri_det(rd, e1, s) / det_rd_e1_e2;  // weight of c
     if (t < h.GetT() && t > tmin && 0 <= beta && 0 <= gamma && beta + gamma <= 1) {
-        if (has_norm) {
-            Vector3f n = (1 - beta - gamma) * na + beta * nb + gamma * nc;
-            h.Set(t, material, n.normalized(), r.PointAtParameter(t), this);
-        } else {
-            h.Set(t, material, normal, r.PointAtParameter(t), this);
+        Vector3f color = material->ambientColor;
+        if (texture != nullptr) {
+            CHECK(has_tex_coord);
+            Vector2f uv = (1 - beta - gamma) * ta + beta * tb + gamma * tc;
+            color = texture->At(uv.x(), uv.y());
         }
+        Vector3f true_normal = has_norm
+                ? (1 - beta - gamma) * na + beta * nb + gamma * nc
+                : normal;
+        h.Set(t, material, true_normal, r.PointAtParameter(t), color, this);
         return true;
     } else {
         return false;
-    }
-}
-
-Vector3f Triangle::AmbientColorAtHit(const Hit &hit) const {
-    if (texture != nullptr) {
-        CHECK(has_tex_coord);
-        const Vector3f e1 = a - b, e2 = a - c, s = a - hit.GetPos();
-        float det_rd_e1_e2 = tri_det(normal, e1, e2);
-        float beta = tri_det(normal, s, e2) / det_rd_e1_e2;  // weight of b
-        float gamma = tri_det(normal, e1, s) / det_rd_e1_e2;  // weight of c
-        Vector2f uv = (1 - beta - gamma) * ta + beta * tb + gamma * tc;
-        return texture->At(uv.x(), uv.y());
-    } else {
-        return material->ambientColor;
     }
 }
 

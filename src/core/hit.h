@@ -27,15 +27,18 @@ public:
 
     [[nodiscard]] Vector3f GetAmbient() const;
 
-    void Set(float _t, const Material *m, const Vector3f &n, const Vector3f &hit_point, const SimpleObject3D *object);
+    void Set(float _t, const Material *m, const Vector3f &n,
+             const Vector3f &hit_point, const Vector3f &color,
+             const SimpleObject3D *object);
 
 private:
     float t;
     const Material *material;
-    const SimpleObject3D *texture_calculator = nullptr;
+    const SimpleObject3D *obj = nullptr;
 
     Vector3f normal;
     Vector3f pos;
+    Vector3f ambient;
 };
 
 } // namespace RT

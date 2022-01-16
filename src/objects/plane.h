@@ -15,6 +15,7 @@ public:
             float d,
             const Material *material,
             const Texture *texture,
+            const Texture *normal_texture,
             float texture_scale = 1.f,
             const Vector2f &texture_translate = Vector2f(0, 0),
             const Vector3f &texture_up = Vector3f(0, 1, 0)
@@ -22,9 +23,8 @@ public:
 
     bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
-    [[nodiscard]] Vector3f AmbientColorAtHit(const Hit &hit) const override;
-
 protected:
+    const Texture *normal_texture;
     const Vector3f normal;
     const float d;
 

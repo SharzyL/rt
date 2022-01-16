@@ -34,24 +34,19 @@ bool Sphere::Intersect(const Ray &r, Hit &h, float tmin) const {
         if (t >= tmin && t < h.GetT()) {
             Vector3f intersection = r.PointAtParameter(t);
             Vector3f normal_at_intersection = (intersection - cur_center).normalized();
-            h.Set(t, material, normal_at_intersection, intersection, this);
+            Vector3f color = material->ambientColor;
+            if (texture != nullptr) {
+                const auto &hit_point = intersection;
+                Vector3f center_to_intersection = (hit_point - center).normalized();
+                float u = std::atan2(center_to_intersection.z(), center_to_intersection.x()) / (float) M_PI / 2.f + 0.5f;
+                float v = std::asin(center_to_intersection.y()) / (float) M_PI + 0.5f;
+                color = texture->At(u, v);
+            }
+            h.Set(t, material, normal_at_intersection, intersection, color, this);
             return true;
         } else {
             return false;
         }
-    }
-}
-
-Vector3f Sphere::AmbientColorAtHit(const Hit &hit) const {
-    if (texture != nullptr) {
-        CHECK(false);
-        const auto &hit_point = hit.GetPos();
-        Vector3f center_to_intersection = (hit_point - center).normalized();
-        float u = std::atan2(center_to_intersection.z(), center_to_intersection.x()) / (float) M_PI / 2.f + 0.5f;
-        float v = std::asin(center_to_intersection.y()) / (float) M_PI + 0.5f;
-        return texture->At(u, v);
-    } else {
-        return material->ambientColor;
     }
 }
 

@@ -3,6 +3,7 @@
 
 #include "./rotate_bezier.h"
 #include "utils/debug.h"
+#include "core/material.h"
 
 namespace RT {
 
@@ -74,7 +75,9 @@ bool RotateBezier::Intersect(const Ray &ray, Hit &hit, float tmin) const {
                     hit_point_to_axis.x() * b_deriv.y(),
                     -b_deriv.x(),
                     hit_point_to_axis.y() * b_deriv.y());
-            hit.Set(ray_t, material, normal.normalized(), hit_point, nullptr);
+            auto color = material->ambientColor;
+            // TODO: texture
+            hit.Set(ray_t, material, normal.normalized(), hit_point, color, nullptr);
 //            LOG(ERROR) << fmt::format(fg(fmt::color::blue), "hit {} (ray_t = {}, normal = {})", hit_point, ray_t, normal);
         } else {
 //            LOG(ERROR) << fmt::format(fg(fmt::color::red), "not found since ray_t = {}, t = {}", ray_t, t);
@@ -83,10 +86,6 @@ bool RotateBezier::Intersect(const Ray &ray, Hit &hit, float tmin) const {
     } else {
         return false;
     }
-}
-
-[[nodiscard]] Vector3f RotateBezier::AmbientColorAtHit(const Hit &hit) const {
-    throw std::runtime_error("bezier texture not implemented");
 }
 
 std::pair<Vector2f, Vector2f> RotateBezier::bezier_evaluate(float bt, float min_t, float max_t) const {

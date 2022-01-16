@@ -15,8 +15,6 @@ public:
 
     bool Intersect(const Ray &r, Hit &h, float tmin) const override;
 
-    [[nodiscard]] Vector3f AmbientColorAtHit(const Hit &hit) const override;
-
     void SetVertexNormal(const Vector3f &_na, const Vector3f &_nb, const Vector3f &_nc);
     void SetTextureCoord(const Vector2f &_ta, const Vector2f &_tb, const Vector2f &_tc);
 

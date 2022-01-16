@@ -66,6 +66,8 @@ world:
       Ka: 1 1 1
     texture:
       file: assets/textures/brick.png
+    normal_texture:
+      file: assets/textures/normal.png
 
   - type: plane  # bottom
     normal: 0 1 0

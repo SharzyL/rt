@@ -12,6 +12,7 @@ Plane::Plane(
         float d,
         const Material *material,
         const Texture *texture,
+        const Texture *normal_texture,
         float texture_scale,
         const Vector2f &texture_translate,
         const Vector3f &texture_up
@@ -24,27 +25,24 @@ Plane::Plane(
     this->texture_right = Vector3f::cross(texture_up, normal);
 }
 
-bool Plane::Intersect(const Ray &r, Hit &h, float tmin) const {
+bool Plane::Intersect(const Ray &r, Hit &hit, float tmin) const {
     const Vector3f &dir = r.GetDirection();
     float t = (d - Vector3f::dot(r.GetOrigin(), normal)) / Vector3f::dot(dir, normal);
-    if (t > tmin && t < h.GetT()) {
-        h.Set(t, material, normal, r.PointAtParameter(t), this);
+    if (t > tmin && t < hit.GetT()) {
+        auto color = material->ambientColor;
+        if (texture != nullptr) {
+            const auto &hit_point = hit.GetPos();
+            auto x = (Vector3f::dot(hit_point, texture_right) + texture_translate.x()) / texture_scale;
+            auto y = (Vector3f::dot(hit_point, texture_up) + texture_translate.y()) / texture_scale;
+            auto u = x - std::floor(x);
+            auto v = y - std::floor(y);
+            color = texture->At(u, v);
+        }
+        // TODO: change texture
+        hit.Set(t, material, normal, r.PointAtParameter(t), color, this);
         return true;
     } else {
         return false;
-    }
-}
-
-Vector3f Plane::AmbientColorAtHit(const Hit &hit) const {
-    if (texture != nullptr) {
-        const auto &hit_point = hit.GetPos();
-        auto x = (Vector3f::dot(hit_point, texture_right) + texture_translate.x()) / texture_scale;
-        auto y = (Vector3f::dot(hit_point, texture_up) + texture_translate.y()) / texture_scale;
-        auto u = x - std::floor(x);
-        auto v = y - std::floor(y);
-        return texture->At(u / 2, v / 2);
-    } else {
-        return material->ambientColor;
     }
 }
 

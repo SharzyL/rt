@@ -107,7 +107,8 @@ std::unique_ptr<Object3D> SceneParser::parse_obj(const YAML::Node &node) {
         auto d = node["d"].as<float>();
         auto material = parse_material(node["mat"]);
         auto texture = parse_texture(node["texture"]);
-        return std::make_unique<Plane>(normal, d, material, texture,
+        auto normal_texture = parse_texture(node["normal_texture"]);
+        return std::make_unique<Plane>(normal, d, material, texture, normal_texture,
                                        texture_scale, texture_translate, texture_up);
 
     } else if (node_type == "triangle") {
