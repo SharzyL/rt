@@ -18,6 +18,11 @@ jobs:
       - name: Build the LaTeX document
         uses: xu-cheng/latex-action@v2
         with:
+          pre_compile: |
+            wget -q -O cascadia.zip "https://github.com/microsoft/cascadia-code/releases/download/v2111.01/CascadiaCode-2111.01.zip"
+            unzip -q cascadia.zip -d cascadia
+            cp -r cascadia/otf/static/*.otf /usr/share/fonts
+            fc-cache
           latexmk_use_xelatex: true
           latexmk_shell_escape: true
           args: "-pdf -file-line-error -halt-on-error -interaction=nonstopmode -8bit"
@@ -52,5 +57,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./report/report.pdf
-          asset_name: report.ppdf
+          asset_name: report.pdf
           asset_content_type: application/pdf
