@@ -21,12 +21,16 @@ Supported features:
 
 - Additional features
     1. Texture u-v mapping for mesh, plane, sphere and Bezier surface
-    2. Normal interpolation based on barycentric coordinates
-    3. Soft shadow produced by light source sampling
-    4. Super-sampling for anti-aliasing
-    5. Depth of field
-    6. Intersection finding accelerated by AABB and BVH data structure
-    7. OpenMP multi-threading
+    2. Normal texture for some objects
+    3. Normal interpolation based on barycentric coordinates
+    4. Soft shadow produced by light source sampling
+    5. Super-sampling for anti-aliasing
+    6. Depth of field
+    7. Motion Blur
+    8. Intersection finding accelerated by AABB and BVH data structure
+    9. OpenMP multi-threading
+
+You may refer to [GitHub Release page](https://github.com/SharzyL/rt/releases/latest/download/report.pdf) for a more detailed report (in Chinese).
 
 ## Gallery
 
@@ -59,6 +63,12 @@ Supported features:
 ./build/RT -i scenes/cornell-depth.yml -o output/final/cornell-depth.bmp -p4 -s1024
 ```
 ![](results/cornell-depth.png)
+
+6. Motion Blur
+```shell
+./build/RT -i scenes/motion.yml -o output/final/motion.bmp -p3 -s512
+```
+![](results/motion.png)
 
 6. Dragon (100k triangles)
 ```shell
