@@ -21,10 +21,10 @@ jobs:
           latexmk_use_xelatex: true
           latexmk_shell_escape: true
           args: "-pdf -file-line-error -halt-on-error -interaction=nonstopmode -8bit"
-          root_file: report/report.tex
           working_directory: report
+          root_file: report.tex
 
-      - name: create tag
+      - name: Create Tag
         id: create_tag
         run: |
           tag_name=$(TZ="Asia/Shanghai" date +"v%Y%m%d_%H%M")
