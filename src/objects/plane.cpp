@@ -4,6 +4,7 @@
 #include "core/material.h"
 
 #include "./plane.h"
+#include "utils/debug.h"
 
 namespace RT {
 
@@ -19,6 +20,7 @@ Plane::Plane(
 ) : normal(normal.normalized()),
     d(d),
     SimpleObject3D(material, texture),
+    normal_texture(normal_texture),
     texture_scale(texture_scale),
     texture_translate(texture_translate) {
     this->texture_up = (texture_up - this->normal * Vector3f::dot(this->normal, texture_up)).normalized();
@@ -28,18 +30,28 @@ Plane::Plane(
 bool Plane::Intersect(const Ray &r, Hit &hit, float tmin) const {
     const Vector3f &dir = r.GetDirection();
     float t = (d - Vector3f::dot(r.GetOrigin(), normal)) / Vector3f::dot(dir, normal);
+
     if (t > tmin && t < hit.GetT()) {
         auto color = material->ambientColor;
-        if (texture != nullptr) {
-            const auto &hit_point = hit.GetPos();
+        auto true_normal = normal;
+        auto hit_point = r.PointAtParameter(t);
+
+        // handling texture
+        if (texture != nullptr || normal_texture != nullptr) {
             auto x = (Vector3f::dot(hit_point, texture_right) + texture_translate.x()) / texture_scale;
             auto y = (Vector3f::dot(hit_point, texture_up) + texture_translate.y()) / texture_scale;
             auto u = x - std::floor(x);
             auto v = y - std::floor(y);
-            color = texture->At(u, v);
+            if (texture != nullptr) {
+                color = texture->At(u, v);
+            }
+            if (normal_texture != nullptr) {
+                auto texture_n = normal_texture->At(u, v);
+                true_normal = texture_n.x() * texture_up + texture_n.y() * texture_right + texture_n.z() * normal;
+//                fmt::print("true_normal: {}\n", true_normal);
+            }
         }
-        // TODO: change texture
-        hit.Set(t, material, normal, r.PointAtParameter(t), color, this);
+        hit.Set(t, material, true_normal, hit_point, color, this);
         return true;
     } else {
         return false;
