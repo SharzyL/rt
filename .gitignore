@@ -4,6 +4,7 @@ bin
 output
 build
 remote
+results/original
 assets
 
 *.aux
