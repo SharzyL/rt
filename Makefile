@@ -18,7 +18,7 @@ bleeding: $(RELEASE_BUILD)
 	$^ -i scenes/bleeding.yml -o output/final/bleeding.bmp -p4 -s512
 
 cornell-bezier: $(RELEASE_BUILD)
-	$^ -i scenes/cornell-bezier.yml -o output/final/cornell-bezier.bmp -p4 -s512
+	$^ -i scenes/cornell-bezier.yml -o output/final/cornell-bezier.bmp -p3 -s512
 
 dragon: $(RELEASE_BUILD)
 	$^ -i scenes/dragon.yml -o output/final/dragon.bmp -p4 -s512

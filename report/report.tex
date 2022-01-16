@@ -7,22 +7,26 @@
 \setmonofont[Scale=0.85]{Cascadia Code PL}
 
 \begin{document}
-    \title{Yet Another Raytracer}
+    \title{Yet Another Raytracer: 实现报告}
+    \author{}
+    \date{}
     \maketitle
     \tableofcontents
     \newpage
 
     \section{简介}
-    本项目使用 C++ 实现了一个纯 CPU 的光线追踪器，包含了下述特性（后附相关的代码位置）：
+    本项目使用 C++ 实现了一个纯 CPU 的光线追踪器，包含了下述特性（后附相关的代码文件和函数）：
 
     \begin{enumerate}
         \item 算法选型：路径追踪(PT）、随机渐进光子映射（SPPM） \hfill\t{src/renders/*.cpp}
         \item 基于牛顿法的旋转 Bezier 曲面绘制 \hfill\t{src/objects/rotate\_bezier.cpp}
         \item 基于 AABB 和 BVH 的复杂三角网格求交加速 \hfill\t{src/objects/bvh.cpp, src/utils/aabb.cpp}
         \item 景深 \hfill\t{src/core/camera.cpp [PerspectiveCamera::generateRay()]}
+        \item 动态模糊 \hfill\t{src/core/camera.cpp, src/core/ray.h}
         \item 软阴影 \hfill\t{src/core/light.cpp}
         \item 基于超采样和 tent filter 的抗锯齿 \hfill\t{src/renderers/*.cpp [Render()]}
-        \item 纹理映射和贴图 \hfill \t{src/objects/*.cpp [SimpleObject3D::AmbientColorAtHit()]}
+        \item 纹理映射和贴图 \hfill \t{src/objects/*.cpp [Object3d::Intersect()]}
+        \item 凹凸贴图 \hfill \t{src/objects/*.cpp [Object3d::Intersect()]}
         \item 焦散\hfill \t{src/renderers/photon\_mapping.cpp}
     \end{enumerate}
 
@@ -38,9 +42,10 @@
             编号 & 图片内容 & 渲染参数 \\ \midrule
             \ref{fig:cornell-2ball} & 折射和反射（PT） & \t{./build/RT -i scenes/cornell-2ball.yml -p4 -s1024} \\
             \ref{fig:cornell-2ball-sppm} & 折射和反射（SPPM） & \t{./build/RT\_sppm -i scenes/cornell-2ball.yml -p 10000000 -n 50 -r 0.008} \\
-            \ref{fig:bezier} & 贝塞尔旋转曲面 & \t{./build/RT -i scenes/cornell-bezier.yml -p4 -s512} \\
+            \ref{fig:bezier} & 贝塞尔旋转曲面 & \t{./build/RT -i scenes/cornell-bezier.yml -p3 -s512} \\
             \ref{fig:bleeding} & Color Bleeding & \t{./build/RT -i scenes/bleeding.yml -p4 -s512} \\
             \ref{fig:depth} & 景深 & \t{./build/RT -i scenes/cornell-depth.yml -p4 -s1024} \\
+            \ref{fig:motion} & 动态模糊 & \t{./build/RT -i scenes/motion.yml -p3 -s512} \\
             \ref{fig:dragon} & 龙 & \t{./build/RT -i scenes/dragon.yml -p4 -s512} \\
             \ref{fig:m4a1} & M4A1 & \t{./build/RT -i scenes/m4a1.yml -p4 -s512} \\
             \ref{fig:caustics} & 焦散 & \t{./build/RT\_sppm -i scenes/caustics.yml -p 10000000 -n 50 -r 0.008} \\
@@ -53,7 +58,7 @@
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=\linewidth]{../results/cornell-2ball.png}
-        \caption{折射和反射（PT）}
+        \caption{折射和反射（PT）。背景图像使用了贴图。}
         \label{fig:cornell-2ball}
     \end{figure}
 
@@ -66,22 +71,29 @@
 
     \begin{figure}[htbp]
         \centering
-        \includegraphics[width=\linewidth]{../results/cornell-bezier.png}
-        \caption{贝塞尔旋转曲面}
+        \includegraphics[width=\linewidth]{../results/cornell-bezier-normal.png}
+        \caption{贝塞尔旋转曲面。注意到两侧面使用了凹凸贴图，并且圆柱体也是通过贝塞尔旋转曲面模拟的}
         \label{fig:bezier}
     \end{figure}
 
     \begin{figure}[htbp]
         \centering
         \includegraphics[width=\linewidth]{../results/bleeding.png}
-        \caption{景深}
+        \caption{Color Bleeding}
         \label{fig:bleeding}
     \end{figure}
 
     \begin{figure}[htbp]
         \centering
+        \includegraphics[width=\linewidth]{../results/motion.png}
+        \caption{动态模糊}
+        \label{fig:motion}
+    \end{figure}
+
+    \begin{figure}[htbp]
+        \centering
         \includegraphics[width=\linewidth]{../results/cornell-depth.png}
-        \caption{Color Bleeding}
+        \caption{景深}
         \label{fig:depth}
     \end{figure}
 
@@ -185,5 +197,9 @@
     \subsection{景深}
 
     我们使用薄透镜模型来模拟相机的景深效果。对于每个相机，我们赋予它两个参数：焦距 $f$ 和光圈半径 $\alpha$，在镜头前方距离为 $f$ 的位置的平面被称为焦平面，每个像素因此对应焦平面上的一个点。而相机的镜头处半径为 $\alpha$ 的圆即为相机的逛前。当我们需要从相机发射光线时，我们先选取焦平面上的点，然后从光圈上随机选取一个点，连接两点的射线即为采样的光线。通过这个方式，我们基本能模拟出逼真的光圈效果。相关的代码位于 \t{src/core/camera.cpp}。
+
+    \subsection{动态模糊}
+
+    我们给相机赋予一个快门时间 $\t{shutter\_time}$，从相机发出的每一条光线都随机地属于某个 $0$ 到 $\t{shutter\_time}$ 之间的某个时间点 $t$。每个物体都可以赋予一个速度向量，当计算交点时，使用的是物体根据这个速度向量在 $t$ 时的位置。
 
 \end{document}

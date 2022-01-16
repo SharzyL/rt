@@ -110,12 +110,18 @@ world:
     normal: 1 0 0
     d: -2
     mat:
-      illum: 1
+      illum: 2
+      Ns: 3
       Ka: 0.75 0.25 0.25
+    normal_texture:
+      file: assets/textures/normal.png
 
   - type: plane  # right
     normal: 1 0 0
     d: 2
     mat:
-      illum: 1
+      illum: 2
+      Ns: 3
       Ka: 0.25 0.25 0.75
+    normal_texture:
+      file: assets/textures/normal.png
