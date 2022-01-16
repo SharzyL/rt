@@ -1,0 +1,56 @@
+name: Build and Release LaTeX document
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: release tag name
+        required: false
+  push:
+    branches:
+      - ci-test
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build the LaTeX document
+        uses: xu-cheng/latex-action@v2
+        with:
+          latexmk_use_xelatex: true
+          latexmk_shell_escape: true
+          args: "-pdf -file-line-error -halt-on-error -interaction=nonstopmode -8bit"
+          root_file: report/report.tex
+          working_directory: report
+
+      - name: create tag
+        id: create_tag
+        run: |
+          tag_name=$(TZ="Asia/Shanghai" date +"v%Y%m%d_%H%M")
+          if [[ -n "${{github.event.inputs.tag_name}}" ]]; then tag_name=${{github.event.inputs.tag_name}}; fi
+          git tag $tag_name
+          git push --tags
+          echo "::set-output name=tag_name::$tag_name"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.create_tag.outputs.tag_name }}
+          release_name: Release ${{ steps.create_tag.outputs.tag_name }}
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        id: upload_release_asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./report/report.pdf
+          asset_name: report.ppdf
+          asset_content_type: application/pdf
