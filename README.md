@@ -166,13 +166,13 @@ Prerequisite:
 
 After cloning the repository:
 ```shell
-mkdir build
-cd build
-cmake .. -DCMAKE_BUILD_TYPE=Release --target RT  # compile path tracer
-cmake .. -DCMAKE_BUILD_TYPE=Release --target RT_sppm  # compile SPPM
+cmake -G Ninja -B build -DCMAKE_BUILD_TYPE=Release
+cmake --build build
 ```
 
-Both binary requires a few command line arguments. Run with `--help` to find out.
+Add `-DRT_BUILD_TEST` if you want tests.
+
+The compiled binary files `RT` and `RT_sppm` lie in `./build`. Both binarys requires a few command line arguments. Run with `--help` to find out.
 
 ## External Dependencies
 
