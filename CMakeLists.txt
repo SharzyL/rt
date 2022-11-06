@@ -1,6 +1,9 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.14)
 PROJECT(RT CXX)
 
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast")
+
 message( ${PROJECT_NAME} " build type: " ${CMAKE_BUILD_TYPE})
 
 # fetch external dependencies
@@ -16,7 +19,6 @@ FetchContent_Declare(googletest GIT_REPOSITORY https://github.com/google/googlet
 FetchContent_MakeAvailable(tinyobjloader fmt glog args yaml-cpp lodepng googletest)
 
 # handle lodepng compilation manually
-include_directories(${lodepng_SOURCE_DIR})
 add_library(lodepng_lib ${lodepng_SOURCE_DIR}/lodepng.cpp)
 
 # local dependency
@@ -35,10 +37,6 @@ set(EXTERNAL_LIBS
         lodepng_lib
         OpenMP::OpenMP_CXX
         )
-
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address")
-set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -Ofast")
 
 set(SOURCES
         src/objects/obj_import.cpp
@@ -63,8 +61,6 @@ set(SOURCES
         src/utils/aabb.cpp
         )
 
-include_directories(${PROJECT_NAME} PRIVATE src)
-
 add_executable(${PROJECT_NAME}
         ${SOURCES}
         src/renderers/path_tracing.cpp
@@ -79,19 +75,28 @@ add_executable(${PROJECT_NAME}_sppm
         )
 target_link_libraries(${PROJECT_NAME}_sppm PRIVATE ${EXTERNAL_LIBS})
 
-# Tests
-add_executable(ball_finder_test
-        tests/ball_finder_test.cpp
-        src/utils/ball_finder.hpp
-        src/utils/math_util.cpp
-        )
-target_link_libraries(ball_finder_test PRIVATE ${EXTERNAL_LIBS} gtest_main)
+foreach(t IN ITEMS ${PROJECT_NAME} ${PROJECT_NAME}_sppm)
+    message("target ${t}")
+    target_include_directories(${t} PRIVATE src)
+    target_include_directories(${t} PRIVATE ${lodepng_SOURCE_DIR})
+    target_compile_features(${t} PRIVATE cxx_std_17)
+endforeach()
 
-add_executable(bezier_test
-        tests/bezier_intersection_test.cpp
-        ${SOURCES}
-        )
-target_link_libraries(bezier_test ${EXTERNAL_LIBS} gtest_main)
+if (RT_BUILD_TEST)
+    # Tests
+    add_executable(ball_finder_test
+            tests/ball_finder_test.cpp
+            src/utils/ball_finder.hpp
+            src/utils/math_util.cpp
+            )
+    target_link_libraries(ball_finder_test PRIVATE ${EXTERNAL_LIBS} gtest_main)
 
-include(GoogleTest)
-gtest_discover_tests(ball_finder_test)
+    add_executable(bezier_test
+            tests/bezier_intersection_test.cpp
+            ${SOURCES}
+            )
+    target_link_libraries(bezier_test ${EXTERNAL_LIBS} gtest_main)
+
+    include(GoogleTest)
+    gtest_discover_tests(ball_finder_test)
+endif()
