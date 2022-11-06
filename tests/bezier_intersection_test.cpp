@@ -14,7 +14,7 @@ TEST(ParseVector, BasicTests) {
 TEST(Bezier, BasicTests) {
     std::vector<Vector2f> controls{{2, 0}, {2, 2}};
     RotateBezier rb(std::move(controls), Vector2f(0, 0), nullptr, nullptr);
-    Ray ray(Vector3f(-3, 0, 0), Vector3f(1, 0.3, 0.1));
+    Ray ray(Vector3f(-3, 0, 0), Vector3f(1, 0.3, 0.1), 0);
     Hit hit;
     rb.Intersect(ray, hit, 0);
     fmt::print("intersect t = {} {}, n = {}\n", hit.GetT(), hit.GetPos(), hit.GetNormal());
